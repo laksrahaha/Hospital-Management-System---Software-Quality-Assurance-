@@ -1,0 +1,1 @@
+console.log("Reserve Health frontend is loaded.");
