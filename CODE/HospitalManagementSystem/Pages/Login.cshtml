@@ -16,6 +16,15 @@
         font-size: 36px;
         font-weight: 600;
         margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .login-logo {
+        width: 110px;
+        height: auto;
+        display: block;
+        margin: 0 auto 12px auto;
+        border-radius: 50%;
     }
 
     .login-card {
@@ -57,6 +66,7 @@
         border: none;
         border-radius: 8px;
         font-weight: 600;
+        cursor: pointer;
     }
 
     .login-card button:hover {
@@ -73,7 +83,13 @@
 <div class="login-page">
 
     <div class="login-brand">
-        Reserve Health
+
+        <img src="/images/reserve-health-logo.png"
+             alt="Reserve Health logo"
+             class="login-logo" />
+
+        <div>Reserve Health</div>
+
     </div>
 
     <div class="login-card">
@@ -84,6 +100,7 @@
 
             <div>
                 <label for="email">Email</label>
+
                 <input type="email"
                        id="email"
                        name="email" />
@@ -91,6 +108,7 @@
 
             <div>
                 <label for="password">Password</label>
+
                 <input type="password"
                        id="password"
                        name="password" />
