@@ -50,3 +50,14 @@
 .login-card button:hover {
   background-color: #4F473C;
 }
+
+
+/* Footer Styling */
+
+.footer {
+  position: static !important;
+  width: 100%;
+  padding: 20px 0;
+  margin-top: 0;
+  line-height: normal !important;
+}
