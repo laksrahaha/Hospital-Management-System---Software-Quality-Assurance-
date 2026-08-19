@@ -1,63 +1,88 @@
-/* Reserve Health Login Page Styling */
+/* Reserve Health Login and Sign Up Page Styling */
 
 .login-page {
-  background-color: #FFD6A3;
-  min-height: 650px;
-  padding: 60px 20px;
+    background-color: #FFD6A3;
+    min-height: 100vh;
+    padding: 60px 20px 100px 20px;
+    box-sizing: border-box;
 }
 
 .login-card {
-  max-width: 420px;
-  margin: 0 auto;
-  background-color: #E8D7C3;
-  padding: 35px;
-  border-radius: 18px;
+    max-width: 420px;
+    margin: 0 auto;
+    background-color: #E8D7C3;
+    padding: 35px;
+    border-radius: 18px;
 }
 
 .login-card h1 {
-  color: #826849;
-  margin-bottom: 10px;
+    color: #826849;
+    margin-bottom: 10px;
 }
 
 .login-card h2 {
-  color: #4F473C;
-  margin-bottom: 25px;
+    color: #4F473C;
+    margin-bottom: 25px;
 }
 
 .login-card label {
-  color: #4F473C;
-  display: block;
-  margin-bottom: 6px;
+    color: #4F473C;
+    display: block;
+    margin-bottom: 6px;
+    margin-top: 15px;
 }
 
 .login-card input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #826849;
-  border-radius: 8px;
-  margin-bottom: 18px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #826849;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
 }
 
 .login-card button {
-  width: 100%;
-  padding: 11px;
-  background-color: #826849;
-  color: white;
-  border: none;
-  border-radius: 8px;
+    width: 100%;
+    padding: 11px;
+    margin-top: 20px;
+    background-color: #826849;
+    color: white;
+    border: none;
+    border-radius: 8px;
 }
 
 .login-card button:hover {
-  background-color: #4F473C;
+    background-color: #4F473C;
 }
 
 
-/* Footer Styling */
+/* Password Requirement */
+
+.password-requirement {
+    color: #4F473C;
+    font-size: 14px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+}
+
+
+/* Validation Error Messages */
+
+.text-danger {
+    color: #c62828;
+    display: block;
+    font-size: 14px;
+    margin-top: 2px;
+    margin-bottom: 10px;
+}
+
+
+/* Keep Footer Below All Page Content */
 
 .footer {
-  position: static !important;
-  width: 100%;
-  padding: 20px 0;
-  margin-top: 0;
-  line-height: normal !important;
+    position: static !important;
+    width: 100%;
+    padding: 20px 0;
+    margin-top: 0;
+    line-height: normal !important;
 }

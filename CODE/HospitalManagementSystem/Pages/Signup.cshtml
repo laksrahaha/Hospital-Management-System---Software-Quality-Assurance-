@@ -4,160 +4,60 @@
     ViewData["Title"] = "Sign Up";
 }
 
-<style>
-    .signup-page {
-        background-color: #ffd59f;
-        min-height: 100vh;
-        padding: 60px 20px;
-        text-align: center;
-    }
+<div class="login-page">
 
-    .signup-logo {
-        width: 120px;
-        margin-bottom: 15px;
-    }
+    <div class="login-card">
 
-    .signup-title {
-        font-size: 40px;
-        font-weight: bold;
-        color: #8f704b;
-        margin-bottom: 30px;
-    }
-
-    .signup-card {
-        background-color: #ead9c2;
-        max-width: 450px;
-        margin: auto;
-        padding: 40px;
-        border-radius: 20px;
-        text-align: left;
-    }
-
-    .signup-card h2 {
-        text-align: center;
-        margin-bottom: 30px;
-        color: #51483e;
-    }
-
-    .signup-card label {
-        display: block;
-        margin-top: 18px;
-        margin-bottom: 8px;
-        font-weight: bold;
-        color: #51483e;
-    }
-
-    .signup-card input {
-        width: 100%;
-        padding: 14px;
-        border: 1px solid #96754e;
-        border-radius: 10px;
-        box-sizing: border-box;
-    }
-
-    .password-requirement {
-        font-size: 13px;
-        color: #6b6258;
-        margin-top: 7px;
-        margin-bottom: 5px;
-        line-height: 1.5;
-    }
-
-    .signup-button {
-        width: 100%;
-        margin-top: 28px;
-        padding: 15px;
-        border: none;
-        border-radius: 10px;
-        background-color: #96754e;
-        color: white;
-        font-size: 17px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .signup-button:hover {
-        background-color: #7f623f;
-    }
-
-    .login-text {
-        text-align: center;
-        margin-top: 20px;
-        color: #51483e;
-    }
-
-    .login-text a {
-        color: #96754e;
-        font-weight: bold;
-    }
-</style>
-
-<div class="signup-page">
-
-    <img src="/images/reserve-health-logo.png"
-         alt="Reserve Health Logo"
-         class="signup-logo">
-
-    <h1 class="signup-title">Reserve Health</h1>
-
-    <div class="signup-card">
-
+        <h1>Reserve Health</h1>
         <h2>Sign Up</h2>
 
         <form method="post">
 
-            <label for="name">Full Name</label>
-
-            <input type="text"
-                   id="name"
-                   name="name"
-                   placeholder="Enter your full name"
-                   required>
+            <label asp-for="FullName">Full Name</label>
+            <input asp-for="FullName"
+                   placeholder="Enter your full name" />
+            <span asp-validation-for="FullName"
+                  class="text-danger"></span>
 
 
-            <label for="email">Email</label>
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email"
+                   type="email"
+                   placeholder="Enter your email" />
+            <span asp-validation-for="Email"
+                  class="text-danger"></span>
 
-            <input type="email"
-                   id="email"
-                   name="email"
-                   placeholder="Enter your email"
-                   required>
 
-
-            <label for="password">Password</label>
-
-            <input type="password"
-                   id="password"
-                   name="password"
-                   placeholder="Enter your password"
-                   minlength="8"
-                   pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}"
-                   title="Password must be at least 8 characters and contain at least one uppercase letter, one number and one symbol."
-                   required>
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password"
+                   type="password"
+                   placeholder="Enter your password" />
 
             <p class="password-requirement">
-                Password must contain at least 8 characters, one uppercase
-                letter, one number and one symbol.
+                Password must contain at least 8 characters,
+                one uppercase letter, one number and one symbol.
             </p>
 
-
-            <label for="confirmPassword">Confirm Password</label>
-
-            <input type="password"
-                   id="confirmPassword"
-                   name="confirmPassword"
-                   placeholder="Confirm your password"
-                   required>
+            <span asp-validation-for="Password"
+                  class="text-danger"></span>
 
 
-            <button type="submit" class="signup-button">
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <input asp-for="ConfirmPassword"
+                   type="password"
+                   placeholder="Confirm your password" />
+
+            <span asp-validation-for="ConfirmPassword"
+                  class="text-danger"></span>
+
+
+            <button type="submit">
                 Sign Up
             </button>
 
         </form>
 
-
-        <p class="login-text">
+        <p style="text-align:center; margin-top:20px;">
             Already have an account?
             <a href="/Login">Login</a>
         </p>
@@ -165,28 +65,3 @@
     </div>
 
 </div>
-
-<script>
-    const signupForm = document.querySelector("form");
-    const password = document.getElementById("password");
-    const confirmPassword = document.getElementById("confirmPassword");
-
-    signupForm.addEventListener("submit", function (event) {
-
-        if (password.value !== confirmPassword.value) {
-            event.preventDefault();
-
-            confirmPassword.setCustomValidity(
-                "Passwords do not match."
-            );
-
-            confirmPassword.reportValidity();
-        } else {
-            confirmPassword.setCustomValidity("");
-        }
-    });
-
-    confirmPassword.addEventListener("input", function () {
-        confirmPassword.setCustomValidity("");
-    });
-</script>
