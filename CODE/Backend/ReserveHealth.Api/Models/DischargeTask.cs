@@ -1,5 +1,8 @@
 namespace ReserveHealth.Api.Models;
 
+// This class stores the different tasks that need to be completed
+// before or after a patient discharge.
+// The tasks can be assigned to staff and tracked until they are completed.
 public class DischargeTask
 {
     public int DischargeTaskId { get; set; }
@@ -19,4 +22,8 @@ public class DischargeTask
     public DateTime? CompletedDate { get; set; }
 
     public string Status { get; set; } = "Pending";
+
+    public Discharge? Discharge { get; set; }
+
+    public User? AssignedToUser { get; set; }
 }
