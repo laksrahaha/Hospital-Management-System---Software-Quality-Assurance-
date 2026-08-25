@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReserveHealth.Api.Data;
 
@@ -11,9 +12,11 @@ using ReserveHealth.Api.Data;
 namespace ReserveHealth.Api.Migrations
 {
     [DbContext(typeof(ReserveHealthContext))]
-    partial class ReserveHealthContextModelSnapshot : ModelSnapshot
+    [Migration("20260819065920_InitialDatabaseSetup")]
+    partial class InitialDatabaseSetup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,20 +36,11 @@ namespace ReserveHealth.Api.Migrations
                     b.Property<DateTime?>("ActualDischargeDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Diagnosis")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FollowUpPlan")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("DischargeTaskId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDischarged")
                         .HasColumnType("bit");
-
-                    b.Property<string>("MedicationChanges")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
                         .IsRequired()
@@ -58,7 +52,7 @@ namespace ReserveHealth.Api.Migrations
                     b.Property<DateTime>("PlannedDischargeDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StaffInChargeId")
+                    b.Property<int>("StaffinchargeID")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -67,9 +61,11 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasKey("DischargeId");
 
+                    b.HasIndex("DischargeTaskId");
+
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("StaffInChargeId");
+                    b.HasIndex("StaffinchargeID");
 
                     b.ToTable("Discharges");
                 });
@@ -163,10 +159,6 @@ namespace ReserveHealth.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PatientId"));
 
-                    b.Property<string>("Allergies")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
@@ -175,10 +167,6 @@ namespace ReserveHealth.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MedicalHistorySummary")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -210,14 +198,6 @@ namespace ReserveHealth.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Organisation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Priority")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -270,6 +250,10 @@ namespace ReserveHealth.Api.Migrations
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Discharge", b =>
                 {
+                    b.HasOne("ReserveHealth.Api.Models.DischargeTask", null)
+                        .WithMany("Discharges")
+                        .HasForeignKey("DischargeTaskId");
+
                     b.HasOne("ReserveHealth.Api.Models.Patient", "Patient")
                         .WithMany("Discharges")
                         .HasForeignKey("PatientId")
@@ -278,7 +262,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasOne("ReserveHealth.Api.Models.User", "StaffInCharge")
                         .WithMany("DischargesInCharge")
-                        .HasForeignKey("StaffInChargeId")
+                        .HasForeignKey("StaffinchargeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -330,6 +314,11 @@ namespace ReserveHealth.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Discharge");
+                });
+
+            modelBuilder.Entity("ReserveHealth.Api.Models.DischargeTask", b =>
+                {
+                    b.Navigation("Discharges");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Patient", b =>
