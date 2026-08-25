@@ -4,3 +4,11 @@ GET {{ReserveHealth.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST http://localhost:5297/api/referrals
+Content-Type: application/json
+
+{
+  "reason": "Patient requires specialist review",
+  "priority": "High"
+}

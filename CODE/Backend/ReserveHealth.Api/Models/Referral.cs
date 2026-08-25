@@ -1,29 +1,15 @@
-namespace ReserveHealth.Api.Models;
+using System.ComponentModel.DataAnnotations;
 
-// This class stores referrals linked to the patient discharge process.
-// The referral can have a priority and status because referrals can be
-// triaged, rejected, accepted or sent back for more information.
-public class Referral
+namespace ReserveHealth.Api.Models
 {
-    public int ReferralId { get; set; }
+    public class Referral
+    {
+        [Required(ErrorMessage = "Reason is required.")]
+        public string Reason { get; set; } = string.Empty;
 
-    public int DischargeId { get; set; }
+        [Required(ErrorMessage = "Priority is required.")]
+        public string Priority { get; set; } = string.Empty;
 
-    public string ReferralType { get; set; } = "";
-
-    public string Organisation { get; set; } = "";
-
-    public string Reason { get; set; } = "";
-
-    public string Priority { get; set; } = "";
-
-    public string Status { get; set; } = "Pending";
-
-    public DateTime? ReferralDate { get; set; }
-
-    public DateTime? FollowUpDate { get; set; }
-
-    public string Notes { get; set; } = "";
-
-    public Discharge? Discharge { get; set; }
+        public string Status { get; set; } = "Pending";
+    }
 }

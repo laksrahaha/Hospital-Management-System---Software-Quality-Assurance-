@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Referral page -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reserve Health - Referrals</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Referral form -->
+    <main class="referral-page">
+
+        <section class="referral-card">
+
+            <h1>Reserve Health</h1>
+            <h2>Create Referral</h2>
+
+            <form id="referralForm">
+
+                <!-- Referral reason -->
+                <label for="reason">Reason</label>
+                <textarea
+                    id="reason"
+                    name="reason"
+                    placeholder="Enter referral reason"
+                    required>
+                </textarea>
+
+                <!-- Referral priority -->
+                <label for="priority">Priority</label>
+                <select id="priority" name="priority" required>
+                    <option value="">Select Priority</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <!-- Submit button -->
+                <button type="submit">
+                    Create Referral
+                </button>
+
+                <p id="referralMessage"></p>
+
+            </form>
+
+        </section>
+
+        <!-- Referral list -->
+        <section class="referral-list-section">
+
+            <h2>Referrals</h2>
+
+            <div id="referralList">
+                <p>No referrals available.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Referral JavaScript -->
+    <script src="referrals.js"></script>
+
+</body>
+</html>

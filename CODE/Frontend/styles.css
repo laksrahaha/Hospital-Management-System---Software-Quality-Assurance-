@@ -597,4 +597,94 @@ body {
     border-color: var(--blue);
 }
 
+    .about-content h2,
+    .features > h2 {
+        font-size: 36px;
+    }
+}
+
+/* Referral page */
+.referral-page {
+    background-color: #FFD6A3;
+    min-height: 100vh;
+    padding: 50px 20px;
+}
+
+/* Referral form */
+.referral-card {
+    max-width: 600px;
+    margin: 0 auto 40px;
+    background-color: #E8D7C3;
+    padding: 30px;
+    border-radius: 18px;
+}
+
+.referral-card h1 {
+    color: #826849;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.referral-card h2 {
+    color: #4F473C;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.referral-card label {
+    display: block;
+    color: #4F473C;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.referral-card textarea,
+.referral-card select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #826849;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.referral-card textarea {
+    min-height: 100px;
+}
+
+.referral-card button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: #826849;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Referral message */
+#referralMessage {
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* Referral list */
+.referral-list-section {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #E8D7C3;
+    padding: 30px;
+    border-radius: 18px;
+}
+
+.referral-list-section h2 {
+    color: #826849;
+    margin-bottom: 20px;
+}
+
+.referral-item {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
 }

@@ -1,0 +1,67 @@
+@page
+@model HospitalManagementSystem.Pages.SignupModel
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <h1>Reserve Health</h1>
+        <h2>Sign Up</h2>
+
+        <form method="post">
+
+            <label asp-for="FullName">Full Name</label>
+            <input asp-for="FullName"
+                   placeholder="Enter your full name" />
+            <span asp-validation-for="FullName"
+                  class="text-danger"></span>
+
+
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email"
+                   type="email"
+                   placeholder="Enter your email" />
+            <span asp-validation-for="Email"
+                  class="text-danger"></span>
+
+
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password"
+                   type="password"
+                   placeholder="Enter your password" />
+
+            <p class="password-requirement">
+                Password must contain at least 8 characters,
+                one uppercase letter, one number and one symbol.
+            </p>
+
+            <span asp-validation-for="Password"
+                  class="text-danger"></span>
+
+
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <input asp-for="ConfirmPassword"
+                   type="password"
+                   placeholder="Confirm your password" />
+
+            <span asp-validation-for="ConfirmPassword"
+                  class="text-danger"></span>
+
+
+            <button type="submit">
+                Sign Up
+            </button>
+
+        </form>
+
+        <p style="text-align:center; margin-top:20px;">
+            Already have an account?
+            <a href="/Login">Login</a>
+        </p>
+
+    </div>
+
+</div>
