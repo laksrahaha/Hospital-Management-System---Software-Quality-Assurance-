@@ -37,4 +37,38 @@ public class PatientController : ControllerBase
 
         return patient;
     }
+//copilot prompt added for new patients
+    [HttpPost]
+    public async Task<ActionResult<Patient>> CreatePatient(Patient patient)
+    {
+        _context.Patients.Add(patient);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(
+            nameof(GetPatient),
+            new { id = patient.PatientId },
+            patient);
+    }
+
+//copilot prompt added
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePatient(int id, Patient patient)
+    {
+        if (id != patient.PatientId)
+        {
+            return BadRequest("Patient ID does not match the route ID.");
+        }
+
+        var existingPatient = await _context.Patients.FindAsync(id);
+
+        if (existingPatient == null)
+        {
+            return NotFound();
+        }
+
+        _context.Entry(existingPatient).CurrentValues.SetValues(patient);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
