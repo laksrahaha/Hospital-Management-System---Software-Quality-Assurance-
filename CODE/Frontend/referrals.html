@@ -10,10 +10,17 @@
 
     <title>Reserve Health - Referrals</title>
 
+    <!-- Uses the shared frontend styling -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+
+    <!-- Main navigation -->
+    <nav class="main-nav">
+        <a href="index.html">Patients</a>
+        <a href="referrals.html" class="active">Referrals</a>
+    </nav>
 
     <main class="referral-page">
 
@@ -59,10 +66,7 @@
                     <option value="P3">P3</option>
                 </select>
 
-                <p id="priorityInfo">
-                    P1 = Urgent, P2 = Semi-urgent, P3 = Routine
-                </p>
-
+                <!-- Submit -->
                 <button type="submit">
                     Create Referral
                 </button>
@@ -73,84 +77,34 @@
 
         </section>
 
-
-        <!-- Referral list -->
+        <!-- Referral list section -->
         <section class="referral-list-section">
 
             <h2>Referrals</h2>
 
-            <!-- Filters -->
-            <div class="referral-filters">
+            <!-- Status filter -->
+            <label for="statusFilter">Filter by Status</label>
+            <select id="statusFilter">
+                <option value="All">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Accepted">Accepted</option>
+                <option value="Returned for more information">
+                    Returned for more information
+                </option>
+                <option value="Rejected">Rejected</option>
+                <option value="Completed">Completed</option>
+            </select>
 
-                <label for="statusFilter">Status</label>
-                <select id="statusFilter">
-                    <option value="All">All</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Accepted">Accepted</option>
-                    <option value="Returned for more information">
-                        Returned for more information
-                    </option>
-                    <option value="Rejected">Rejected</option>
-                    <option value="Completed">Completed</option>
-                </select>
-
-                <label for="priorityFilter">Priority</label>
-                <select id="priorityFilter">
-                    <option value="All">All</option>
-                    <option value="P1">P1</option>
-                    <option value="P2">P2</option>
-                    <option value="P3">P3</option>
-                </select>
-
+            <!-- Referral list -->
+            <div id="referralList">
+                <p>No referrals available.</p>
             </div>
-
-
-            <!-- Referral table -->
-            <div class="referral-table-wrapper">
-
-                <table class="referral-table">
-
-                    <thead>
-                        <tr>
-                            <th>Referral ID</th>
-                            <th>Patient</th>
-                            <th>Service</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="referralList">
-
-                        <tr>
-                            <td colspan="6">
-                                No referrals available.
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <!-- Selected referral -->
-            <section
-                id="referralDetails"
-                class="referral-card referral-details hidden">
-
-                <h2>Referral Details</h2>
-
-                <div id="referralDetailsContent"></div>
-
-            </section>
 
         </section>
 
     </main>
 
+    <!-- Referral JavaScript -->
     <script src="referrals.js"></script>
 
 </body>
