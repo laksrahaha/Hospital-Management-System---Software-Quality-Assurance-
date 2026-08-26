@@ -3,20 +3,21 @@
 
 <head>
     <!-- Referral page -->
+    <!-- Allows staff to create, view and manage patient referrals -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Reserve Health - Referrals</title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <!-- Referral form -->
     <main class="referral-page">
 
+        <!-- Create referral section -->
         <section class="referral-card">
 
             <h1>Reserve Health</h1>
@@ -24,25 +25,44 @@
 
             <form id="referralForm">
 
+                <!-- Patient -->
+                <label for="patientId">Patient</label>
+                <select id="patientId" name="patientId" required>
+                    <option value="">Select Patient</option>
+                </select>
+
+                <!-- Service -->
+                <label for="service">Service</label>
+                <select id="service" name="service" required>
+                    <option value="">Select Service</option>
+                    <option value="Cardiology">Cardiology</option>
+                    <option value="Dermatology">Dermatology</option>
+                    <option value="Neurology">Neurology</option>
+                    <option value="Orthopaedics">Orthopaedics</option>
+                    <option value="General Medicine">General Medicine</option>
+                </select>
+
                 <!-- Referral reason -->
                 <label for="reason">Reason</label>
                 <textarea
                     id="reason"
                     name="reason"
                     placeholder="Enter referral reason"
-                    required>
-                </textarea>
+                    required></textarea>
 
-                <!-- Referral priority -->
+                <!-- Priority -->
                 <label for="priority">Priority</label>
                 <select id="priority" name="priority" required>
                     <option value="">Select Priority</option>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
+                    <option value="P1">P1</option>
+                    <option value="P2">P2</option>
+                    <option value="P3">P3</option>
                 </select>
 
-                <!-- Submit button -->
+                <p id="priorityInfo">
+                    P1 = Urgent, P2 = Semi-urgent, P3 = Routine
+                </p>
+
                 <button type="submit">
                     Create Referral
                 </button>
@@ -53,21 +73,86 @@
 
         </section>
 
+
         <!-- Referral list -->
         <section class="referral-list-section">
 
             <h2>Referrals</h2>
 
-            <div id="referralList">
-                <p>No referrals available.</p>
+            <!-- Filters -->
+            <div class="referral-filters">
+
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                    <option value="All">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Returned for more information">
+                        Returned for more information
+                    </option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Completed">Completed</option>
+                </select>
+
+                <label for="priorityFilter">Priority</label>
+                <select id="priorityFilter">
+                    <option value="All">All</option>
+                    <option value="P1">P1</option>
+                    <option value="P2">P2</option>
+                    <option value="P3">P3</option>
+                </select>
+
             </div>
+
+
+            <!-- Referral table -->
+            <div class="referral-table-wrapper">
+
+                <table class="referral-table">
+
+                    <thead>
+                        <tr>
+                            <th>Referral ID</th>
+                            <th>Patient</th>
+                            <th>Service</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="referralList">
+
+                        <tr>
+                            <td colspan="6">
+                                No referrals available.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Selected referral -->
+            <section
+                id="referralDetails"
+                class="referral-card referral-details hidden">
+
+                <h2>Referral Details</h2>
+
+                <div id="referralDetailsContent"></div>
+
+            </section>
 
         </section>
 
     </main>
 
-    <!-- Referral JavaScript -->
     <script src="referrals.js"></script>
 
 </body>
+
 </html>
