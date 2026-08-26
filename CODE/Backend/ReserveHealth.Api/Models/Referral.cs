@@ -2,8 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ReserveHealth.Api.Models
 {
-    public class Referral
+    public class Referral   
     {
+
+        public int ReferralId { get; set; }
+        
         [Required(ErrorMessage = "Reason is required.")]
         public string Reason { get; set; } = string.Empty;
 
