@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReserveHealth.Api.Data;
 
@@ -11,9 +12,11 @@ using ReserveHealth.Api.Data;
 namespace ReserveHealth.Api.Migrations
 {
     [DbContext(typeof(ReserveHealthContext))]
-    partial class ReserveHealthContextModelSnapshot : ModelSnapshot
+    [Migration("20260826101541_AddPatientLocationAndIsActive")]
+    partial class AddPatientLocationAndIsActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

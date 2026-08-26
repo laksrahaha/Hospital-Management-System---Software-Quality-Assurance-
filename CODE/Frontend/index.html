@@ -14,13 +14,6 @@
 
     <div class="topbar-left">
 
-        <button
-            class="back-button"
-            onclick="history.back()"
-            aria-label="Go back">
-            Back
-        </button>
-
         <div class="logo-box">
             RH
         </div>
@@ -51,8 +44,8 @@
 
 
 <nav class="main-nav">
-    <a href="#patients" class="active">Patients</a>
-    <a href="#referrals">Referrals</a>
+    <a href="index.html" class="active">Patients</a>
+    <a href="referrals.html">Referrals</a>
 </nav>
 
 
@@ -62,31 +55,58 @@
 
         <div class="section-header">
 
-            <div>
-                <h2>Patients</h2>
-                <p>Current patient records</p>
+            <div class="patient-header-top">
+
+                <div class="patient-heading">
+                    <h2>Patients</h2>
+
+                    <p id="patient-list-description">
+                        Current patient records
+                    </p>
+                </div>
+
+
+                <div class="patient-tools">
+
+                    <button
+                        id="add-patient-button"
+                        class="add-patient-button"
+                        type="button">
+                        + Add Patient
+                    </button>
+
+                    <label
+                        for="patient-search"
+                        class="visually-hidden">
+                        Search patients
+                    </label>
+
+                    <input
+                        type="search"
+                        id="patient-search"
+                        placeholder="Search patients..."
+                        aria-label="Search patients">
+
+                </div>
+
             </div>
 
-            <div class="patient-tools">
+
+            <div class="patient-list-tabs">
 
                 <button
-                    id="add-patient-button"
-                    class="add-patient-button"
+                    id="active-patients-button"
+                    class="patient-list-tab active"
                     type="button">
-                    + Add Patient
+                    Active Patients
                 </button>
 
-                <label
-                    for="patient-search"
-                    class="visually-hidden">
-                    Search patients
-                </label>
-
-                <input
-                    type="search"
-                    id="patient-search"
-                    placeholder="Search patients..."
-                    aria-label="Search patients">
+                <button
+                    id="archived-patients-button"
+                    class="patient-list-tab"
+                    type="button">
+                    Archived Patients
+                </button>
 
             </div>
 
@@ -112,11 +132,11 @@
                 <tbody id="patient-table-body">
 
                     <tr>
-
-                        <td colspan="5" class="loading-row">
+                        <td
+                            colspan="5"
+                            class="loading-row">
                             Loading patient records...
                         </td>
-
                     </tr>
 
                 </tbody>
@@ -130,7 +150,13 @@
 
     <section class="patient-record">
 
-        <div id="patient-empty" class="empty-record">
+        <div
+            id="patient-empty"
+            class="empty-record">
+
+            <div class="empty-record-icon">
+                RH
+            </div>
 
             <h3>No patient selected</h3>
 
@@ -141,7 +167,9 @@
         </div>
 
 
-        <div id="patient-details" class="hidden">
+        <div
+            id="patient-details"
+            class="hidden">
 
             <div class="patient-record-header">
 
@@ -165,6 +193,10 @@
                             Date of Birth
                         </span>
 
+                        <span id="detail-patient-location">
+                            Location
+                        </span>
+
                     </div>
 
                 </div>
@@ -178,6 +210,7 @@
                         Status
                     </span>
 
+
                     <div class="edit-menu">
 
                         <button
@@ -187,6 +220,7 @@
                             Edit Patient
                         </button>
 
+
                         <div
                             id="edit-options"
                             class="edit-options hidden">
@@ -195,6 +229,12 @@
                                 type="button"
                                 onclick="showEditSection('status')">
                                 Status
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="showEditSection('location')">
+                                Location
                             </button>
 
                             <button
@@ -218,6 +258,14 @@
                         </div>
 
                     </div>
+
+
+                    <button
+                        id="archive-patient-button"
+                        class="archive-patient-button"
+                        type="button">
+                        Archive Patient
+                    </button>
 
                 </div>
 
@@ -249,7 +297,9 @@
 
                     <section class="record-section">
 
-                        <h3>Medical History</h3>
+                        <h3>
+                            Medical History
+                        </h3>
 
                         <p id="detail-medical-history">
                             No medical history available.
@@ -260,7 +310,9 @@
 
                     <section class="record-section allergy-section">
 
-                        <h3>Allergies</h3>
+                        <h3>
+                            Allergies
+                        </h3>
 
                         <p id="detail-allergies">
                             No allergy information available.
@@ -277,22 +329,21 @@
                 class="tab-content"
                 id="referrals">
 
-                <section class="record-section">
+                <section class="referral-summary">
 
-                    <div class="record-section-heading">
-
-                        <h3>Referral Information</h3>
-
-                        <span class="pending-label">
-                            Not connected
-                        </span>
-
-                    </div>
+                    <h3>
+                        Referral Information
+                    </h3>
 
                     <p>
-                        Referral information will appear here once
-                        the referral workflow is connected.
+                        View and manage referrals for this patient.
                     </p>
+
+                    <a
+                        href="referrals.html"
+                        class="view-button">
+                        Open Referrals
+                    </a>
 
                 </section>
 
@@ -303,7 +354,9 @@
                 id="edit-status-section"
                 class="edit-section hidden">
 
-                <h3>Edit Status</h3>
+                <h3>
+                    Edit Status
+                </h3>
 
                 <label for="edit-status">
                     Patient status
@@ -327,6 +380,7 @@
 
                 </select>
 
+
                 <div class="edit-actions">
 
                     <button
@@ -347,10 +401,49 @@
 
 
             <div
+                id="edit-location-section"
+                class="edit-section hidden">
+
+                <h3>
+                    Edit Location
+                </h3>
+
+                <label for="edit-location">
+                    Patient location
+                </label>
+
+                <input
+                    id="edit-location"
+                    type="text"
+                    maxlength="100"
+                    placeholder="e.g. Ward 3B">
+
+                <div class="edit-actions">
+
+                    <button
+                        type="button"
+                        onclick="savePatientField('location')">
+                        Save
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="closeEditSection('location')">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
                 id="edit-history-section"
                 class="edit-section hidden">
 
-                <h3>Edit Medical History</h3>
+                <h3>
+                    Edit Medical History
+                </h3>
 
                 <textarea
                     id="edit-medical-history"
@@ -381,7 +474,9 @@
                 id="edit-allergies-section"
                 class="edit-section hidden">
 
-                <h3>Edit Allergies</h3>
+                <h3>
+                    Edit Allergies
+                </h3>
 
                 <textarea
                     id="edit-allergies"
@@ -426,6 +521,7 @@
         <div class="patient-modal-header">
 
             <div>
+
                 <p class="small-label">
                     Patient Management
                 </p>
@@ -433,6 +529,7 @@
                 <h2 id="add-patient-title">
                     Add Patient
                 </h2>
+
             </div>
 
             <button
@@ -452,9 +549,12 @@
         </div>
 
 
-        <form id="add-patient-form" novalidate>
+        <form
+            id="add-patient-form"
+            novalidate>
 
             <div class="patient-form-grid">
+
 
                 <div class="form-field">
 
@@ -529,6 +629,21 @@
 
                 <div class="form-field full-form-field">
 
+                    <label for="add-location">
+                        Location
+                    </label>
+
+                    <input
+                        id="add-location"
+                        type="text"
+                        maxlength="100"
+                        placeholder="e.g. Ward 3B">
+
+                </div>
+
+
+                <div class="form-field full-form-field">
+
                     <label for="add-medical-history">
                         Medical history
                     </label>
@@ -536,7 +651,8 @@
                     <textarea
                         id="add-medical-history"
                         maxlength="1000"
-                        placeholder="Enter relevant medical history"></textarea>
+                        placeholder="Enter relevant medical history">
+                    </textarea>
 
                     <div class="field-help">
                         Maximum 1000 characters
@@ -554,7 +670,8 @@
                     <textarea
                         id="add-allergies"
                         maxlength="500"
-                        placeholder="Enter known allergies or leave blank"></textarea>
+                        placeholder="Enter known allergies or leave blank">
+                    </textarea>
 
                     <div class="field-help">
                         Maximum 500 characters
