@@ -22,7 +22,9 @@ public class PatientController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
     {
-        return await _context.Patients.ToListAsync();
+        return await _context.Patients
+        .Where(patient => patient.IsActive)
+        .ToListAsync();
     }
 
     [HttpGet("{id}")]
@@ -71,4 +73,47 @@ public class PatientController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("{id}/archive")]
+public async Task<IActionResult> ArchivePatient(int id)
+{
+    var patient = await _context.Patients.FindAsync(id);
+
+    if (patient == null)
+    {
+        return NotFound();
+    }
+
+    patient.IsActive = false;
+
+    await _context.SaveChangesAsync();
+
+    return NoContent();
+}
+
+[HttpGet("archived")]
+public async Task<ActionResult<IEnumerable<Patient>>> GetArchivedPatients()
+{
+    return await _context.Patients
+        .Where(patient => !patient.IsActive)
+        .ToListAsync();
+}
+
+[HttpPut("{id}/restore")]
+public async Task<IActionResult> RestorePatient(int id)
+{
+    var patient = await _context.Patients.FindAsync(id);
+
+    if (patient == null)
+    {
+        return NotFound();
+    }
+
+    patient.IsActive = true;
+
+    await _context.SaveChangesAsync();
+
+    return NoContent();
+}
+
 }

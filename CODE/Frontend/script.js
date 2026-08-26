@@ -1,6 +1,7 @@
 const apiUrl = "http://localhost:5297/api/patient";
 
 let selectedPatient = null;
+let showingArchivedPatients = false;
 
 
 async function loadPatients() {
@@ -10,13 +11,21 @@ async function loadPatients() {
 
     try {
 
+        let requestUrl = apiUrl;
+
+        if (showingArchivedPatients) {
+            requestUrl = `${apiUrl}/archived`;
+        }
+
         const response =
-            await fetch(apiUrl);
+            await fetch(requestUrl);
 
         if (!response.ok) {
+
             throw new Error(
                 "Could not load patient information."
             );
+
         }
 
         const patients =
@@ -24,6 +33,22 @@ async function loadPatients() {
 
         tableBody.innerHTML = "";
 
+        if (patients.length === 0) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        ${
+                            showingArchivedPatients
+                                ? "No archived patients."
+                                : "No active patients."
+                        }
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
 
         patients.forEach(patient => {
 
@@ -33,7 +58,6 @@ async function loadPatients() {
             const dateOfBirth =
                 new Date(patient.dateOfBirth)
                     .toLocaleDateString("en-NZ");
-
 
             row.innerHTML = `
                 <td>${patient.patientId}</td>
@@ -61,7 +85,6 @@ async function loadPatients() {
                     </button>
                 </td>
             `;
-
 
             tableBody.appendChild(row);
 
@@ -95,7 +118,6 @@ async function loadPatient(patientId) {
                 `${apiUrl}/${patientId}`
             );
 
-
         if (!response.ok) {
 
             throw new Error(
@@ -104,32 +126,26 @@ async function loadPatient(patientId) {
 
         }
 
-
         const patient =
             await response.json();
-
 
         document
             .getElementById("patient-empty")
             .classList.add("hidden");
 
-
         document
             .getElementById("patient-details")
             .classList.remove("hidden");
-
 
         document
             .getElementById("detail-patient-id")
             .textContent =
             `Patient ID: ${patient.patientId}`;
 
-
         document
             .getElementById("detail-patient-name")
             .textContent =
             `${patient.firstName} ${patient.lastName}`;
-
 
         document
             .getElementById("detail-patient-dob")
@@ -139,12 +155,18 @@ async function loadPatient(patientId) {
                     .toLocaleDateString("en-NZ")
             }`;
 
+        document
+            .getElementById("detail-patient-location")
+            .textContent =
+            `Location: ${
+                patient.location
+                || "Not specified"
+            }`;
 
         document
             .getElementById("detail-patient-status")
             .textContent =
             patient.status;
-
 
         document
             .getElementById("detail-medical-history")
@@ -152,15 +174,27 @@ async function loadPatient(patientId) {
             patient.medicalHistorySummary
             || "No medical history available.";
 
-
         document
             .getElementById("detail-allergies")
             .textContent =
             patient.allergies
             || "No allergy information available.";
 
-
         selectedPatient = patient;
+
+        if (showingArchivedPatients) {
+
+            archivePatientButton.textContent =
+                "Restore Patient";
+
+        }
+
+        else {
+
+            archivePatientButton.textContent =
+                "Archive Patient";
+
+        }
 
     }
 
@@ -177,8 +211,103 @@ async function loadPatient(patientId) {
 
 
 
+const activePatientsButton =
+    document.getElementById(
+        "active-patients-button"
+    );
+
+
+const archivedPatientsButton =
+    document.getElementById(
+        "archived-patients-button"
+    );
+
+
+const patientListDescription =
+    document.getElementById(
+        "patient-list-description"
+    );
+
+
+const addPatientButton =
+    document.getElementById(
+        "add-patient-button"
+    );
+
+
+activePatientsButton.addEventListener(
+    "click",
+    async function () {
+
+        showingArchivedPatients = false;
+
+        activePatientsButton
+            .classList.add("active");
+
+        archivedPatientsButton
+            .classList.remove("active");
+
+        patientListDescription.textContent =
+            "Current patient records";
+
+        addPatientButton
+            .classList.remove("hidden");
+
+        selectedPatient = null;
+
+        document
+            .getElementById("patient-details")
+            .classList.add("hidden");
+
+        document
+            .getElementById("patient-empty")
+            .classList.remove("hidden");
+
+        await loadPatients();
+
+    }
+);
+
+
+archivedPatientsButton.addEventListener(
+    "click",
+    async function () {
+
+        showingArchivedPatients = true;
+
+        archivedPatientsButton
+            .classList.add("active");
+
+        activePatientsButton
+            .classList.remove("active");
+
+        patientListDescription.textContent =
+            "Archived patient records";
+
+        addPatientButton
+            .classList.add("hidden");
+
+        selectedPatient = null;
+
+        document
+            .getElementById("patient-details")
+            .classList.add("hidden");
+
+        document
+            .getElementById("patient-empty")
+            .classList.remove("hidden");
+
+        await loadPatients();
+
+    }
+);
+
+
+
 const patientSearch =
-    document.getElementById("patient-search");
+    document.getElementById(
+        "patient-search"
+    );
 
 
 if (patientSearch) {
@@ -192,19 +321,16 @@ if (patientSearch) {
                     .toLowerCase()
                     .trim();
 
-
             const rows =
                 document.querySelectorAll(
                     "#patient-table-body tr"
                 );
-
 
             rows.forEach(row => {
 
                 const rowText =
                     row.textContent
                         .toLowerCase();
-
 
                 if (
                     rowText.includes(
@@ -237,6 +363,7 @@ const tabButtons =
         ".tab-button"
     );
 
+
 const tabContents =
     document.querySelectorAll(
         ".tab-content"
@@ -257,7 +384,6 @@ tabButtons.forEach(button => {
 
             });
 
-
             tabContents.forEach(content => {
 
                 content.classList.remove(
@@ -266,15 +392,12 @@ tabButtons.forEach(button => {
 
             });
 
-
             this.classList.add(
                 "active"
             );
 
-
             const tabName =
                 this.dataset.tab;
-
 
             document
                 .getElementById(tabName)
@@ -296,7 +419,7 @@ function logout() {
     );
 
     window.location.href =
-        "login.html";
+        "../HospitalManagementSystem/Pages/Login.html";
 
 }
 
@@ -319,7 +442,6 @@ document
                 return;
 
             }
-
 
             document
                 .getElementById(
@@ -362,10 +484,30 @@ function showEditSection(section) {
             .value =
             selectedPatient.status;
 
-
         document
             .getElementById(
                 "edit-status-section"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+    }
+
+
+    if (section === "location") {
+
+        document
+            .getElementById(
+                "edit-location"
+            )
+            .value =
+            selectedPatient.location
+            || "";
+
+        document
+            .getElementById(
+                "edit-location-section"
             )
             .classList.remove(
                 "hidden"
@@ -384,7 +526,6 @@ function showEditSection(section) {
             selectedPatient
                 .medicalHistorySummary
             || "";
-
 
         document
             .getElementById(
@@ -406,7 +547,6 @@ function showEditSection(section) {
             .value =
             selectedPatient.allergies
             || "";
-
 
         document
             .getElementById(
@@ -448,7 +588,6 @@ async function savePatientField(field) {
 
     }
 
-
     const updatedPatient = {
         ...selectedPatient
     };
@@ -462,6 +601,19 @@ async function savePatientField(field) {
                     "edit-status"
                 )
                 .value;
+
+    }
+
+
+    if (field === "location") {
+
+        updatedPatient.location =
+            document
+                .getElementById(
+                    "edit-location"
+                )
+                .value
+                .trim();
 
     }
 
@@ -513,7 +665,6 @@ async function savePatientField(field) {
                 }
             );
 
-
         if (!response.ok) {
 
             const errorMessage =
@@ -526,16 +677,13 @@ async function savePatientField(field) {
 
         }
 
-
         await loadPatient(
             selectedPatient.patientId
         );
 
         await loadPatients();
 
-
         closeEditSection(field);
-
 
         alert(
             "Patient updated successfully."
@@ -562,15 +710,18 @@ const addPatientModal =
         "add-patient-modal"
     );
 
+
 const addPatientForm =
     document.getElementById(
         "add-patient-form"
     );
 
+
 const addPatientMessage =
     document.getElementById(
         "add-patient-message"
     );
+
 
 const saveNewPatientButton =
     document.getElementById(
@@ -614,20 +765,17 @@ function clearAddPatientForm() {
         )
         .value = "";
 
-
     document
         .getElementById(
             "add-last-name"
         )
         .value = "";
 
-
     document
         .getElementById(
             "add-date-of-birth"
         )
         .value = "";
-
 
     document
         .getElementById(
@@ -636,13 +784,17 @@ function clearAddPatientForm() {
         .value =
         "Admitted";
 
+    document
+        .getElementById(
+            "add-location"
+        )
+        .value = "";
 
     document
         .getElementById(
             "add-medical-history"
         )
         .value = "";
-
 
     document
         .getElementById(
@@ -662,7 +814,6 @@ function openAddPatientModal() {
         .classList.remove(
             "hidden"
         );
-
 
     document
         .getElementById(
@@ -803,6 +954,15 @@ addPatientForm.addEventListener(
                 .value;
 
 
+        const location =
+            document
+                .getElementById(
+                    "add-location"
+                )
+                .value
+                .trim();
+
+
         const medicalHistorySummary =
             document
                 .getElementById(
@@ -880,6 +1040,7 @@ addPatientForm.addEventListener(
                 `${dateOfBirth}T00:00:00`
             );
 
+
         const today =
             new Date();
 
@@ -928,6 +1089,20 @@ addPatientForm.addEventListener(
 
 
         if (
+            location.length > 100
+        ) {
+
+            showAddPatientMessage(
+                "Location cannot exceed 100 characters.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (
             medicalHistorySummary.length
             > 1000
         ) {
@@ -966,6 +1141,8 @@ addPatientForm.addEventListener(
 
             status,
 
+            location,
+
             medicalHistorySummary,
 
             allergies
@@ -975,6 +1152,7 @@ addPatientForm.addEventListener(
 
         saveNewPatientButton.disabled =
             true;
+
 
         saveNewPatientButton.textContent =
             "Saving...";
@@ -1006,7 +1184,6 @@ addPatientForm.addEventListener(
                 const errorMessage =
                     await response.text();
 
-
                 throw new Error(
                     errorMessage
                     || "Patient could not be added."
@@ -1023,6 +1200,26 @@ addPatientForm.addEventListener(
                 "Patient added successfully.",
                 "success"
             );
+
+
+            showingArchivedPatients =
+                false;
+
+
+            activePatientsButton
+                .classList.add(
+                    "active"
+                );
+
+
+            archivedPatientsButton
+                .classList.remove(
+                    "active"
+                );
+
+
+            patientListDescription.textContent =
+                "Current patient records";
 
 
             await loadPatients();
@@ -1049,7 +1246,6 @@ addPatientForm.addEventListener(
 
             console.error(error);
 
-
             showAddPatientMessage(
                 "Patient could not be added. Please check the information and try again.",
                 "error"
@@ -1069,6 +1265,193 @@ addPatientForm.addEventListener(
 
     }
 );
+
+
+
+function openReferralPage() {
+
+    window.location.href =
+        "referrals.html";
+
+}
+
+
+
+const archivePatientButton =
+    document.getElementById(
+        "archive-patient-button"
+    );
+
+
+archivePatientButton.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedPatient) {
+            return;
+        }
+
+
+        if (showingArchivedPatients) {
+
+            await restorePatient();
+
+        }
+
+        else {
+
+            await archivePatient();
+
+        }
+
+    }
+);
+
+
+
+async function archivePatient() {
+
+    if (!selectedPatient) {
+        return;
+    }
+
+
+    const patientName =
+        `${selectedPatient.firstName} ${selectedPatient.lastName}`;
+
+
+    const confirmed =
+        confirm(
+            `Archive ${patientName}? This patient will be removed from the active patient list.`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${apiUrl}/${selectedPatient.patientId}/archive`,
+                {
+                    method: "PUT"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Archive failed."
+            );
+
+        }
+
+
+        selectedPatient = null;
+
+
+        document
+            .getElementById("patient-details")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("patient-empty")
+            .classList.remove("hidden");
+
+
+        await loadPatients();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Patient could not be archived."
+        );
+
+    }
+
+}
+
+
+
+async function restorePatient() {
+
+    if (!selectedPatient) {
+        return;
+    }
+
+
+    const patientName =
+        `${selectedPatient.firstName} ${selectedPatient.lastName}`;
+
+
+    const confirmed =
+        confirm(
+            `Restore ${patientName} to the active patient list?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${apiUrl}/${selectedPatient.patientId}/restore`,
+                {
+                    method: "PUT"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Restore failed."
+            );
+
+        }
+
+
+        selectedPatient = null;
+
+
+        document
+            .getElementById("patient-details")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("patient-empty")
+            .classList.remove("hidden");
+
+
+        await loadPatients();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Patient could not be restored."
+        );
+
+    }
+
+}
 
 
 
