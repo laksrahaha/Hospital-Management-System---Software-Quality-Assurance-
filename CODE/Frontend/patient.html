@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve Health</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/patient.css">
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="topbar-left">
+
+        <div class="logo-box">
+            RH
+        </div>
+
+        <div class="brand-details">
+            <h1>Reserve Health</h1>
+            <p>Clinical Coordination System</p>
+        </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <div class="staff-details">
+            <span class="staff-name">Clinical Staff</span>
+            <span class="role">Doctor</span>
+        </div>
+
+        <button
+            class="logout-button"
+            onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<nav class="main-nav">
+    <a href="index.html" class="active">Dashboard</a>
+    <a href="patient.html">Patients</a>
+    <a href="referrals.html">Referrals</a>
+</nav>
+
+
+<main class="app-layout">
+
+    <section class="patient-panel">
+
+        <div class="section-header">
+
+            <div class="patient-header-top">
+
+                <div class="patient-heading">
+                    <h2>Patients</h2>
+
+                    <p id="patient-list-description">
+                        Current patient records
+                    </p>
+                </div>
+
+
+                <div class="patient-tools">
+
+                    <button
+                        id="add-patient-button"
+                        class="add-patient-button"
+                        type="button">
+                        + Add Patient
+                    </button>
+
+                    <label
+                        for="patient-search"
+                        class="visually-hidden">
+                        Search patients
+                    </label>
+
+                    <input
+                        type="search"
+                        id="patient-search"
+                        placeholder="Search patients..."
+                        aria-label="Search patients">
+
+                </div>
+
+            </div>
+
+
+            <div class="patient-list-tabs">
+
+                <button
+                    id="active-patients-button"
+                    class="patient-list-tab active"
+                    type="button">
+                    Active Patients
+                </button>
+
+                <button
+                    id="archived-patients-button"
+                    class="patient-list-tab"
+                    type="button">
+                    Archived Patients
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table class="patient-table">
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient</th>
+                        <th>Date of Birth</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="patient-table-body">
+
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="loading-row">
+                            Loading patient records...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <section class="patient-record">
+
+        <div
+            id="patient-empty"
+            class="empty-record">
+
+            <div class="empty-record-icon">
+                RH
+            </div>
+
+            <h3>No patient selected</h3>
+
+            <p>
+                Select a patient from the table to view their clinical record.
+            </p>
+
+        </div>
+
+
+        <div
+            id="patient-details"
+            class="hidden">
+
+            <div class="patient-record-header">
+
+                <div>
+
+                    <p class="small-label">
+                        Patient Record
+                    </p>
+
+                    <h2 id="detail-patient-name">
+                        Patient Name
+                    </h2>
+
+                    <div class="patient-meta">
+
+                        <span id="detail-patient-id">
+                            Patient ID
+                        </span>
+
+                        <span id="detail-patient-dob">
+                            Date of Birth
+                        </span>
+
+                        <span id="detail-patient-location">
+                            Location
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="patient-header-actions">
+
+                    <span
+                        id="detail-patient-status"
+                        class="status-badge">
+                        Status
+                    </span>
+
+
+                    <div class="edit-menu">
+
+                        <button
+                            id="edit-patient-button"
+                            class="edit-patient-button"
+                            type="button">
+                            Edit Patient
+                        </button>
+
+
+                        <div
+                            id="edit-options"
+                            class="edit-options hidden">
+
+                            <button
+                                type="button"
+                                onclick="showEditSection('status')">
+                                Status
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="showEditSection('location')">
+                                Location
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="showEditSection('history')">
+                                Medical History
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="showEditSection('allergies')">
+                                Allergies
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="closeEditOptions()">
+                                Cancel
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="archive-patient-button"
+                        class="archive-patient-button"
+                        type="button">
+                        Archive Patient
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="record-tabs">
+
+                <button
+                    class="tab-button active"
+                    data-tab="summary">
+                    Summary
+                </button>
+
+                <button
+                    class="tab-button"
+                    data-tab="referrals">
+                    Referrals
+                </button>
+
+            </div>
+
+
+            <div
+                class="tab-content active-tab"
+                id="summary">
+
+                <div class="record-grid">
+
+                    <section class="record-section">
+
+                        <h3>
+                            Medical History
+                        </h3>
+
+                        <p id="detail-medical-history">
+                            No medical history available.
+                        </p>
+
+                    </section>
+
+
+                    <section class="record-section allergy-section">
+
+                        <h3>
+                            Allergies
+                        </h3>
+
+                        <p id="detail-allergies">
+                            No allergy information available.
+                        </p>
+
+                    </section>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="tab-content"
+                id="referrals">
+
+                <section class="referral-summary">
+
+                    <h3>
+                        Referral Information
+                    </h3>
+
+                    <p>
+                        View and manage referrals for this patient.
+                    </p>
+
+                    <a
+                        href="referrals.html"
+                        class="view-button">
+                        Open Referrals
+                    </a>
+
+                </section>
+
+            </div>
+
+
+            <div
+                id="edit-status-section"
+                class="edit-section hidden">
+
+                <h3>
+                    Edit Status
+                </h3>
+
+                <label for="edit-status">
+                    Patient status
+                </label>
+
+                <select
+                    id="edit-status"
+                    required>
+
+                    <option value="Admitted">
+                        Admitted
+                    </option>
+
+                    <option value="Active">
+                        Active
+                    </option>
+
+                    <option value="Follow-up">
+                        Follow-up
+                    </option>
+
+                </select>
+
+
+                <div class="edit-actions">
+
+                    <button
+                        type="button"
+                        onclick="savePatientField('status')">
+                        Save
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="closeEditSection('status')">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="edit-location-section"
+                class="edit-section hidden">
+
+                <h3>
+                    Edit Location
+                </h3>
+
+                <label for="edit-location">
+                    Patient location
+                </label>
+
+                <input
+                    id="edit-location"
+                    type="text"
+                    maxlength="100"
+                    placeholder="e.g. Ward 3B">
+
+                <div class="edit-actions">
+
+                    <button
+                        type="button"
+                        onclick="savePatientField('location')">
+                        Save
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="closeEditSection('location')">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="edit-history-section"
+                class="edit-section hidden">
+
+                <h3>
+                    Edit Medical History
+                </h3>
+
+                <textarea
+                    id="edit-medical-history"
+                    maxlength="1000"
+                    aria-label="Medical history">
+                </textarea>
+
+                <div class="edit-actions">
+
+                    <button
+                        type="button"
+                        onclick="savePatientField('history')">
+                        Save
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="closeEditSection('history')">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="edit-allergies-section"
+                class="edit-section hidden">
+
+                <h3>
+                    Edit Allergies
+                </h3>
+
+                <textarea
+                    id="edit-allergies"
+                    maxlength="500"
+                    aria-label="Allergies">
+                </textarea>
+
+                <div class="edit-actions">
+
+                    <button
+                        type="button"
+                        onclick="savePatientField('allergies')">
+                        Save
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="closeEditSection('allergies')">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div
+    id="add-patient-modal"
+    class="patient-modal hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="add-patient-title">
+
+    <div class="patient-modal-card">
+
+        <div class="patient-modal-header">
+
+            <div>
+
+                <p class="small-label">
+                    Patient Management
+                </p>
+
+                <h2 id="add-patient-title">
+                    Add Patient
+                </h2>
+
+            </div>
+
+            <button
+                id="close-add-patient-button"
+                class="modal-close-button"
+                type="button"
+                aria-label="Close add patient form">
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            id="add-patient-message"
+            class="form-message hidden">
+        </div>
+
+
+        <form
+            id="add-patient-form"
+            novalidate>
+
+            <div class="patient-form-grid">
+
+
+                <div class="form-field">
+
+                    <label for="add-first-name">
+                        First name
+                        <span class="required-mark">*</span>
+                    </label>
+
+                    <input
+                        id="add-first-name"
+                        type="text"
+                        maxlength="50"
+                        autocomplete="off">
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="add-last-name">
+                        Last name
+                        <span class="required-mark">*</span>
+                    </label>
+
+                    <input
+                        id="add-last-name"
+                        type="text"
+                        maxlength="50"
+                        autocomplete="off">
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="add-date-of-birth">
+                        Date of birth
+                        <span class="required-mark">*</span>
+                    </label>
+
+                    <input
+                        id="add-date-of-birth"
+                        type="date">
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="add-status">
+                        Status
+                    </label>
+
+                    <select id="add-status">
+
+                        <option value="Admitted">
+                            Admitted
+                        </option>
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Follow-up">
+                            Follow-up
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-field full-form-field">
+
+                    <label for="add-location">
+                        Location
+                    </label>
+
+                    <input
+                        id="add-location"
+                        type="text"
+                        maxlength="100"
+                        placeholder="e.g. Ward 3B">
+
+                </div>
+
+
+                <div class="form-field full-form-field">
+
+                    <label for="add-medical-history">
+                        Medical history
+                    </label>
+
+                    <textarea
+                        id="add-medical-history"
+                        maxlength="1000"
+                        placeholder="Enter relevant medical history">
+                    </textarea>
+
+                    <div class="field-help">
+                        Maximum 1000 characters
+                    </div>
+
+                </div>
+
+
+                <div class="form-field full-form-field">
+
+                    <label for="add-allergies">
+                        Allergies
+                    </label>
+
+                    <textarea
+                        id="add-allergies"
+                        maxlength="500"
+                        placeholder="Enter known allergies or leave blank">
+                    </textarea>
+
+                    <div class="field-help">
+                        Maximum 500 characters
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="patient-modal-actions">
+
+                <button
+                    id="cancel-add-patient-button"
+                    class="secondary-button"
+                    type="button">
+                    Cancel
+                </button>
+
+                <button
+                    id="save-new-patient-button"
+                    class="primary-button"
+                    type="submit">
+                    Save Patient
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="patient.js"></script>
+
+</body>
+
+</html>
