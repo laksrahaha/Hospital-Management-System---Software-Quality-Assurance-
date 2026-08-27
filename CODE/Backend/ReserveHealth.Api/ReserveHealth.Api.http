@@ -12,3 +12,36 @@ Content-Type: application/json
   "reason": "Patient requires specialist review",
   "priority": "High"
 }
+
+
+###
+
+POST http://localhost:5297/api/referrals
+Content-Type: application/json
+
+{
+  "reason": "",
+  "priority": "High"
+}
+
+###
+
+POST http://localhost:5297/api/referrals
+Content-Type: application/json
+
+{
+  "reason": "Patient requires specialist review",
+  "priority": ""
+}
+
+###
+
+POST http://localhost:5297/api/referrals
+Content-Type: application/json
+
+{
+  "patientId": 1,
+  "reason": "Patient requires specialist review",
+  "service": "Cardiology",
+  "priority": "P1"
+}
