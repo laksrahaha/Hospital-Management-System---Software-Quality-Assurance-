@@ -2,110 +2,452 @@
 <html lang="en">
 
 <head>
-    <!-- Referral page -->
-    <!-- Allows staff to create, view and manage patient referrals -->
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Reserve Health - Referrals</title>
 
-    <!-- Uses the shared frontend styling -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./css/shared.css">
+    <link rel="stylesheet" href="./css/referral.css">
 </head>
 
 <body>
 
-    <!-- Main navigation -->
-    <nav class="main-nav">
-        <a href="index.html">Patients</a>
-        <a href="referrals.html" class="active">Referrals</a>
-    </nav>
+<header class="topbar">
 
-    <main class="referral-page">
+    <div class="topbar-left">
 
-        <!-- Create referral section -->
-        <section class="referral-card">
+        <div class="logo-box">
+            RH
+        </div>
 
+        <div class="brand-details">
             <h1>Reserve Health</h1>
+            <p>Clinical Coordination System</p>
+        </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <div class="staff-details">
+            <span class="staff-name">Clinical Staff</span>
+            <span class="role">Doctor</span>
+        </div>
+
+        <button
+            type="button"
+            class="logout-button"
+            onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+<nav class="main-nav">
+    <a href="index.html">Dashboard</a>
+    <a href="patient.html">Patients</a>
+    <a href="referrals.html" class="active">Referrals</a>
+</nav>
+
+<main class="referral-layout">
+
+    <!-- Create referral section -->
+    <section class="referral-create-panel">
+
+        <div class="referral-section-header">
+
+            <p class="small-label">
+                Referral Management
+            </p>
+
             <h2>Create Referral</h2>
 
-            <form id="referralForm">
+            <p>
+                Create a referral for an existing patient.
+            </p>
 
-                <!-- Patient -->
-                <label for="patientId">Patient</label>
-                <select id="patientId" name="patientId" required>
-                    <option value="">Select Patient</option>
+        </div>
+
+        <form
+            id="referralForm"
+            class="referral-form">
+
+            <div class="referral-form-field">
+
+                <label for="patientId">
+                    Patient
+                </label>
+
+                <select
+                    id="patientId"
+                    name="patientId"
+                    required>
+
+                    <option value="">
+                        Select Patient
+                    </option>
+
                 </select>
 
-                <!-- Service -->
-                <label for="service">Service</label>
-                <select id="service" name="service" required>
-                    <option value="">Select Service</option>
-                    <option value="Cardiology">Cardiology</option>
-                    <option value="Dermatology">Dermatology</option>
-                    <option value="Neurology">Neurology</option>
-                    <option value="Orthopaedics">Orthopaedics</option>
-                    <option value="General Medicine">General Medicine</option>
+            </div>
+
+            <div class="referral-form-field">
+
+                <label for="service">
+                    Service
+                </label>
+
+                <select
+                    id="service"
+                    name="service"
+                    required>
+
+                    <option value="">
+                        Select Service
+                    </option>
+
+                    <option value="Cardiology">
+                        Cardiology
+                    </option>
+
+                    <option value="Dermatology">
+                        Dermatology
+                    </option>
+
+                    <option value="Neurology">
+                        Neurology
+                    </option>
+
+                    <option value="Orthopaedics">
+                        Orthopaedics
+                    </option>
+
+                    <option value="General Medicine">
+                        General Medicine
+                    </option>
+
                 </select>
 
-                <!-- Referral reason -->
-                <label for="reason">Reason</label>
+            </div>
+
+            <div class="referral-form-field">
+
+                <label for="priority">
+                    Priority
+                </label>
+
+                <select
+                    id="priority"
+                    name="priority"
+                    required>
+
+                    <option value="">
+                        Select Priority
+                    </option>
+
+                    <option value="P1">
+                        P1
+                    </option>
+
+                    <option value="P2">
+                        P2
+                    </option>
+
+                    <option value="P3">
+                        P3
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="referral-form-field">
+
+                <label for="reason">
+                    Referral reason
+                </label>
+
                 <textarea
                     id="reason"
                     name="reason"
                     placeholder="Enter referral reason"
                     required></textarea>
 
-                <!-- Priority -->
-                <label for="priority">Priority</label>
-                <select id="priority" name="priority" required>
-                    <option value="">Select Priority</option>
-                    <option value="P1">P1</option>
-                    <option value="P2">P2</option>
-                    <option value="P3">P3</option>
-                </select>
+            </div>
 
-                <!-- Submit -->
-                <button type="submit">
-                    Create Referral
-                </button>
+            <button
+                type="submit"
+                class="create-referral-button">
+                Create Referral
+            </button>
 
-                <p id="referralMessage"></p>
+            <p
+                id="referralMessage"
+                class="form-message">
+            </p>
 
-            </form>
+        </form>
 
-        </section>
+    </section>
 
-        <!-- Referral list section -->
-        <section class="referral-list-section">
+    <!-- Referral list section -->
+    <section class="referral-list-panel">
+
+        <div class="referral-section-header">
+
+            <p class="small-label">
+                Referral Records
+            </p>
 
             <h2>Referrals</h2>
 
-            <!-- Status filter -->
-            <label for="statusFilter">Filter by Status</label>
-            <select id="statusFilter">
-                <option value="All">All</option>
-                <option value="Pending">Pending</option>
-                <option value="Accepted">Accepted</option>
-                <option value="Returned for more information">
-                    Returned for more information
-                </option>
-                <option value="Rejected">Rejected</option>
-                <option value="Completed">Completed</option>
-            </select>
+            <p>
+                View, filter and update current referral records.
+            </p>
 
-            <!-- Referral list -->
-            <div id="referralList">
-                <p>No referrals available.</p>
+        </div>
+
+        <div class="referral-filters">
+
+            <div class="referral-filter">
+
+                <label for="statusFilter">
+                    Status
+                </label>
+
+                <select id="statusFilter">
+
+                    <option value="All">
+                        All
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Accepted">
+                        Accepted
+                    </option>
+
+                    <option value="Returned for more information">
+                        Returned for more information
+                    </option>
+
+                    <option value="Rejected">
+                        Rejected
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                </select>
+
             </div>
 
-        </section>
+            <div class="referral-filter">
 
-    </main>
+                <label for="priorityFilter">
+                    Priority
+                </label>
 
-    <!-- Referral JavaScript -->
-    <script src="referrals.js"></script>
+                <select id="priorityFilter">
+
+                    <option value="All">
+                        All
+                    </option>
+
+                    <option value="P1">
+                        P1
+                    </option>
+
+                    <option value="P2">
+                        P2
+                    </option>
+
+                    <option value="P3">
+                        P3
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="table-container">
+
+            <table class="referral-table">
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Patient</th>
+                        <th>Service</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="referralList">
+
+                    <tr>
+                        <td
+                            colspan="6"
+                            class="loading-row">
+                            Loading referrals...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!-- Edit referral section -->
+    <section
+        id="referralDetails"
+        class="referral-details-panel hidden">
+
+        <div class="referral-section-header">
+
+            <p class="small-label">
+                Referral Record
+            </p>
+
+            <h2>Edit Referral</h2>
+
+            <p>
+                Update the priority and current referral status.
+            </p>
+
+        </div>
+
+        <div id="referralDetailsContent">
+        </div>
+
+        <form
+            id="editReferralForm"
+            class="referral-form">
+
+            <input
+                type="hidden"
+                id="editReferralId">
+
+            <div class="referral-form-field">
+
+                <label for="editPriority">
+                    Priority
+                </label>
+
+                <select
+                    id="editPriority"
+                    required>
+
+                    <option value="P1">
+                        P1
+                    </option>
+
+                    <option value="P2">
+                        P2
+                    </option>
+
+                    <option value="P3">
+                        P3
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="referral-form-field">
+
+                <label for="editStatus">
+                    Status
+                </label>
+
+                <select
+                    id="editStatus"
+                    required>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Accepted">
+                        Accepted
+                    </option>
+
+                    <option value="Returned for more information">
+                        Returned for more information
+                    </option>
+
+                    <option value="Rejected">
+                        Rejected
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div
+                id="statusReasonField"
+                class="referral-form-field hidden">
+
+                <label for="editStatusReason">
+                    Status reason
+                </label>
+
+                <textarea
+                    id="editStatusReason"
+                    placeholder="Enter the reason for returning or rejecting this referral"></textarea>
+
+            </div>
+
+            <div class="edit-referral-actions">
+
+                <button
+                    type="submit"
+                    class="create-referral-button">
+                    Save Changes
+                </button>
+
+                <button
+                    type="button"
+                    id="cancelEditButton"
+                    class="cancel-edit-button">
+                    Cancel
+                </button>
+
+            </div>
+
+            <p
+                id="editReferralMessage"
+                class="form-message">
+            </p>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="referrals.js"></script>
 
 </body>
 
