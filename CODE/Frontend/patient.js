@@ -1,3 +1,6 @@
+//contorls the patirtn page fucntinality
+// it connects tot he pateint api and handles the loading, searcing , adding editing and even
+// the archiving function also cna restore pateints
 const apiUrl = "http://localhost:5297/api/patient";
 
 let selectedPatient = null;

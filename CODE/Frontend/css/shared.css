@@ -1,3 +1,6 @@
+/*the shared styling that is used acorrs the reserve health frontend, it also keeps the mina colours , naviatgation buttons and general layout consistent between pages
+*/
+
 :root {
     --navy: #173b57;
     --navy-dark: #102f45;

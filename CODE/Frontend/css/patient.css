@@ -1,3 +1,11 @@
+/*this is the css file that styles the pateint management page,
+ it includes the layout and styling for the patient list, patient details, 
+ and patient management modals.
+  It also includes responsive design for different screen sizes.*/ 
+
+
+
+
 .app-layout {
     width: min(1500px, 96%);
 

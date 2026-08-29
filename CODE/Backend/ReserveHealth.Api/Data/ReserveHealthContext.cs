@@ -3,8 +3,8 @@ using ReserveHealth.Api.Models;
 
 namespace ReserveHealth.Api.Data;
 
-// This is the database context for Reserve Health.
-// It connects the different hospital system models to the database.
+// This is the database context for Reserve Health ssytem.
+// It connects the different models in the project to the database.
 public class ReserveHealthContext : DbContext
 {
     public ReserveHealthContext(DbContextOptions<ReserveHealthContext> options)
