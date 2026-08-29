@@ -1,5 +1,5 @@
-//this is the main dashboard for the reserve health system
-//it gives staff access to the patient and referral management sections
+<!-- this is the main dashboard for the reserve health system -->
+<!-- it gives staff access to the patient and referral management sections -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,8 +34,17 @@
     <div class="topbar-right">
 
         <div class="staff-details">
-            <span class="staff-name">Clinical Staff</span>
-            <span class="role">Doctor</span>
+            <span
+                class="staff-name"
+                id="staff-name">
+                Clinical Staff
+            </span>
+
+            <span
+                class="role"
+                id="staff-role">
+                Doctor
+            </span>
         </div>
 
         <button
@@ -120,10 +129,52 @@
 
 
 <script>
-function logout() {
+
+// Gets the current logged in user
+const storedUser =
+    sessionStorage.getItem("reserveHealthUser");
+
+if (!storedUser) {
+
+    // Returns to login if there is no logged in user
     window.location.href =
-        "../HospitalManagementSystem/Pages/Login.cshtml";
+        "login.html";
+
 }
+
+else {
+
+    // Gets the stored user information
+    const currentUser =
+        JSON.parse(storedUser);
+
+    // Shows the logged in staff details
+    document
+        .getElementById("staff-name")
+        .textContent =
+        currentUser.name || "Clinical Staff";
+
+    document
+        .getElementById("staff-role")
+        .textContent =
+        currentUser.role || "Doctor";
+
+}
+
+
+// Logs the current user out of the system
+function logout() {
+
+    // Removes the current user from the session
+    sessionStorage.removeItem(
+        "reserveHealthUser"
+    );
+
+    // Returns to the login page
+    window.location.href =
+        "login.html";
+}
+
 </script>
 
 </body>
