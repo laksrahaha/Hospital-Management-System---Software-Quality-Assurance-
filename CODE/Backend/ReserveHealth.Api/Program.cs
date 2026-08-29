@@ -1,3 +1,5 @@
+//sets up and runs the reserve health api
+// this is incduing the database connection , contorller, CORS and sample apteint data
 using Microsoft.EntityFrameworkCore;
 using ReserveHealth.Api.Data;
 

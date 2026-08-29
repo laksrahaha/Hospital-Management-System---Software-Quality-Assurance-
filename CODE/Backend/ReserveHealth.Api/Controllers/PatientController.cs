@@ -1,3 +1,9 @@
+// This controller is used to get patient information from the database.
+//handles the aptient requests betweent he fronted and the database
+// It uses the ReserveHealthContext to access the Patients table in the database.
+//it also handles th viewing, adding , editing, archniving and restoring of patients in the database. and resotring pateint records
+
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReserveHealth.Api.Data;
@@ -5,9 +11,7 @@ using ReserveHealth.Api.Models;
 
 namespace ReserveHealth.Api.Controllers;
 
-// This controller is used to get patient information from the database.
-// I added a single patient request because the dashboard will need to
-// open one patient's information instead of only showing the full list.
+
 [Route("api/[controller]")]
 [ApiController]
 public class PatientController : ControllerBase
