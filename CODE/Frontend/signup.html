@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reserve Health - Sign Up</title>
+
+    <!-- Links the sign up page styling -->
+    <link rel="stylesheet" href="css/privacy.css">
+</head>
+
+<body>
+
+    <!-- Main sign up page -->
+    <div class="page">
+
+        <div class="card">
+
+            <!-- Reserve Health logo and heading -->
+            <div class="brand">
+                <img src="Images/logo.png" alt="Reserve Health logo">
+
+                <h1>Reserve Health</h1>
+
+                <p>Clinical management portal</p>
+            </div>
+
+            <h2>Create Account</h2>
+
+            <!-- Sign up form for the user -->
+            <form id="signup-form">
+
+                <label for="full-name">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="full-name"
+                    name="full-name"
+                    placeholder="Enter your full name"
+                >
+
+                <!-- Shows the full name error message -->
+                <span
+                    id="full-name-error"
+                    class="text-danger">
+                </span>
+
+                <label for="signup-email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="signup-email"
+                    name="signup-email"
+                    placeholder="Enter your email"
+                >
+
+                <!-- Shows the email error message -->
+                <span
+                    id="signup-email-error"
+                    class="text-danger">
+                </span>
+
+                <label for="signup-password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="signup-password"
+                    name="signup-password"
+                    placeholder="Enter your password"
+                >
+
+                <!-- Explains the required password format -->
+                <p class="password-requirement">
+
+                    At least 8 characters,
+                    one uppercase letter,
+                    one number and one symbol.
+
+                </p>
+
+                <!-- Shows the password error message -->
+                <span
+                    id="signup-password-error"
+                    class="text-danger">
+                </span>
+
+                <label for="confirm-password">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirm-password"
+                    name="confirm-password"
+                    placeholder="Confirm your password"
+                >
+
+                <!-- Shows the confirm password error message -->
+                <span
+                    id="confirm-password-error"
+                    class="text-danger">
+                </span>
+
+                <button type="submit">
+                    Sign Up
+                </button>
+
+            </form>
+
+            <!-- Takes existing users to the login page -->
+            <p class="account-link">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Login
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Connects the JavaScript file -->
+    <script src="privacy.js"></script>
+
+</body>
+
+</html>
