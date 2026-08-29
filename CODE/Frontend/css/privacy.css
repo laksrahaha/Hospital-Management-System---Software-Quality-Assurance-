@@ -1,0 +1,199 @@
+/* Applies border sizing to every element */
+* {
+    box-sizing: border-box;
+}
+
+
+/* Main page colours and font */
+body {
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: #f4f7f9;
+
+    color: #17384d;
+}
+
+
+/* Centres the card on the page */
+.page {
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+}
+
+
+/* Login and sign up card */
+.card {
+    width: 100%;
+
+    max-width: 460px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 16px;
+
+    border: 1px solid #d7e2e8;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+
+/* Reserve Health logo and heading */
+.brand {
+    text-align: center;
+
+    margin-bottom: 28px;
+}
+
+
+.brand img {
+    width: 80px;
+
+    height: auto;
+
+    margin-bottom: 10px;
+}
+
+
+.brand h1 {
+    margin: 0;
+
+    color: #0a4568;
+
+    font-size: 30px;
+}
+
+
+.brand p {
+    margin-top: 7px;
+
+    color: #687b86;
+}
+
+
+/* Login and sign up heading */
+h2 {
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+
+/* Form labels */
+label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    margin-top: 16px;
+
+    font-weight: 600;
+}
+
+
+/* Form input fields */
+input {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #b8c8d1;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+}
+
+
+/* Changes the input border when selected */
+input:focus {
+    outline: none;
+
+    border-color: #1682ad;
+}
+
+
+/* Login and sign up buttons */
+button {
+    width: 100%;
+
+    margin-top: 24px;
+
+    padding: 13px;
+
+    background: #126785;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* Changes the button colour when hovered */
+button:hover {
+    background: #0d536c;
+}
+
+
+/* Login and sign up page links */
+.account-link {
+    text-align: center;
+
+    margin-top: 22px;
+
+    color: #667985;
+}
+
+
+.account-link a {
+    color: #126785;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+
+.account-link a:hover {
+    text-decoration: underline;
+}
+
+
+/* Shows the required password format */
+.password-requirement {
+    font-size: 13px;
+
+    color: #687b86;
+
+    margin-top: 6px;
+}
+
+
+/* Validation error messages */
+.text-danger {
+    display: block;
+
+    color: #b42318;
+
+    font-size: 13px;
+
+    margin-top: 5px;
+
+    min-height: 15px;
+}
