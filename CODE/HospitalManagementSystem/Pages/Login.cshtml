@@ -1,5 +1,5 @@
 @page
-@model HospitalManagementSystem.Pages.SignupModel
+@model HospitalManagementSystem.Pages.LoginModel
 
 @{
     Layout = null;
@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reserve Health - Sign Up</title>
+    <title>Reserve Health - Login</title>
 
     <style>
         * {
@@ -34,7 +34,7 @@
 
         .card {
             width: 100%;
-            max-width: 460px;
+            max-width: 430px;
             background: white;
             padding: 40px;
             border-radius: 16px;
@@ -111,17 +111,8 @@
             text-decoration: none;
         }
 
-        .password-requirement {
-            font-size: 13px;
-            color: #687b86;
-            margin-top: 6px;
-        }
-
-        .text-danger {
-            display: block;
-            color: #b42318;
-            font-size: 13px;
-            margin-top: 4px;
+        .account-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -135,52 +126,35 @@
                 <p>Clinical management portal</p>
             </div>
 
-            <h2>Create Account</h2>
+            <h2>Login</h2>
 
             <form method="post">
 
-                <label asp-for="FullName">Full Name</label>
+                <label for="email">Email</label>
                 <input
-                    asp-for="FullName"
-                    placeholder="Enter your full name" />
-                <span asp-validation-for="FullName" class="text-danger"></span>
-
-                <label asp-for="Email">Email</label>
-                <input
-                    asp-for="Email"
                     type="email"
-                    placeholder="Enter your email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required />
 
-                <label asp-for="Password">Password</label>
+                <label for="password">Password</label>
                 <input
-                    asp-for="Password"
                     type="password"
-                    placeholder="Enter your password" />
-
-                <p class="password-requirement">
-                    At least 8 characters, one uppercase letter,
-                    one number and one symbol.
-                </p>
-
-                <span asp-validation-for="Password" class="text-danger"></span>
-
-                <label asp-for="ConfirmPassword">Confirm Password</label>
-                <input
-                    asp-for="ConfirmPassword"
-                    type="password"
-                    placeholder="Confirm your password" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required />
 
                 <button type="submit">
-                    Sign Up
+                    Login
                 </button>
 
             </form>
 
             <p class="account-link">
-                Already have an account?
-                <a href="/Login">Login</a>
+                Don't have an account?
+                <a href="/Signup">Sign up</a>
             </p>
 
         </div>

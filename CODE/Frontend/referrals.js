@@ -544,7 +544,7 @@ document
 // Return the user to the login page
 function logout() {
     window.location.href =
-        "../HospitalManagementSystem/Pages/Login.html";
+        "../HospitalManagementSystem/Pages/Login.cshtml";
 }
 
 // Load patients and referrals when the page opens
