@@ -90,9 +90,9 @@ namespace ReserveHealth.Api.Controllers
             return Ok(referral);
         }
 
-        // Update the status of an existing referral
-        [HttpPut("{referralId}/status")]
-        public ActionResult<Referral> UpdateReferralStatus(
+        // Update the priority and status of an existing referral
+        [HttpPut("{referralId}")]
+        public ActionResult<Referral> UpdateReferral(
             int referralId,
             Referral updatedReferral)
         {
@@ -104,6 +104,25 @@ namespace ReserveHealth.Api.Controllers
                 return NotFound("Referral not found.");
             }
 
+            // Only allow the three referral priority levels
+            string[] validPriorities =
+            {
+                "P1",
+                "P2",
+                "P3"
+            };
+
+            if (string.IsNullOrWhiteSpace(updatedReferral.Priority))
+            {
+                return BadRequest("Priority is required.");
+            }
+
+            if (!validPriorities.Contains(updatedReferral.Priority))
+            {
+                return BadRequest("Priority must be P1, P2 or P3.");
+            }
+
+            // Only allow recognised referral statuses
             string[] validStatuses =
             {
                 "Pending",
@@ -113,12 +132,17 @@ namespace ReserveHealth.Api.Controllers
                 "Completed"
             };
 
+            if (string.IsNullOrWhiteSpace(updatedReferral.Status))
+            {
+                return BadRequest("Status is required.");
+            }
+
             if (!validStatuses.Contains(updatedReferral.Status))
             {
                 return BadRequest("Invalid referral status.");
             }
 
-            // Returned and rejected referrals need a reason
+            // Returned and rejected referrals must include a reason
             if ((updatedReferral.Status == "Returned for more information" ||
                  updatedReferral.Status == "Rejected") &&
                 string.IsNullOrWhiteSpace(updatedReferral.StatusReason))
@@ -127,13 +151,13 @@ namespace ReserveHealth.Api.Controllers
                     "A reason is required when a referral is returned or rejected.");
             }
 
+            referral.Priority = updatedReferral.Priority;
             referral.Status = updatedReferral.Status;
 
             if (updatedReferral.Status == "Returned for more information" ||
                 updatedReferral.Status == "Rejected")
             {
-                referral.StatusReason = updatedReferral.StatusReason;
-            }
+            referral.StatusReason = updatedReferral.StatusReason!.Trim();            }
             else
             {
                 referral.StatusReason = null;

@@ -1,0 +1,325 @@
+/* Referral page styling */
+/* Keeps the referral page consistent with the shared Reserve Health layout */
+
+.referral-layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.8fr) minmax(520px, 1.5fr);
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px;
+    align-items: start;
+}
+
+.referral-create-panel,
+.referral-list-panel,
+.referral-details-panel {
+    background-color: #ffffff;
+    border: 1px solid #e4e7ec;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+}
+
+.referral-section-header {
+    margin-bottom: 24px;
+}
+
+.referral-section-header h2 {
+    color: #24352f;
+    font-size: 25px;
+    margin: 5px 0 8px;
+}
+
+.referral-section-header > p:last-child {
+    color: #667085;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.small-label {
+    color: #4f7667;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* Create and edit forms */
+
+.referral-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.referral-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.referral-form-field label {
+    color: #344054;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.referral-form-field select,
+.referral-form-field textarea {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid #d0d5dd;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #344054;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.referral-form-field select:focus,
+.referral-form-field textarea:focus {
+    border-color: #668d7e;
+    box-shadow: 0 0 0 3px rgba(102, 141, 126, 0.15);
+    outline: none;
+}
+
+.referral-form-field textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.create-referral-button {
+    border: none;
+    border-radius: 9px;
+    padding: 12px 18px;
+    background-color: #4f7667;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.create-referral-button:hover {
+    background-color: #3f6255;
+    transform: translateY(-1px);
+}
+
+.form-message {
+    min-height: 20px;
+    margin: 0;
+    color: #9b3a3a;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Referral filters */
+
+.referral-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.referral-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 180px;
+}
+
+.referral-filter label {
+    color: #344054;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.referral-filter select {
+    padding: 10px 12px;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #344054;
+    font-family: inherit;
+}
+
+.referral-filter select:focus {
+    border-color: #668d7e;
+    outline: none;
+}
+
+/* Referral table */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.referral-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+}
+
+.referral-table th {
+    padding: 13px 12px;
+    background-color: #f4f7f5;
+    color: #475467;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.referral-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #eaecf0;
+    color: #344054;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.referral-table tbody tr:hover {
+    background-color: #f9fbfa;
+}
+
+.loading-row {
+    color: #667085;
+    text-align: center;
+}
+
+.status-pill {
+    display: inline-block;
+    min-width: 32px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background-color: #e7f0ec;
+    color: #36594c;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Edit referral controls */
+
+.edit-referral-button {
+    border: 1px solid #4f7667;
+    border-radius: 7px;
+    padding: 7px 12px;
+    background-color: #ffffff;
+    color: #4f7667;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.edit-referral-button:hover {
+    background-color: #4f7667;
+    color: #ffffff;
+}
+
+.referral-details-panel {
+    grid-column: 1 / -1;
+}
+
+#referralDetailsContent {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 24px;
+    margin-bottom: 24px;
+    padding: 18px;
+    border-radius: 10px;
+    background-color: #f8faf9;
+}
+
+#referralDetailsContent p {
+    margin: 0;
+    color: #475467;
+    line-height: 1.5;
+}
+
+#referralDetailsContent strong {
+    color: #24352f;
+}
+
+.edit-referral-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cancel-edit-button {
+    border: 1px solid #d0d5dd;
+    border-radius: 9px;
+    padding: 12px 18px;
+    background-color: #ffffff;
+    color: #475467;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.cancel-edit-button:hover {
+    background-color: #f2f4f7;
+}
+
+/* Used to hide the edit panel and conditional reason field */
+
+.hidden {
+    display: none;
+}
+
+/* Responsive layout */
+
+@media (max-width: 1000px) {
+    .referral-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .referral-details-panel {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 650px) {
+    .referral-layout {
+        padding: 18px;
+    }
+
+    .referral-create-panel,
+    .referral-list-panel,
+    .referral-details-panel {
+        padding: 20px;
+    }
+
+    .referral-filters {
+        flex-direction: column;
+    }
+
+    .referral-filter {
+        width: 100%;
+    }
+
+    #referralDetailsContent {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-referral-actions {
+        flex-direction: column;
+    }
+
+    .create-referral-button,
+    .cancel-edit-button {
+        width: 100%;
+    }
+}

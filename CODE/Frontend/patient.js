@@ -305,10 +305,7 @@ archivedPatientsButton.addEventListener(
 
 
 const patientSearch =
-    document.getElementById(
-        "patient-search"
-    );
-
+    document.getElementById("patient-search");
 
 if (patientSearch) {
 
@@ -328,26 +325,31 @@ if (patientSearch) {
 
             rows.forEach(row => {
 
-                const rowText =
-                    row.textContent
-                        .toLowerCase();
+                const cells =
+                    row.querySelectorAll("td");
 
-                if (
-                    rowText.includes(
-                        searchValue
-                    )
-                ) {
-
-                    row.style.display = "";
-
+                if (cells.length < 2) {
+                    return;
                 }
 
-                else {
+                const patientId =
+                    cells[0].textContent
+                        .toLowerCase()
+                        .trim();
 
-                    row.style.display =
-                        "none";
+                const patientName =
+                    cells[1].textContent
+                        .toLowerCase()
+                        .trim();
 
-                }
+                const matches =
+                    patientId === searchValue ||
+                    patientName.includes(searchValue);
+
+                row.style.display =
+                    matches || searchValue === ""
+                        ? ""
+                        : "none";
 
             });
 
@@ -419,7 +421,7 @@ function logout() {
     );
 
     window.location.href =
-        "../HospitalManagementSystem/Pages/Login.html";
+        "../HospitalManagementSystem/Pages/Login.cshtml";
 
 }
 
