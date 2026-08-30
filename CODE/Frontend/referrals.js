@@ -543,8 +543,13 @@ document
 
 // Return the user to the login page
 function logout() {
+
+    sessionStorage.removeItem(
+        "reserveHealthUser"
+    );
+
     window.location.href =
-        "../HospitalManagementSystem/Pages/Login.cshtml";
+        "login.html";
 }
 
 // Load patients and referrals when the page opens

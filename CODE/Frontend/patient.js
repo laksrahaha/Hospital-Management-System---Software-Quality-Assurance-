@@ -423,8 +423,7 @@ function logout() {
         "reserveHealthUser"
     );
 
-    window.location.href =
-        "../HospitalManagementSystem/Pages/Login.cshtml";
+    window.location.href = "login.html";
 
 }
 
