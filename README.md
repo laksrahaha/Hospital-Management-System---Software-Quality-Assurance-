@@ -100,6 +100,6 @@ Use the Logout button to return to the login page.
 
 10. GitHub Repository
 
-Add the GitHub repository link below:
+https://github.com/laksrahaha/Hospital-Management-System---Software-Quality-Assurance-
 
 
