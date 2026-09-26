@@ -57,7 +57,7 @@ if (loginForm) {
                         },
                         body: JSON.stringify({
                             email: email,
-                            passwordHash: password
+                            password: password
                         })
                     }
                 );
@@ -195,8 +195,7 @@ if (signupForm) {
                         body: JSON.stringify({
                             name: fullName,
                             email: email,
-                            passwordHash: password,
-                            role: "Doctor"
+                            password: password
                         })
                     }
                 );

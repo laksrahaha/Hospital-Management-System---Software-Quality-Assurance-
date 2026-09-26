@@ -1,12 +1,17 @@
 //sets up and runs the reserve health api
 // this is incduing the database connection , contorller, CORS and sample apteint data
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReserveHealth.Api.Data;
-
+using ReserveHealth.Api.Models; 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
+// Provides secure password hashing and verification for staff accounts.
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddCors(options =>
 {
