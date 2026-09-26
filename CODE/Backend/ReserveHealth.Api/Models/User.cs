@@ -15,6 +15,7 @@ public class User
 
     public string Role { get; set; } = "";
 
+
     public List<Discharge> DischargesInCharge { get; set; } = new();
 
     public List<MedicationCheck> VerifiedMedicationChecks { get; set; } = new();

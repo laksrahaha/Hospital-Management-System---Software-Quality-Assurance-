@@ -3,6 +3,56 @@
 // the archiving function also cna restore pateints
 const apiUrl = "http://localhost:5297/api/patient";
 
+// Gets the logged-in staff account and its authentication token.
+const currentUser = JSON.parse(
+    sessionStorage.getItem("reserveHealthUser")
+);
+
+// A patient page cannot be accessed without a valid login.
+if (!currentUser || !currentUser.token) {
+
+    sessionStorage.removeItem(
+        "reserveHealthUser"
+    );
+
+    window.location.href =
+        "login.html";
+
+    throw new Error(
+        "Authentication required."
+    );
+}
+
+
+// Adds the JWT to patient API requests.
+// If the backend rejects the token, the user must log in again.
+async function authenticatedFetch(
+    url,
+    options = {}
+) {
+    options.headers = {
+        ...(options.headers || {}),
+        "Authorization": `Bearer ${currentUser.token}`
+    };
+
+    // This MUST stay as normal fetch().
+    const response = await fetch(
+        url,
+        options
+    );
+
+    if (response.status === 401) {
+        sessionStorage.removeItem(
+            "reserveHealthUser"
+        );
+
+        window.location.href =
+            "login.html";
+    }
+
+    return response;
+}
+
 let selectedPatient = null;
 let showingArchivedPatients = false;
 
@@ -21,7 +71,7 @@ async function loadPatients() {
         }
 
         const response =
-            await fetch(requestUrl);
+            await authenticatedFetch(requestUrl);
 
         if (!response.ok) {
 
@@ -117,7 +167,7 @@ async function loadPatient(patientId) {
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${apiUrl}/${patientId}`
             );
 
@@ -652,7 +702,7 @@ async function savePatientField(field) {
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${apiUrl}/${selectedPatient.patientId}`,
                 {
                     method: "PUT",
@@ -1165,7 +1215,7 @@ addPatientForm.addEventListener(
         try {
 
             const response =
-                await fetch(
+                await authenticatedFetch(
                     apiUrl,
                     {
                         method: "POST",
@@ -1338,7 +1388,7 @@ async function archivePatient() {
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${apiUrl}/${selectedPatient.patientId}/archive`,
                 {
                     method: "PUT"
@@ -1411,7 +1461,7 @@ async function restorePatient() {
     try {
 
         const response =
-            await fetch(
+            await authenticatedFetch(
                 `${apiUrl}/${selectedPatient.patientId}/restore`,
                 {
                     method: "PUT"

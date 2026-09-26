@@ -71,7 +71,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasIndex("StaffInChargeId");
 
-                    b.ToTable("Discharges");
+                    b.ToTable("Discharges", (string)null);
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.DischargeTask", b =>
@@ -115,7 +115,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasIndex("DischargeId");
 
-                    b.ToTable("DischargeTasks");
+                    b.ToTable("DischargeTasks", (string)null);
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.MedicationCheck", b =>
@@ -152,7 +152,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasIndex("VerifiedByUserId");
 
-                    b.ToTable("MedicationChecks");
+                    b.ToTable("MedicationChecks", (string)null);
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Patient", b =>
@@ -195,7 +195,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasKey("PatientId");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Referral", b =>
@@ -233,7 +233,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasKey("ReferralId");
 
-                    b.ToTable("Referrals");
+                    b.ToTable("Referrals", (string)null);
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.User", b =>
@@ -262,7 +262,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Discharge", b =>
