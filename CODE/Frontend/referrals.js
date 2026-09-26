@@ -5,6 +5,46 @@
 const referralApi = "http://localhost:5297/api/referrals";
 const patientApi = "http://localhost:5297/api/patient";
 
+// Gets the logged-in staff account and authentication token.
+const currentUser = JSON.parse(
+    sessionStorage.getItem("reserveHealthUser")
+);
+
+// Users must be logged in before accessing referral functions.
+if (!currentUser || !currentUser.token) {
+    sessionStorage.removeItem("reserveHealthUser");
+
+    window.location.href = "login.html";
+
+    throw new Error("Authentication required.");
+}
+
+
+// Sends the JWT with every protected API request.
+async function authenticatedFetch(
+    url,
+    options = {}
+) {
+    options.headers = {
+        ...(options.headers || {}),
+        "Authorization": `Bearer ${currentUser.token}`
+    };
+
+    const response = await fetch(
+        url,
+        options
+    );
+
+    // An invalid or expired token requires a new login.
+    if (response.status === 401) {
+        sessionStorage.removeItem("reserveHealthUser");
+
+        window.location.href = "login.html";
+    }
+
+    return response;
+}
+
 let referrals = [];
 let patients = [];
 
@@ -14,7 +54,7 @@ async function loadPatients() {
     const message = document.getElementById("referralMessage");
 
     try {
-        const response = await fetch(patientApi);
+        const response = await authenticatedFetch(patientApi);
 
         if (!response.ok) {
             throw new Error("Could not load patients.");
@@ -61,7 +101,7 @@ async function loadReferrals() {
         document.getElementById("referralList");
 
     try {
-        const response = await fetch(referralApi);
+        const response = await authenticatedFetch(referralApi);
 
         if (!response.ok) {
             throw new Error("Could not load referrals.");
@@ -348,7 +388,7 @@ document
 
             try {
                 const response =
-                    await fetch(
+                    await authenticatedFetch(
                         referralApi,
                         {
                             method: "POST",
@@ -460,7 +500,7 @@ document
 
             try {
                 const response =
-                    await fetch(
+                    await authenticatedFetch(
                         `${referralApi}/${referralId}`,
                         {
                             method: "PUT",

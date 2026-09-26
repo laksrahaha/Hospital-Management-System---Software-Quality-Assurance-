@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReserveHealth.Api.Data;
 using ReserveHealth.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ReserveHealth.Api.Controllers;
 
-
+[Authorize(Roles = "Doctor")]
 [Route("api/[controller]")]
 [ApiController]
+
 public class PatientController : ControllerBase
 {
     private readonly ReserveHealthContext _context;

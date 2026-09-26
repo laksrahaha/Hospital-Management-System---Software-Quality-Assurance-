@@ -3,8 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ReserveHealth.Api.Auth;
 
 // Stores the information required to create a staff account.
-// Validation is performed on the backend so it cannot be bypassed
-// by directly calling the API.
+// Backend validation prevents invalid role values being submitted directly.
 public class SignupRequest
 {
     [Required]
@@ -17,4 +16,7 @@ public class SignupRequest
     [Required]
     [MinLength(8)]
     public string Password { get; set; } = "";
+
+    [Required]
+    public string Role { get; set; } = "";
 }
