@@ -1,0 +1,40 @@
+.requests-page {
+    width: min(1100px, 92%);
+    margin: 40px auto;
+}
+
+.requests-page .small-label {
+    color: var(--blue);
+}
+
+.requests-page h2 {
+    margin: 8px 0;
+    color: var(--navy);
+}
+
+.requests-page > p {
+    margin-bottom: 20px;
+}
+
+#requests-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+}
+
+#requests-table th,
+#requests-table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+#requests-table th {
+    color: var(--navy);
+    background: var(--light-blue);
+}
+
+#requests-table tr.completed {
+    color: var(--muted);
+    background: var(--background);
+}
