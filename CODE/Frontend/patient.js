@@ -235,6 +235,8 @@ async function loadPatient(patientId) {
 
         selectedPatient = patient;
 
+        await loadPatientTestResults(patient.patientId);
+
         if (showingArchivedPatients) {
 
             archivePatientButton.textContent =
@@ -263,6 +265,59 @@ async function loadPatient(patientId) {
 }
 
 
+
+
+async function loadPatientTestResults(patientId) {
+    const container = document.getElementById("patient-test-results");
+    container.textContent = "Loading lab results...";
+
+    try {
+        const response = await authenticatedFetch(
+            `${apiUrl}/${patientId}/test-results`
+        );
+
+        if (!response.ok) {
+            throw new Error("Could not load lab results.");
+        }
+
+        const results = await response.json();
+
+        if (selectedPatient?.patientId !== patientId) {
+            return;
+        }
+
+        container.replaceChildren();
+
+        if (results.length === 0) {
+            container.textContent = "No completed lab results.";
+            return;
+        }
+
+        results.forEach(result => {
+            const item = document.createElement("div");
+            item.className = "lab-result-item";
+
+            const title = document.createElement("strong");
+            title.textContent = result.testType;
+
+            const information = document.createElement("p");
+            information.textContent = result.resultInformation;
+
+            const date = document.createElement("small");
+            date.textContent = `Recorded: ${new Date(
+                result.recordedAt
+            ).toLocaleString("en-NZ")}`;
+
+            item.append(title, information, date);
+            container.appendChild(item);
+        });
+    } catch (error) {
+        if (selectedPatient?.patientId === patientId) {
+            container.textContent = "Lab results could not be loaded.";
+        }
+        console.error(error);
+    }
+}
 
 const activePatientsButton =
     document.getElementById(
