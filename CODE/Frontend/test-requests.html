@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reserve Health - Test Requests</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/test-requests.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo-box">RH</div>
+            <div class="brand-details">
+                <h1>Reserve Health</h1>
+                <p>Clinical Coordination System</p>
+            </div>
+        </div>
+        <button class="logout-button" id="logout-button" type="button">
+            Logout
+        </button>
+    </header>
+
+    <nav class="main-nav">
+        <a href="index.html">Dashboard</a>
+        <a href="test-requests.html" class="active">Test Requests</a>
+    </nav>
+
+    <main class="requests-page">
+        <p class="small-label">Laboratory</p>
+        <h2>Patient test requests</h2>
+        <p>Outstanding requests are shown first.</p>
+
+        <p id="requests-message" role="status">Loading test requests...</p>
+
+        <table id="requests-table" hidden>
+            <thead>
+                <tr>
+                    <th scope="col">Patient</th>
+                    <th scope="col">Test type</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Requested</th>
+                </tr>
+            </thead>
+            <tbody id="requests-body"></tbody>
+        </table>
+    </main>
+
+    <script src="test-requests.js"></script>
+</body>
+</html>
