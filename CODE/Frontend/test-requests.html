@@ -40,10 +40,36 @@
                     <th scope="col">Test type</th>
                     <th scope="col">Status</th>
                     <th scope="col">Requested</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody id="requests-body"></tbody>
         </table>
+
+        <section id="result-section" hidden>
+            <h3>Enter test result</h3>
+            <p id="selected-request"></p>
+
+            <form id="result-form">
+                <label for="result-information">Result information</label>
+                <textarea
+                    id="result-information"
+                    name="resultInformation"
+                    rows="5"
+                    required></textarea>
+
+                <div>
+                    <button id="save-result-button" type="submit">
+                        Save result
+                    </button>
+                    <button id="cancel-result-button" type="button">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
+            <p id="result-message" role="status"></p>
+        </section>
     </main>
 
     <script src="test-requests.js"></script>
