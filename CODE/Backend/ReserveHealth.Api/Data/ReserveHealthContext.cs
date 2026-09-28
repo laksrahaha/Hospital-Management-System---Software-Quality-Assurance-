@@ -25,4 +25,6 @@ public class ReserveHealthContext : DbContext
     public DbSet<DischargeTask> DischargeTasks { get; set; }
 
     public DbSet<TestRequest> TestRequests { get; set; }
+
+    public DbSet<TestResult> TestResults { get; set; }
 }
