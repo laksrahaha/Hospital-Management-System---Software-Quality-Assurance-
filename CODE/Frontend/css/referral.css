@@ -323,3 +323,39 @@
         width: 100%;
     }
 }
+
+.waiting-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.waiting-due {
+    background: #fff3cd;
+    color: #664d03;
+}
+
+.waiting-overdue {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.waiting-completed {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.waiting-unavailable {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.referral-due {
+    background-color: #fffdf5;
+}
+
+.referral-overdue {
+    background-color: #fff7f7;
+}

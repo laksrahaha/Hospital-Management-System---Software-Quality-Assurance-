@@ -48,6 +48,79 @@ async function authenticatedFetch(
 let referrals = [];
 let patients = [];
 
+function getWaitingDays(dateCreated) {
+    if (!dateCreated) {
+        return null;
+    }
+
+    const createdDate = new Date(dateCreated);
+    const today = new Date();
+
+    if (isNaN(createdDate.getTime())) {
+        return null;
+    }
+
+    const differenceInMilliseconds =
+        today.getTime() - createdDate.getTime();
+
+    const differenceInDays = Math.floor(
+        differenceInMilliseconds /
+        (1000 * 60 * 60 * 24)
+    );
+
+    return Math.max(differenceInDays, 0);
+}
+
+function getPriorityThreshold(priority) {
+    switch (priority) {
+        case "P1":
+            return 14;
+
+        case "P2":
+            return null;
+
+        case "P3":
+            return null;
+
+        default:
+            return null;
+    }
+}
+
+function getWaitingStatus(referral) {
+    if (!referral) {
+        return "Unknown";
+    }
+
+    if (referral.status === "Completed") {
+        return "Completed";
+    }
+
+    const waitingDays =
+        getWaitingDays(referral.dateCreated);
+
+    const threshold =
+        getPriorityThreshold(referral.priority);
+
+    if (waitingDays === null) {
+        return "Unknown";
+    }
+
+    if (threshold === null) {
+        return "Waiting";
+    }
+
+    if (waitingDays > threshold) {
+        return "Overdue";
+    }
+
+    if (waitingDays === threshold) {
+        return "Due";
+    }
+
+    return "Normal";
+}
+
 // Load patients into the patient dropdown
 async function loadPatients() {
     const patientSelect = document.getElementById("patientId");
@@ -116,7 +189,7 @@ async function loadReferrals() {
 
         referralList.innerHTML = `
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     Referrals could not be loaded.
                 </td>
             </tr>
@@ -160,48 +233,113 @@ function displayReferrals() {
         return;
     }
 
+
     referralList.innerHTML = "";
 
-    filteredReferrals.forEach(referral => {
-        const row = document.createElement("tr");
+referralList.innerHTML = "";
 
-        row.innerHTML = `
-            <td>
-                ${referral.referralId}
-            </td>
+filteredReferrals.forEach(referral => {
 
-            <td>
-                ${getPatientName(referral.patientId)}
-            </td>
+    const waitingDays =
+        getWaitingDays(referral.dateCreated);
 
-            <td>
-                ${referral.service}
-            </td>
+    const waitingStatus =
+        getWaitingStatus(referral);
+let waitingDisplay = "";
 
-            <td>
-                <span class="status-pill">
-                    ${referral.priority}
-                </span>
-            </td>
+if (waitingStatus === "Completed") {
+    waitingDisplay = `
+        <span class="waiting-badge waiting-completed">
+            Completed
+        </span>
+    `;
+} else if (waitingDays === null) {
+    waitingDisplay = `
+        <span class="waiting-badge waiting-unavailable">
+            Unavailable
+        </span>
+    `;
+} else if (waitingStatus === "Overdue") {
+    waitingDisplay = `
+        <span class="waiting-badge waiting-overdue">
+            ${waitingDays} days - Overdue
+        </span>
+    `;
+} else if (waitingStatus === "Due") {
+    waitingDisplay = `
+        <span class="waiting-badge waiting-due">
+            ${waitingDays} days - Due
+        </span>
+    `;
+} else if (waitingDays === 0) {
+    waitingDisplay = `
+        <span class="waiting-badge">
+            Today
+        </span>
+    `;
+} else if (waitingDays === 1) {
+    waitingDisplay = `
+        <span class="waiting-badge">
+            1 day
+        </span>
+    `;
+} else {
+    waitingDisplay = `
+        <span class="waiting-badge">
+            ${waitingDays} days
+        </span>
+    `;
+}
 
-            <td>
-                ${referral.status}
-            </td>
 
-            <td>
-                <button
-                    type="button"
-                    class="edit-referral-button"
-                    onclick="openReferralEditor(
-                        ${referral.referralId}
-                    )">
-                    Edit
-                </button>
-            </td>
-        `;
+    const row =
+        document.createElement("tr");
 
-        referralList.appendChild(row);
-    });
+        if (waitingStatus === "Overdue") {
+    row.classList.add("referral-overdue");
+        } else if (waitingStatus === "Due") {
+            row.classList.add("referral-due");
+        }
+
+    row.innerHTML = `
+        <td>
+            ${referral.referralId}
+        </td>
+
+        <td>
+            ${getPatientName(referral.patientId)}
+        </td>
+
+        <td>
+            ${referral.service}
+        </td>
+
+        <td>
+            <span class="status-pill">
+                ${referral.priority}
+            </span>
+        </td>
+
+        <td>
+            ${referral.status}
+        </td>
+
+        <td>
+            ${waitingDisplay}
+        </td>
+
+        <td>
+            <button
+                type="button"
+                class="edit-referral-button"
+                onclick="openReferralEditor(${referral.referralId})">
+                Edit
+            </button>
+        </td>
+    `;
+
+    referralList.appendChild(row);
+});
 }
 
 // Open the edit form for one referral
