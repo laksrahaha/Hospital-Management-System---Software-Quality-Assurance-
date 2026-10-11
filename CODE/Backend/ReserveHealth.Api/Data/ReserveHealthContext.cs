@@ -3,11 +3,12 @@ using ReserveHealth.Api.Models;
 
 namespace ReserveHealth.Api.Data;
 
-// This is the database context for Reserve Health ssytem.
+// This is the database context for Reserve Health system.
 // It connects the different models in the project to the database.
 public class ReserveHealthContext : DbContext
 {
-    public ReserveHealthContext(DbContextOptions<ReserveHealthContext> options)
+    public ReserveHealthContext(
+        DbContextOptions<ReserveHealthContext> options)
         : base(options)
     {
     }
@@ -25,4 +26,10 @@ public class ReserveHealthContext : DbContext
     public DbSet<DischargeTask> DischargeTasks { get; set; }
 
     public DbSet<AuditLog> AuditLogs { get; set; }
+
+    public DbSet<TestRequest> TestRequests { get; set; }
+
+    public DbSet<TestResult> TestResults { get; set; }
+
+    public DbSet<ReferralStatusHistory> ReferralStatusHistories { get; set; }
 }
