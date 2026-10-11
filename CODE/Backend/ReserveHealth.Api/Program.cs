@@ -14,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddScoped<AuditService>();
+
 
 // Provides secure password hashing and verification for staff accounts.
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

@@ -96,6 +96,10 @@ function getWaitingStatus(referral) {
         return "Completed";
     }
 
+    if (referral.status === "Rejected") {
+        return "Rejected";
+    }
+
     const waitingDays =
         getWaitingDays(referral.dateCreated);
 
@@ -224,7 +228,7 @@ function displayReferrals() {
     if (filteredReferrals.length === 0) {
         referralList.innerHTML = `
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     No referrals available.
                 </td>
             </tr>
@@ -233,113 +237,116 @@ function displayReferrals() {
         return;
     }
 
-
     referralList.innerHTML = "";
 
-referralList.innerHTML = "";
+    filteredReferrals.forEach(referral => {
 
-filteredReferrals.forEach(referral => {
+        const waitingDays =
+            getWaitingDays(referral.dateCreated);
 
-    const waitingDays =
-        getWaitingDays(referral.dateCreated);
+        const waitingStatus =
+            getWaitingStatus(referral);
 
-    const waitingStatus =
-        getWaitingStatus(referral);
-let waitingDisplay = "";
+        let waitingDisplay = "";
 
-if (waitingStatus === "Completed") {
-    waitingDisplay = `
-        <span class="waiting-badge waiting-completed">
-            Completed
-        </span>
-    `;
-} else if (waitingDays === null) {
-    waitingDisplay = `
-        <span class="waiting-badge waiting-unavailable">
-            Unavailable
-        </span>
-    `;
-} else if (waitingStatus === "Overdue") {
-    waitingDisplay = `
-        <span class="waiting-badge waiting-overdue">
-            ${waitingDays} days - Overdue
-        </span>
-    `;
-} else if (waitingStatus === "Due") {
-    waitingDisplay = `
-        <span class="waiting-badge waiting-due">
-            ${waitingDays} days - Due
-        </span>
-    `;
-} else if (waitingDays === 0) {
-    waitingDisplay = `
-        <span class="waiting-badge">
-            Today
-        </span>
-    `;
-} else if (waitingDays === 1) {
-    waitingDisplay = `
-        <span class="waiting-badge">
-            1 day
-        </span>
-    `;
-} else {
-    waitingDisplay = `
-        <span class="waiting-badge">
-            ${waitingDays} days
-        </span>
-    `;
-}
+        if (waitingStatus === "Completed") {
+            waitingDisplay = `
+                <span class="waiting-badge waiting-completed">
+                    Completed
+                </span>
+            `;
+        } else if (waitingStatus === "Rejected") {
+            waitingDisplay = `
+                <span class="waiting-badge waiting-rejected">
+                    Rejected
+                </span>
+            `;
+        } else if (waitingDays === null) {
+            waitingDisplay = `
+                <span class="waiting-badge waiting-unavailable">
+                    Unavailable
+                </span>
+            `;
+        } else if (waitingStatus === "Overdue") {
+            waitingDisplay = `
+                <span class="waiting-badge waiting-overdue">
+                    ${waitingDays} days - Overdue
+                </span>
+            `;
+        } else if (waitingStatus === "Due") {
+            waitingDisplay = `
+                <span class="waiting-badge waiting-due">
+                    ${waitingDays} days - Due
+                </span>
+            `;
+        } else if (waitingDays === 0) {
+            waitingDisplay = `
+                <span class="waiting-badge">
+                    Today
+                </span>
+            `;
+        } else if (waitingDays === 1) {
+            waitingDisplay = `
+                <span class="waiting-badge">
+                    1 day
+                </span>
+            `;
+        } else {
+            waitingDisplay = `
+                <span class="waiting-badge">
+                    ${waitingDays} days
+                </span>
+            `;
+        }
 
-
-    const row =
-        document.createElement("tr");
+        const row =
+            document.createElement("tr");
 
         if (waitingStatus === "Overdue") {
-    row.classList.add("referral-overdue");
+            row.classList.add("referral-overdue");
         } else if (waitingStatus === "Due") {
             row.classList.add("referral-due");
         }
 
-    row.innerHTML = `
-        <td>
-            ${referral.referralId}
-        </td>
+        row.innerHTML = `
+            <td>
+                ${referral.referralId}
+            </td>
 
-        <td>
-            ${getPatientName(referral.patientId)}
-        </td>
+            <td>
+                ${getPatientName(referral.patientId)}
+            </td>
 
-        <td>
-            ${referral.service}
-        </td>
+            <td>
+                ${referral.service}
+            </td>
 
-        <td>
-            <span class="status-pill">
-                ${referral.priority}
-            </span>
-        </td>
+            <td>
+                <span class="status-pill">
+                    ${referral.priority}
+                </span>
+            </td>
 
-        <td>
-            ${referral.status}
-        </td>
+            <td>
+                ${referral.status}
+            </td>
 
-        <td>
-            ${waitingDisplay}
-        </td>
+            <td>
+                ${waitingDisplay}
+            </td>
 
-        <td>
-            <button
-                type="button"
-                class="edit-referral-button"
-                onclick="openReferralEditor(${referral.referralId})">
-                Edit
-            </button>
-        </td>
-    `;
+            <td>
+                <button
+                    type="button"
+                    class="edit-referral-button"
+                    onclick="openReferralEditor(${referral.referralId})">
+                    Edit
+                </button>
+            </td>
+        `;
 
-    referralList.appendChild(row);
-});
+        referralList.appendChild(row);
+    });
 }
 
 // Open the edit form for one referral
@@ -379,7 +386,39 @@ function openReferralEditor(referralId) {
 
     if (referral.dateCreated) {
         createdDate =
-            new Date(referral.dateCreated).toLocaleString();
+            new Date(
+                referral.dateCreated
+            ).toLocaleString();
+    }
+
+    const waitingDays =
+        getWaitingDays(referral.dateCreated);
+
+    const waitingStatus =
+        getWaitingStatus(referral);
+
+    let waitingText = "Unavailable";
+
+    if (waitingStatus === "Completed") {
+        waitingText = "Completed";
+    } else if (waitingStatus === "Rejected") {
+        waitingText = "Rejected";
+    } else if (waitingDays !== null) {
+
+        if (waitingStatus === "Overdue") {
+            waitingText =
+                `${waitingDays} days - Overdue`;
+        } else if (waitingStatus === "Due") {
+            waitingText =
+                `${waitingDays} days - Due`;
+        } else if (waitingDays === 0) {
+            waitingText = "Today";
+        } else if (waitingDays === 1) {
+            waitingText = "1 day";
+        } else {
+            waitingText =
+                `${waitingDays} days`;
+        }
     }
 
     detailsContent.innerHTML = `
@@ -407,12 +446,25 @@ function openReferralEditor(referralId) {
             <strong>Date created:</strong>
             ${createdDate}
         </p>
+
+        <p>
+            <strong>Waiting time:</strong>
+            ${waitingText}
+        </p>
     `;
 
-    editReferralId.value = referral.referralId;
-    editPriority.value = referral.priority;
-    editStatus.value = referral.status;
-    editStatusReason.value = referral.statusReason || "";
+    editReferralId.value =
+        referral.referralId;
+
+    editPriority.value =
+        referral.priority;
+
+    editStatus.value =
+        referral.status;
+
+    editStatusReason.value =
+        referral.statusReason || "";
+
     editMessage.textContent = "";
 
     updateStatusReasonVisibility();

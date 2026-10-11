@@ -1,16 +1,10 @@
-// Referral controller
-// Handles creating, viewing and updating referrals.
-// Uses the existing patient database to make sure
-// each referral is linked to a real patient.
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReserveHealth.Api.Data;
 using ReserveHealth.Api.Models;
-using Microsoft.AspNetCore.Authorization;
-
-
-
+using ReserveHealth.Api.Services;
+using System.Security.Claims;
 
 namespace ReserveHealth.Api.Controllers
 {
@@ -23,19 +17,22 @@ namespace ReserveHealth.Api.Controllers
         public string? StatusReason { get; set; }
     }
 
-   [Authorize(Roles = "Doctor")]
+    [Authorize(Roles = "Doctor")]
     [ApiController]
     [Route("api/referrals")]
     public class ReferralController : ControllerBase
     {
         private readonly ReserveHealthContext _context;
+        private readonly AuditService _auditService;
 
-        public ReferralController(ReserveHealthContext context)
+        public ReferralController(
+            ReserveHealthContext context,
+            AuditService auditService)
         {
             _context = context;
+            _auditService = auditService;
         }
 
-        // Get all referrals
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Referral>>> GetReferrals()
         {
@@ -46,21 +43,22 @@ namespace ReserveHealth.Api.Controllers
             return Ok(referrals);
         }
 
-        // Create a new referral
         [HttpPost]
         public async Task<ActionResult<Referral>> CreateReferral(
             Referral referral)
         {
             if (referral.PatientId <= 0)
             {
-                return BadRequest("Patient is required.");
+                return BadRequest(
+                    "Patient is required."
+                );
             }
 
-            // Check that the selected patient actually exists
             bool patientExists =
                 await _context.Patients
                     .AnyAsync(
-                        p => p.PatientId == referral.PatientId
+                        p => p.PatientId ==
+                             referral.PatientId
                     );
 
             if (!patientExists)
@@ -70,28 +68,30 @@ namespace ReserveHealth.Api.Controllers
                 );
             }
 
-            if (string.IsNullOrWhiteSpace(referral.Reason))
+            if (string.IsNullOrWhiteSpace(
+                    referral.Reason))
             {
                 return BadRequest(
                     "Reason is required."
                 );
             }
 
-            if (string.IsNullOrWhiteSpace(referral.Service))
+            if (string.IsNullOrWhiteSpace(
+                    referral.Service))
             {
                 return BadRequest(
                     "Service is required."
                 );
             }
 
-            if (string.IsNullOrWhiteSpace(referral.Priority))
+            if (string.IsNullOrWhiteSpace(
+                    referral.Priority))
             {
                 return BadRequest(
                     "Priority is required."
                 );
             }
 
-            // Only allow the three referral priority levels
             string[] validPriorities =
             {
                 "P1",
@@ -99,27 +99,34 @@ namespace ReserveHealth.Api.Controllers
                 "P3"
             };
 
-            if (!validPriorities.Contains(referral.Priority))
+            if (!validPriorities.Contains(
+                    referral.Priority))
             {
                 return BadRequest(
                     "Priority must be P1, P2 or P3."
                 );
             }
 
-            // New referrals always begin as pending
             referral.Status = "Pending";
             referral.StatusReason = null;
             referral.DateCreated = DateTime.Now;
 
-            // Adds the referral to the database
             _context.Referrals.Add(referral);
 
             await _context.SaveChangesAsync();
 
+            await _auditService.LogAsync(
+                GetCurrentUserId(),
+                "Referral Created",
+                "Referral",
+                referral.ReferralId,
+                null,
+                $"Priority: {referral.Priority}, Status: {referral.Status}"
+            );
+
             return Ok(referral);
         }
 
-        // Update the priority and status of an existing referral
         [HttpPut("{referralId}")]
         public async Task<ActionResult<Referral>> UpdateReferral(
             int referralId,
@@ -128,7 +135,9 @@ namespace ReserveHealth.Api.Controllers
             var referral =
                 await _context.Referrals
                     .FirstOrDefaultAsync(
-                        r => r.ReferralId == referralId
+                        r =>
+                            r.ReferralId ==
+                            referralId
                     );
 
             if (referral == null)
@@ -138,7 +147,12 @@ namespace ReserveHealth.Api.Controllers
                 );
             }
 
-            // Only allow the three referral priority levels
+            var oldPriority =
+                referral.Priority;
+
+            var oldStatus =
+                referral.Status;
+
             string[] validPriorities =
             {
                 "P1",
@@ -162,7 +176,6 @@ namespace ReserveHealth.Api.Controllers
                 );
             }
 
-            // Only allow recognised referral statuses
             string[] validStatuses =
             {
                 "Pending",
@@ -188,13 +201,16 @@ namespace ReserveHealth.Api.Controllers
                 );
             }
 
-            // Returned and rejected referrals must include a reason
-            if ((updatedReferral.Status ==
-                    "Returned for more information" ||
-                 updatedReferral.Status ==
-                    "Rejected") &&
+            if (
+                (
+                    updatedReferral.Status ==
+                        "Returned for more information" ||
+                    updatedReferral.Status ==
+                        "Rejected"
+                ) &&
                 string.IsNullOrWhiteSpace(
-                    updatedReferral.StatusReason))
+                    updatedReferral.StatusReason)
+            )
             {
                 return BadRequest(
                     "A reason is required when a referral is returned or rejected."
@@ -207,23 +223,77 @@ namespace ReserveHealth.Api.Controllers
             referral.Status =
                 updatedReferral.Status;
 
-            if (updatedReferral.Status ==
+            if (
+                updatedReferral.Status ==
                     "Returned for more information" ||
                 updatedReferral.Status ==
-                    "Rejected")
+                    "Rejected"
+            )
             {
                 referral.StatusReason =
-                    updatedReferral.StatusReason!.Trim();
+                    updatedReferral
+                        .StatusReason!
+                        .Trim();
             }
             else
             {
                 referral.StatusReason = null;
             }
 
-            // Saves the referral changes to the database
             await _context.SaveChangesAsync();
 
+            if (oldPriority != referral.Priority)
+            {
+                await _auditService.LogAsync(
+                    GetCurrentUserId(),
+                    "Referral Priority Changed",
+                    "Referral",
+                    referral.ReferralId,
+                    oldPriority,
+                    referral.Priority
+                );
+            }
+
+            if (oldStatus != referral.Status)
+            {
+                await _auditService.LogAsync(
+                    GetCurrentUserId(),
+                    "Referral Status Changed",
+                    "Referral",
+                    referral.ReferralId,
+                    oldStatus,
+                    referral.Status
+                );
+            }
+
             return Ok(referral);
+        }
+
+        private int GetCurrentUserId()
+        {
+            var userIdClaim =
+                User.FindFirst(
+                    ClaimTypes.NameIdentifier
+                )?.Value
+                ??
+                User.FindFirst(
+                    "userId"
+                )?.Value
+                ??
+                User.FindFirst(
+                    "sub"
+                )?.Value;
+
+            if (int.TryParse(
+                    userIdClaim,
+                    out var userId))
+            {
+                return userId;
+            }
+
+            throw new UnauthorizedAccessException(
+                "Authenticated user ID could not be determined."
+            );
         }
     }
 }
