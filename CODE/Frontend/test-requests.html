@@ -1,77 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Reserve Health - Test Requests</title>
-    <link rel="stylesheet" href="css/shared.css">
-    <link rel="stylesheet" href="css/test-requests.css">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1">
+
+    <title>
+        Reserve Health - Test Requests
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/shared.css">
+
+    <link
+        rel="stylesheet"
+        href="css/test-requests.css">
 </head>
+
+
 <body>
-    <header class="topbar">
-        <div class="topbar-left">
-            <div class="logo-box">RH</div>
-            <div class="brand-details">
-                <h1>Reserve Health</h1>
-                <p>Clinical Coordination System</p>
-            </div>
+
+
+<header class="topbar">
+
+    <div class="topbar-left">
+
+        <div class="logo-box">
+            RH
         </div>
-        <button class="logout-button" id="logout-button" type="button">
+
+        <div class="brand-details">
+
+            <h1>
+                Reserve Health
+            </h1>
+
+            <p>
+                Clinical Coordination System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="topbar-right">
+
+        <div class="staff-details">
+
+            <span
+                class="staff-name"
+                id="staff-name">
+            </span>
+
+            <span
+                class="role"
+                id="staff-role">
+            </span>
+
+        </div>
+
+
+        <button
+            class="logout-button"
+            id="logout-button"
+            type="button">
+
             Logout
+
         </button>
-    </header>
 
-    <nav class="main-nav">
-        <a href="index.html">Dashboard</a>
-        <a href="test-requests.html" class="active">Test Requests</a>
-    </nav>
+    </div>
 
-    <main class="requests-page">
-        <p class="small-label">Laboratory</p>
-        <h2>Patient test requests</h2>
-        <p>Outstanding requests are shown first.</p>
+</header>
 
-        <p id="requests-message" role="status">Loading test requests...</p>
 
-        <table id="requests-table" hidden>
-            <thead>
-                <tr>
-                    <th scope="col">Patient</th>
-                    <th scope="col">Test type</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Requested</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody id="requests-body"></tbody>
-        </table>
+<nav class="main-nav">
 
-        <section id="result-section" hidden>
-            <h3>Enter test result</h3>
-            <p id="selected-request"></p>
+    <a href="index.html">
+        Dashboard
+    </a>
 
-            <form id="result-form">
-                <label for="result-information">Result information</label>
-                <textarea
-                    id="result-information"
-                    name="resultInformation"
-                    rows="5"
-                    required></textarea>
+    <a
+        href="test-requests.html"
+        class="active">
 
-                <div>
-                    <button id="save-result-button" type="submit">
-                        Save result
-                    </button>
-                    <button id="cancel-result-button" type="button">
-                        Cancel
-                    </button>
-                </div>
-            </form>
+        Test Requests
 
-            <p id="result-message" role="status"></p>
-        </section>
-    </main>
+    </a>
 
-    <script src="test-requests.js"></script>
+</nav>
+
+
+<main class="requests-page">
+
+
+    <p class="small-label">
+        Laboratory
+    </p>
+
+
+    <h2>
+        Patient test requests
+    </h2>
+
+
+    <p>
+        Outstanding requests are shown first.
+    </p>
+
+
+    <p
+        id="requests-message"
+        role="status">
+
+        Loading test requests...
+
+    </p>
+
+
+    <table
+        id="requests-table"
+        hidden>
+
+        <thead>
+
+            <tr>
+
+                <th scope="col">
+                    Patient
+                </th>
+
+                <th scope="col">
+                    Test type
+                </th>
+
+                <th scope="col">
+                    Status
+                </th>
+
+                <th scope="col">
+                    Requested
+                </th>
+
+                <th scope="col">
+                    Action
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody id="requests-body">
+        </tbody>
+
+    </table>
+
+
+    <section
+        id="result-section"
+        hidden>
+
+
+        <h3 id="result-heading">
+            Enter test result
+        </h3>
+
+
+        <p id="selected-request">
+        </p>
+
+
+        <form id="result-form">
+
+
+            <label for="result-information">
+                Result information
+            </label>
+
+
+            <textarea
+                id="result-information"
+                name="resultInformation"
+                rows="5"
+                required>
+            </textarea>
+
+
+            <div>
+
+                <button
+                    id="save-result-button"
+                    type="submit">
+
+                    Save result
+
+                </button>
+
+
+                <button
+                    id="cancel-result-button"
+                    type="button">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <p
+            id="result-message"
+            role="status">
+        </p>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    const testRequestStoredUser =
+        sessionStorage.getItem(
+            "reserveHealthUser"
+        );
+
+
+    if (
+        testRequestStoredUser
+    ) {
+
+        try {
+
+            const testRequestCurrentUser =
+                JSON.parse(
+                    testRequestStoredUser
+                );
+
+
+            document
+                .getElementById(
+                    "staff-name"
+                )
+                .textContent =
+                testRequestCurrentUser.name ||
+                "Staff User";
+
+
+            document
+                .getElementById(
+                    "staff-role"
+                )
+                .textContent =
+                testRequestCurrentUser.role ||
+                "";
+
+        } catch (error) {
+
+            console.error(
+                "Could not display staff details:",
+                error
+            );
+        }
+    }
+
+</script>
+
+
+<script src="test-requests.js">
+</script>
+
+
 </body>
+
 </html>

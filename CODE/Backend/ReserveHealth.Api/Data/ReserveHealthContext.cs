@@ -30,6 +30,5 @@ public class ReserveHealthContext : DbContext
     public DbSet<TestRequest> TestRequests { get; set; }
 
     public DbSet<TestResult> TestResults { get; set; }
-
     public DbSet<ReferralStatusHistory> ReferralStatusHistories { get; set; }
 }

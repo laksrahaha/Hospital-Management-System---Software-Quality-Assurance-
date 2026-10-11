@@ -11,11 +11,25 @@ const currentUser =
 if (!currentUser ||
     !currentUser.token) {
 
+    sessionStorage.removeItem(
+        "reserveHealthUser"
+    );
+
     window.location.href =
         "login.html";
 
     throw new Error(
         "Authentication required."
+    );
+}
+
+if (currentUser.role !== "Doctor") {
+
+    window.location.href =
+        "index.html";
+
+    throw new Error(
+        "Doctor role required."
     );
 }
 
@@ -37,6 +51,7 @@ async function authenticatedFetch(
         );
 
     if (response.status === 401) {
+
         sessionStorage.removeItem(
             "reserveHealthUser"
         );
@@ -48,7 +63,9 @@ async function authenticatedFetch(
     return response;
 }
 
+
 async function loadAuditLogs() {
+
     const auditList =
         document.getElementById(
             "auditList"
@@ -62,19 +79,22 @@ async function loadAuditLogs() {
     auditMessage.textContent = "";
 
     try {
+
         const response =
             await authenticatedFetch(
                 auditApi
             );
 
         if (response.status === 403) {
-            auditMessage.textContent =
-                "You are not authorised to view audit records.";
+
+            window.location.href =
+                "index.html";
 
             return;
         }
 
         if (!response.ok) {
+
             throw new Error(
                 "Could not load audit records."
             );
@@ -86,6 +106,7 @@ async function loadAuditLogs() {
         auditList.innerHTML = "";
 
         if (auditLogs.length === 0) {
+
             auditList.innerHTML = `
                 <tr>
                     <td colspan="8">
@@ -98,6 +119,7 @@ async function loadAuditLogs() {
         }
 
         auditLogs.forEach(log => {
+
             const row =
                 document.createElement(
                     "tr"
@@ -150,6 +172,7 @@ async function loadAuditLogs() {
         });
 
     } catch (error) {
+
         console.error(
             "Error loading audit records:",
             error

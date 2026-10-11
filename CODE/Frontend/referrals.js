@@ -2,194 +2,447 @@
 // Loads patients and referrals from the API.
 // Handles creating, filtering and editing referrals.
 
-const referralApi = "http://localhost:5297/api/referrals";
-const patientApi = "http://localhost:5297/api/patient";
+const referralApi =
+    "http://localhost:5297/api/referrals";
+
+const patientApi =
+    "http://localhost:5297/api/patient";
+
 
 // Gets the logged-in staff account and authentication token.
-const currentUser = JSON.parse(
-    sessionStorage.getItem("reserveHealthUser")
-);
+
+const currentUser =
+    JSON.parse(
+        sessionStorage.getItem(
+            "reserveHealthUser"
+        )
+    );
+
 
 // Users must be logged in before accessing referral functions.
-if (!currentUser || !currentUser.token) {
-    sessionStorage.removeItem("reserveHealthUser");
 
-    window.location.href = "login.html";
+if (!currentUser ||
+    !currentUser.token) {
 
-    throw new Error("Authentication required.");
+    sessionStorage.removeItem(
+        "reserveHealthUser"
+    );
+
+    window.location.href =
+        "login.html";
+
+    throw new Error(
+        "Authentication required."
+    );
+}
+
+
+// Referrals are Doctor-only.
+
+if (
+    currentUser.role !==
+    "Doctor"
+) {
+
+    window.location.href =
+        "index.html";
+
+    throw new Error(
+        "Doctor role required."
+    );
+}
+
+
+// Display the real logged-in staff identity.
+
+const staffName =
+    document.getElementById(
+        "staff-name"
+    );
+
+const staffRole =
+    document.getElementById(
+        "staff-role"
+    );
+
+if (staffName) {
+
+    staffName.textContent =
+        currentUser.name ||
+        "Staff User";
+}
+
+if (staffRole) {
+
+    staffRole.textContent =
+        currentUser.role;
 }
 
 
 // Sends the JWT with every protected API request.
+
 async function authenticatedFetch(
     url,
     options = {}
 ) {
+
     options.headers = {
+
         ...(options.headers || {}),
-        "Authorization": `Bearer ${currentUser.token}`
+
+        "Authorization":
+            `Bearer ${currentUser.token}`
     };
 
-    const response = await fetch(
-        url,
-        options
-    );
 
-    // An invalid or expired token requires a new login.
-    if (response.status === 401) {
-        sessionStorage.removeItem("reserveHealthUser");
+    const response =
+        await fetch(
+            url,
+            options
+        );
 
-        window.location.href = "login.html";
+
+    if (
+        response.status === 401
+    ) {
+
+        sessionStorage.removeItem(
+            "reserveHealthUser"
+        );
+
+        window.location.href =
+            "login.html";
     }
+
+
+    if (
+        response.status === 403
+    ) {
+
+        window.location.href =
+            "index.html";
+    }
+
 
     return response;
 }
 
+
 let referrals = [];
+
 let patients = [];
 
-function getWaitingDays(dateCreated) {
+
+// Calculate how many days a referral has been waiting.
+
+function getWaitingDays(
+    dateCreated
+) {
+
     if (!dateCreated) {
+
         return null;
     }
 
-    const createdDate = new Date(dateCreated);
-    const today = new Date();
 
-    if (isNaN(createdDate.getTime())) {
+    const createdDate =
+        new Date(
+            dateCreated
+        );
+
+    const today =
+        new Date();
+
+
+    if (
+        isNaN(
+            createdDate.getTime()
+        )
+    ) {
+
         return null;
     }
+
 
     const differenceInMilliseconds =
-        today.getTime() - createdDate.getTime();
+        today.getTime() -
+        createdDate.getTime();
 
-    const differenceInDays = Math.floor(
-        differenceInMilliseconds /
-        (1000 * 60 * 60 * 24)
+
+    const differenceInDays =
+        Math.floor(
+            differenceInMilliseconds /
+            (
+                1000 *
+                60 *
+                60 *
+                24
+            )
+        );
+
+
+    return Math.max(
+        differenceInDays,
+        0
     );
-
-    return Math.max(differenceInDays, 0);
 }
 
-function getPriorityThreshold(priority) {
-    switch (priority) {
+
+// Returns the waiting threshold for each priority.
+
+function getPriorityThreshold(
+    priority
+) {
+
+    switch (
+        priority
+    ) {
+
         case "P1":
+
             return 14;
 
+
         case "P2":
+
             return null;
+
 
         case "P3":
+
             return null;
 
+
         default:
+
             return null;
     }
 }
 
-function getWaitingStatus(referral) {
+
+// Determines the waiting status for a referral.
+
+function getWaitingStatus(
+    referral
+) {
+
     if (!referral) {
+
         return "Unknown";
     }
 
-    if (referral.status === "Completed") {
+
+    if (
+        referral.status ===
+        "Completed"
+    ) {
+
         return "Completed";
     }
 
-    if (referral.status === "Rejected") {
+
+    if (
+        referral.status ===
+        "Rejected"
+    ) {
+
         return "Rejected";
     }
 
+
     const waitingDays =
-        getWaitingDays(referral.dateCreated);
+        getWaitingDays(
+            referral.dateCreated
+        );
+
 
     const threshold =
-        getPriorityThreshold(referral.priority);
+        getPriorityThreshold(
+            referral.priority
+        );
 
-    if (waitingDays === null) {
+
+    if (
+        waitingDays === null
+    ) {
+
         return "Unknown";
     }
 
-    if (threshold === null) {
+
+    if (
+        threshold === null
+    ) {
+
         return "Waiting";
     }
 
-    if (waitingDays > threshold) {
+
+    if (
+        waitingDays >
+        threshold
+    ) {
+
         return "Overdue";
     }
 
-    if (waitingDays === threshold) {
+
+    if (
+        waitingDays ===
+        threshold
+    ) {
+
         return "Due";
     }
+
 
     return "Normal";
 }
 
-// Load patients into the patient dropdown
+
+// Load patients into the patient dropdown.
+
 async function loadPatients() {
-    const patientSelect = document.getElementById("patientId");
-    const message = document.getElementById("referralMessage");
+
+    const patientSelect =
+        document.getElementById(
+            "patientId"
+        );
+
+    const message =
+        document.getElementById(
+            "referralMessage"
+        );
+
 
     try {
-        const response = await authenticatedFetch(patientApi);
+
+        const response =
+            await authenticatedFetch(
+                patientApi
+            );
+
 
         if (!response.ok) {
-            throw new Error("Could not load patients.");
+
+            throw new Error(
+                "Could not load patients."
+            );
         }
 
-        patients = await response.json();
+
+        patients =
+            await response.json();
+
 
         patientSelect.innerHTML =
             '<option value="">Select Patient</option>';
 
-        patients.forEach(patient => {
-            const option = document.createElement("option");
 
-            option.value = patient.patientId;
-            option.textContent =
-                `${patient.firstName} ${patient.lastName}`;
+        patients.forEach(
+            patient => {
 
-            patientSelect.appendChild(option);
-        });
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    patient.patientId;
+
+
+                option.textContent =
+                    `${patient.firstName} ${patient.lastName}`;
+
+
+                patientSelect.appendChild(
+                    option
+                );
+            }
+        );
 
     } catch (error) {
-        console.error("Error loading patients:", error);
-        message.textContent = "Patients could not be loaded.";
+
+        console.error(
+            "Error loading patients:",
+            error
+        );
+
+
+        message.textContent =
+            "Patients could not be loaded.";
     }
 }
 
-// Find the patient's name using their ID
-function getPatientName(patientId) {
-    const patient = patients.find(
-        patient =>
-            Number(patient.patientId) === Number(patientId)
-    );
+
+// Find a patient's name using their ID.
+
+function getPatientName(
+    patientId
+) {
+
+    const patient =
+        patients.find(
+            patient =>
+                Number(
+                    patient.patientId
+                ) ===
+                Number(
+                    patientId
+                )
+        );
+
 
     if (patient) {
+
         return `${patient.firstName} ${patient.lastName}`;
     }
+
 
     return `Patient ${patientId}`;
 }
 
-// Load referrals from the API
+
+// Load referrals from the API.
+
 async function loadReferrals() {
+
     const referralList =
-        document.getElementById("referralList");
+        document.getElementById(
+            "referralList"
+        );
+
 
     try {
-        const response = await authenticatedFetch(referralApi);
+
+        const response =
+            await authenticatedFetch(
+                referralApi
+            );
+
 
         if (!response.ok) {
-            throw new Error("Could not load referrals.");
+
+            throw new Error(
+                "Could not load referrals."
+            );
         }
 
-        referrals = await response.json();
+
+        referrals =
+            await response.json();
+
 
         displayReferrals();
 
     } catch (error) {
-        console.error("Error loading referrals:", error);
+
+        console.error(
+            "Error loading referrals:",
+            error
+        );
+
 
         referralList.innerHTML = `
             <tr>
@@ -201,31 +454,62 @@ async function loadReferrals() {
     }
 }
 
-// Display referrals using the selected filters
+
+// Display referrals using the selected filters.
+
 function displayReferrals() {
+
     const referralList =
-        document.getElementById("referralList");
+        document.getElementById(
+            "referralList"
+        );
+
 
     const statusFilter =
-        document.getElementById("statusFilter").value;
+        document.getElementById(
+            "statusFilter"
+        ).value;
+
 
     const priorityFilter =
-        document.getElementById("priorityFilter").value;
+        document.getElementById(
+            "priorityFilter"
+        ).value;
+
 
     const filteredReferrals =
-        referrals.filter(referral => {
-            const statusMatches =
-                statusFilter === "All" ||
-                referral.status === statusFilter;
+        referrals.filter(
+            referral => {
 
-            const priorityMatches =
-                priorityFilter === "All" ||
-                referral.priority === priorityFilter;
+                const statusMatches =
+                    statusFilter ===
+                    "All" ||
 
-            return statusMatches && priorityMatches;
-        });
+                    referral.status ===
+                    statusFilter;
 
-    if (filteredReferrals.length === 0) {
+
+                const priorityMatches =
+                    priorityFilter ===
+                    "All" ||
+
+                    referral.priority ===
+                    priorityFilter;
+
+
+                return (
+                    statusMatches &&
+                    priorityMatches
+                );
+            }
+        );
+
+
+    if (
+        filteredReferrals.length ===
+        0
+    ) {
+
         referralList.innerHTML = `
             <tr>
                 <td colspan="7">
@@ -237,325 +521,612 @@ function displayReferrals() {
         return;
     }
 
-    referralList.innerHTML = "";
 
-    filteredReferrals.forEach(referral => {
+    referralList.innerHTML =
+        "";
 
-        const waitingDays =
-            getWaitingDays(referral.dateCreated);
 
-        const waitingStatus =
-            getWaitingStatus(referral);
+    filteredReferrals.forEach(
+        referral => {
 
-        let waitingDisplay = "";
 
-        if (waitingStatus === "Completed") {
-            waitingDisplay = `
-                <span class="waiting-badge waiting-completed">
-                    Completed
-                </span>
+            const waitingDays =
+                getWaitingDays(
+                    referral.dateCreated
+                );
+
+
+            const waitingStatus =
+                getWaitingStatus(
+                    referral
+                );
+
+
+            let waitingDisplay =
+                "";
+
+
+            if (
+                waitingStatus ===
+                "Completed"
+            ) {
+
+                waitingDisplay = `
+                    <span class="waiting-badge waiting-completed">
+                        Completed
+                    </span>
+                `;
+
+            } else if (
+                waitingStatus ===
+                "Rejected"
+            ) {
+
+                waitingDisplay = `
+                    <span class="waiting-badge waiting-rejected">
+                        Rejected
+                    </span>
+                `;
+
+            } else if (
+                waitingDays ===
+                null
+            ) {
+
+                waitingDisplay = `
+                    <span class="waiting-badge waiting-unavailable">
+                        Unavailable
+                    </span>
+                `;
+
+            } else if (
+                waitingStatus ===
+                "Overdue"
+            ) {
+
+                waitingDisplay = `
+                    <span class="waiting-badge waiting-overdue">
+                        ${waitingDays} days - Overdue
+                    </span>
+                `;
+
+            } else if (
+                waitingStatus ===
+                "Due"
+            ) {
+
+                waitingDisplay = `
+                    <span class="waiting-badge waiting-due">
+                        ${waitingDays} days - Due
+                    </span>
+                `;
+
+            } else if (
+                waitingDays ===
+                0
+            ) {
+
+                waitingDisplay = `
+                    <span class="waiting-badge">
+                        Today
+                    </span>
+                `;
+
+            } else if (
+                waitingDays ===
+                1
+            ) {
+
+                waitingDisplay = `
+                    <span class="waiting-badge">
+                        1 day
+                    </span>
+                `;
+
+            } else {
+
+                waitingDisplay = `
+                    <span class="waiting-badge">
+                        ${waitingDays} days
+                    </span>
+                `;
+            }
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            if (
+                waitingStatus ===
+                "Overdue"
+            ) {
+
+                row.classList.add(
+                    "referral-overdue"
+                );
+
+            } else if (
+                waitingStatus ===
+                "Due"
+            ) {
+
+                row.classList.add(
+                    "referral-due"
+                );
+            }
+
+
+            row.innerHTML = `
+                <td>
+                    ${referral.referralId}
+                </td>
+
+                <td>
+                    ${getPatientName(
+                        referral.patientId
+                    )}
+                </td>
+
+                <td>
+                    ${referral.service}
+                </td>
+
+                <td>
+                    <span class="status-pill">
+                        ${referral.priority}
+                    </span>
+                </td>
+
+                <td>
+                    ${referral.status}
+                </td>
+
+                <td>
+                    ${waitingDisplay}
+                </td>
+
+                <td>
+                    <button
+                        type="button"
+                        class="edit-referral-button"
+                        onclick="openReferralEditor(${referral.referralId})">
+
+                        Edit
+
+                    </button>
+                </td>
             `;
-        } else if (waitingStatus === "Rejected") {
-            waitingDisplay = `
-                <span class="waiting-badge waiting-rejected">
-                    Rejected
-                </span>
-            `;
-        } else if (waitingDays === null) {
-            waitingDisplay = `
-                <span class="waiting-badge waiting-unavailable">
-                    Unavailable
-                </span>
-            `;
-        } else if (waitingStatus === "Overdue") {
-            waitingDisplay = `
-                <span class="waiting-badge waiting-overdue">
-                    ${waitingDays} days - Overdue
-                </span>
-            `;
-        } else if (waitingStatus === "Due") {
-            waitingDisplay = `
-                <span class="waiting-badge waiting-due">
-                    ${waitingDays} days - Due
-                </span>
-            `;
-        } else if (waitingDays === 0) {
-            waitingDisplay = `
-                <span class="waiting-badge">
-                    Today
-                </span>
-            `;
-        } else if (waitingDays === 1) {
-            waitingDisplay = `
-                <span class="waiting-badge">
-                    1 day
-                </span>
-            `;
-        } else {
-            waitingDisplay = `
-                <span class="waiting-badge">
-                    ${waitingDays} days
-                </span>
-            `;
+
+
+            referralList.appendChild(
+                row
+            );
         }
-
-        const row =
-            document.createElement("tr");
-
-        if (waitingStatus === "Overdue") {
-            row.classList.add("referral-overdue");
-        } else if (waitingStatus === "Due") {
-            row.classList.add("referral-due");
-        }
-
-        row.innerHTML = `
-            <td>
-                ${referral.referralId}
-            </td>
-
-            <td>
-                ${getPatientName(referral.patientId)}
-            </td>
-
-            <td>
-                ${referral.service}
-            </td>
-
-            <td>
-                <span class="status-pill">
-                    ${referral.priority}
-                </span>
-            </td>
-
-            <td>
-                ${referral.status}
-            </td>
-
-            <td>
-                ${waitingDisplay}
-            </td>
-
-            <td>
-                <button
-                    type="button"
-                    class="edit-referral-button"
-                    onclick="openReferralEditor(${referral.referralId})">
-                    Edit
-                </button>
-            </td>
-        `;
-
-        referralList.appendChild(row);
-    });
+    );
 }
 
-// Open the edit form for one referral
-function openReferralEditor(referralId) {
-    const referral = referrals.find(
-        referral =>
-            Number(referral.referralId) ===
-            Number(referralId)
-    );
+
+// Open the edit form for one referral.
+
+function openReferralEditor(
+    referralId
+) {
+
+    const referral =
+        referrals.find(
+            referral =>
+                Number(
+                    referral.referralId
+                ) ===
+                Number(
+                    referralId
+                )
+        );
+
 
     if (!referral) {
+
         return;
     }
 
+
     const detailsPanel =
-        document.getElementById("referralDetails");
+        document.getElementById(
+            "referralDetails"
+        );
+
 
     const detailsContent =
-        document.getElementById("referralDetailsContent");
+        document.getElementById(
+            "referralDetailsContent"
+        );
+
 
     const editReferralId =
-        document.getElementById("editReferralId");
+        document.getElementById(
+            "editReferralId"
+        );
+
 
     const editPriority =
-        document.getElementById("editPriority");
+        document.getElementById(
+            "editPriority"
+        );
+
 
     const editStatus =
-        document.getElementById("editStatus");
+        document.getElementById(
+            "editStatus"
+        );
+
 
     const editStatusReason =
-        document.getElementById("editStatusReason");
+        document.getElementById(
+            "editStatusReason"
+        );
+
 
     const editMessage =
-        document.getElementById("editReferralMessage");
+        document.getElementById(
+            "editReferralMessage"
+        );
 
-    let createdDate = "Not available";
 
-    if (referral.dateCreated) {
+    let createdDate =
+        "Not available";
+
+
+    if (
+        referral.dateCreated
+    ) {
+
         createdDate =
             new Date(
                 referral.dateCreated
-            ).toLocaleString();
+            ).toLocaleString(
+                "en-NZ"
+            );
     }
 
+
     const waitingDays =
-        getWaitingDays(referral.dateCreated);
+        getWaitingDays(
+            referral.dateCreated
+        );
+
 
     const waitingStatus =
-        getWaitingStatus(referral);
+        getWaitingStatus(
+            referral
+        );
 
-    let waitingText = "Unavailable";
 
-    if (waitingStatus === "Completed") {
-        waitingText = "Completed";
-    } else if (waitingStatus === "Rejected") {
-        waitingText = "Rejected";
-    } else if (waitingDays !== null) {
+    let waitingText =
+        "Unavailable";
 
-        if (waitingStatus === "Overdue") {
+
+    if (
+        waitingStatus ===
+        "Completed"
+    ) {
+
+        waitingText =
+            "Completed";
+
+    } else if (
+        waitingStatus ===
+        "Rejected"
+    ) {
+
+        waitingText =
+            "Rejected";
+
+    } else if (
+        waitingDays !==
+        null
+    ) {
+
+        if (
+            waitingStatus ===
+            "Overdue"
+        ) {
+
             waitingText =
                 `${waitingDays} days - Overdue`;
-        } else if (waitingStatus === "Due") {
+
+        } else if (
+            waitingStatus ===
+            "Due"
+        ) {
+
             waitingText =
                 `${waitingDays} days - Due`;
-        } else if (waitingDays === 0) {
-            waitingText = "Today";
-        } else if (waitingDays === 1) {
-            waitingText = "1 day";
+
+        } else if (
+            waitingDays ===
+            0
+        ) {
+
+            waitingText =
+                "Today";
+
+        } else if (
+            waitingDays ===
+            1
+        ) {
+
+            waitingText =
+                "1 day";
+
         } else {
+
             waitingText =
                 `${waitingDays} days`;
         }
     }
 
+
     detailsContent.innerHTML = `
         <p>
-            <strong>Referral ID:</strong>
+            <strong>
+                Referral ID:
+            </strong>
+
             ${referral.referralId}
         </p>
 
         <p>
-            <strong>Patient:</strong>
-            ${getPatientName(referral.patientId)}
+            <strong>
+                Patient:
+            </strong>
+
+            ${getPatientName(
+                referral.patientId
+            )}
         </p>
 
         <p>
-            <strong>Service:</strong>
+            <strong>
+                Service:
+            </strong>
+
             ${referral.service}
         </p>
 
         <p>
-            <strong>Referral reason:</strong>
+            <strong>
+                Referral reason:
+            </strong>
+
             ${referral.reason}
         </p>
 
         <p>
-            <strong>Date created:</strong>
+            <strong>
+                Date created:
+            </strong>
+
             ${createdDate}
         </p>
 
         <p>
-            <strong>Waiting time:</strong>
+            <strong>
+                Waiting time:
+            </strong>
+
             ${waitingText}
         </p>
     `;
 
+
     editReferralId.value =
         referral.referralId;
+
 
     editPriority.value =
         referral.priority;
 
+
     editStatus.value =
         referral.status;
 
-    editStatusReason.value =
-        referral.statusReason || "";
 
-    editMessage.textContent = "";
+    editStatusReason.value =
+        referral.statusReason ||
+        "";
+
+
+    editMessage.textContent =
+        "";
+
 
     updateStatusReasonVisibility();
 
-    detailsPanel.classList.remove("hidden");
 
-    detailsPanel.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+    detailsPanel.classList.remove(
+        "hidden"
+    );
+
+
+    detailsPanel.scrollIntoView(
+        {
+            behavior:
+                "smooth",
+
+            block:
+                "start"
+        }
+    );
 }
 
-// Show the reason field for returned or rejected referrals
+
+// Show the reason field for returned or rejected referrals.
+
 function updateStatusReasonVisibility() {
+
     const editStatus =
-        document.getElementById("editStatus").value;
+        document.getElementById(
+            "editStatus"
+        ).value;
+
 
     const statusReasonField =
-        document.getElementById("statusReasonField");
+        document.getElementById(
+            "statusReasonField"
+        );
+
 
     const editStatusReason =
-        document.getElementById("editStatusReason");
+        document.getElementById(
+            "editStatusReason"
+        );
+
 
     const reasonIsRequired =
-        editStatus === "Returned for more information" ||
-        editStatus === "Rejected";
 
-    if (reasonIsRequired) {
-        statusReasonField.classList.remove("hidden");
-        editStatusReason.required = true;
+        editStatus ===
+        "Returned for more information"
+
+        ||
+
+        editStatus ===
+        "Rejected";
+
+
+    if (
+        reasonIsRequired
+    ) {
+
+        statusReasonField
+            .classList
+            .remove(
+                "hidden"
+            );
+
+
+        editStatusReason.required =
+            true;
+
     } else {
-        statusReasonField.classList.add("hidden");
-        editStatusReason.required = false;
-        editStatusReason.value = "";
+
+        statusReasonField
+            .classList
+            .add(
+                "hidden"
+            );
+
+
+        editStatusReason.required =
+            false;
+
+
+        editStatusReason.value =
+            "";
     }
 }
 
-// Close the edit form
+
+// Close the edit form.
+
 function closeReferralEditor() {
+
     const detailsPanel =
-        document.getElementById("referralDetails");
+        document.getElementById(
+            "referralDetails"
+        );
+
 
     const editForm =
-        document.getElementById("editReferralForm");
+        document.getElementById(
+            "editReferralForm"
+        );
+
 
     const editMessage =
-        document.getElementById("editReferralMessage");
+        document.getElementById(
+            "editReferralMessage"
+        );
 
-    detailsPanel.classList.add("hidden");
+
+    detailsPanel.classList.add(
+        "hidden"
+    );
+
+
     editForm.reset();
-    editMessage.textContent = "";
+
+
+    editMessage.textContent =
+        "";
+
 
     updateStatusReasonVisibility();
 }
 
-// Create a new referral
+
+// Create a new referral.
+
 document
-    .getElementById("referralForm")
+    .getElementById(
+        "referralForm"
+    )
     .addEventListener(
         "submit",
-        async function (event) {
+        async function (
+            event
+        ) {
+
             event.preventDefault();
+
 
             const patientId =
                 Number(
                     document
-                        .getElementById("patientId")
+                        .getElementById(
+                            "patientId"
+                        )
                         .value
                 );
 
+
             const service =
                 document
-                    .getElementById("service")
+                    .getElementById(
+                        "service"
+                    )
                     .value;
+
 
             const reason =
                 document
-                    .getElementById("reason")
+                    .getElementById(
+                        "reason"
+                    )
                     .value
                     .trim();
 
+
             const priority =
                 document
-                    .getElementById("priority")
+                    .getElementById(
+                        "priority"
+                    )
                     .value;
+
 
             const message =
                 document
-                    .getElementById("referralMessage");
+                    .getElementById(
+                        "referralMessage"
+                    );
 
-            message.textContent = "";
+
+            message.textContent =
+                "";
+
 
             if (
                 !patientId ||
@@ -563,49 +1134,75 @@ document
                 reason === "" ||
                 priority === ""
             ) {
+
                 message.textContent =
                     "Patient, service, reason and priority are required.";
 
                 return;
             }
 
+
             const referral = {
-                patientId: patientId,
-                service: service,
-                reason: reason,
-                priority: priority
+
+                patientId:
+                    patientId,
+
+                service:
+                    service,
+
+                reason:
+                    reason,
+
+                priority:
+                    priority
             };
 
+
             try {
+
                 const response =
                     await authenticatedFetch(
                         referralApi,
                         {
-                            method: "POST",
+                            method:
+                                "POST",
 
                             headers: {
+
                                 "Content-Type":
                                     "application/json"
                             },
 
                             body:
-                                JSON.stringify(referral)
+                                JSON.stringify(
+                                    referral
+                                )
                         }
                     );
 
-                if (response.ok) {
+
+                if (
+                    response.ok
+                ) {
+
                     message.textContent =
                         "Referral created successfully.";
 
+
                     document
-                        .getElementById("referralForm")
+                        .getElementById(
+                            "referralForm"
+                        )
                         .reset();
+
 
                     await loadReferrals();
 
                 } else {
+
                     const errorMessage =
                         await response.text();
+
 
                     message.textContent =
                         errorMessage ||
@@ -613,10 +1210,12 @@ document
                 }
 
             } catch (error) {
+
                 console.error(
                     "Error creating referral:",
                     error
                 );
+
 
                 message.textContent =
                     "Referral could not be created.";
@@ -624,78 +1223,129 @@ document
         }
     );
 
-// Save changes made to a referral
+
+// Save changes made to a referral.
+
 document
-    .getElementById("editReferralForm")
+    .getElementById(
+        "editReferralForm"
+    )
     .addEventListener(
         "submit",
-        async function (event) {
+        async function (
+            event
+        ) {
+
             event.preventDefault();
+
 
             const referralId =
                 Number(
                     document
-                        .getElementById("editReferralId")
+                        .getElementById(
+                            "editReferralId"
+                        )
                         .value
                 );
 
+
             const priority =
                 document
-                    .getElementById("editPriority")
+                    .getElementById(
+                        "editPriority"
+                    )
                     .value;
+
 
             const status =
                 document
-                    .getElementById("editStatus")
+                    .getElementById(
+                        "editStatus"
+                    )
                     .value;
+
 
             const statusReason =
                 document
-                    .getElementById("editStatusReason")
+                    .getElementById(
+                        "editStatusReason"
+                    )
                     .value
                     .trim();
 
+
             const message =
                 document
-                    .getElementById("editReferralMessage");
+                    .getElementById(
+                        "editReferralMessage"
+                    );
 
-            message.textContent = "";
+
+            message.textContent =
+                "";
+
 
             const reasonIsRequired =
-                status === "Returned for more information" ||
-                status === "Rejected";
 
-            if (priority === "" || status === "") {
+                status ===
+                "Returned for more information"
+
+                ||
+
+                status ===
+                "Rejected";
+
+
+            if (
+                priority === "" ||
+                status === ""
+            ) {
+
                 message.textContent =
                     "Priority and status are required.";
 
                 return;
             }
 
-            if (reasonIsRequired && statusReason === "") {
+
+            if (
+                reasonIsRequired &&
+                statusReason === ""
+            ) {
+
                 message.textContent =
                     "A reason is required when a referral is returned or rejected.";
 
                 return;
             }
 
+
             const updatedReferral = {
-                priority: priority,
-                status: status,
+
+                priority:
+                    priority,
+
+                status:
+                    status,
+
                 statusReason:
                     reasonIsRequired
                         ? statusReason
                         : null
             };
 
+
             try {
+
                 const response =
                     await authenticatedFetch(
                         `${referralApi}/${referralId}`,
                         {
-                            method: "PUT",
+                            method:
+                                "PUT",
 
                             headers: {
+
                                 "Content-Type":
                                     "application/json"
                             },
@@ -707,11 +1357,17 @@ document
                         }
                     );
 
-                if (response.ok) {
+
+                if (
+                    response.ok
+                ) {
+
                     message.textContent =
                         "Referral updated successfully.";
 
+
                     await loadReferrals();
+
 
                     setTimeout(
                         closeReferralEditor,
@@ -719,8 +1375,10 @@ document
                     );
 
                 } else {
+
                     const errorMessage =
                         await response.text();
+
 
                     message.textContent =
                         errorMessage ||
@@ -728,10 +1386,12 @@ document
                 }
 
             } catch (error) {
+
                 console.error(
                     "Error updating referral:",
                     error
                 );
+
 
                 message.textContent =
                     "Referral could not be updated.";
@@ -739,39 +1399,57 @@ document
         }
     );
 
-// Update the reason field when status changes
+
+// Update the reason field when status changes.
+
 document
-    .getElementById("editStatus")
+    .getElementById(
+        "editStatus"
+    )
     .addEventListener(
         "change",
         updateStatusReasonVisibility
     );
 
-// Close the edit panel when Cancel is selected
+
+// Close the edit panel when Cancel is selected.
+
 document
-    .getElementById("cancelEditButton")
+    .getElementById(
+        "cancelEditButton"
+    )
     .addEventListener(
         "click",
         closeReferralEditor
     );
 
-// Filter referrals by status
+
+// Filter referrals by status.
+
 document
-    .getElementById("statusFilter")
+    .getElementById(
+        "statusFilter"
+    )
     .addEventListener(
         "change",
         displayReferrals
     );
 
-// Filter referrals by priority
+
+// Filter referrals by priority.
+
 document
-    .getElementById("priorityFilter")
+    .getElementById(
+        "priorityFilter"
+    )
     .addEventListener(
         "change",
         displayReferrals
     );
 
-// Return the user to the login page
+
+// Return the user to the login page.
+
 function logout() {
 
     sessionStorage.removeItem(
@@ -782,10 +1460,15 @@ function logout() {
         "login.html";
 }
 
-// Load patients and referrals when the page opens
+
+// Load patients and referrals when the page opens.
+
 async function initialiseReferralPage() {
+
     await loadPatients();
+
     await loadReferrals();
 }
+
 
 initialiseReferralPage();

@@ -1,19 +1,33 @@
 <!-- this page shows the patient management interface -->
-<!-- staff users can view patient records, and use the patient management options to edit existing patient information, and archive or restore patient records. The interface includes a search function to filter patients by name or ID, and tabs to switch between active and archived patients. -->
+<!-- doctors can view patient records, edit patient information,
+     and archive or restore patient records -->
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserve Health</title>
-    <link rel="stylesheet" href="css/shared.css">
-    <link rel="stylesheet" href="css/patient.css">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Reserve Health - Patients
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/shared.css">
+
+    <link
+        rel="stylesheet"
+        href="css/patient.css">
 </head>
 
+
 <body>
+
 
 <header class="topbar">
 
@@ -24,23 +38,43 @@
         </div>
 
         <div class="brand-details">
-            <h1>Reserve Health</h1>
-            <p>Clinical Coordination System</p>
+
+            <h1>
+                Reserve Health
+            </h1>
+
+            <p>
+                Clinical Coordination System
+            </p>
+
         </div>
 
     </div>
 
+
     <div class="topbar-right">
 
         <div class="staff-details">
-            <span class="staff-name">Clinical Staff</span>
-            <span class="role">Doctor</span>
+
+            <span
+                class="staff-name"
+                id="staff-name">
+            </span>
+
+            <span
+                class="role"
+                id="staff-role">
+            </span>
+
         </div>
+
 
         <button
             class="logout-button"
             onclick="logout()">
+
             Logout
+
         </button>
 
     </div>
@@ -49,43 +83,72 @@
 
 
 <nav class="main-nav">
-    <a href="index.html" class="active">Dashboard</a>
-    <a href="patient.html">Patients</a>
-    <a href="referrals.html">Referrals</a>
+
+    <a href="index.html">
+        Dashboard
+    </a>
+
+    <a
+        href="patient.html"
+        class="active">
+
+        Patients
+
+    </a>
+
+    <a href="referrals.html">
+        Referrals
+    </a>
+
 </nav>
 
 
 <main class="app-layout">
 
+
     <section class="patient-panel">
+
 
         <div class="section-header">
 
+
             <div class="patient-header-top">
 
+
                 <div class="patient-heading">
-                    <h2>Patients</h2>
+
+                    <h2>
+                        Patients
+                    </h2>
 
                     <p id="patient-list-description">
                         Current patient records
                     </p>
+
                 </div>
 
 
                 <div class="patient-tools">
 
+
                     <button
                         id="add-patient-button"
                         class="add-patient-button"
                         type="button">
+
                         + Add Patient
+
                     </button>
+
 
                     <label
                         for="patient-search"
                         class="visually-hidden">
+
                         Search patients
+
                     </label>
+
 
                     <input
                         type="search"
@@ -100,18 +163,24 @@
 
             <div class="patient-list-tabs">
 
+
                 <button
                     id="active-patients-button"
                     class="patient-list-tab active"
                     type="button">
+
                     Active Patients
+
                 </button>
+
 
                 <button
                     id="archived-patients-button"
                     class="patient-list-tab"
                     type="button">
+
                     Archived Patients
+
                 </button>
 
             </div>
@@ -126,23 +195,43 @@
                 <thead>
 
                     <tr>
-                        <th>ID</th>
-                        <th>Patient</th>
-                        <th>Date of Birth</th>
-                        <th>Status</th>
-                        <th></th>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Date of Birth
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                        </th>
+
                     </tr>
 
                 </thead>
 
+
                 <tbody id="patient-table-body">
 
                     <tr>
+
                         <td
                             colspan="5"
                             class="loading-row">
+
                             Loading patient records...
+
                         </td>
+
                     </tr>
 
                 </tbody>
@@ -156,15 +245,21 @@
 
     <section class="patient-record">
 
+
         <div
             id="patient-empty"
             class="empty-record">
+
 
             <div class="empty-record-icon">
                 RH
             </div>
 
-            <h3>No patient selected</h3>
+
+            <h3>
+                No patient selected
+            </h3>
+
 
             <p>
                 Select a patient from the table to view their clinical record.
@@ -177,27 +272,35 @@
             id="patient-details"
             class="hidden">
 
+
             <div class="patient-record-header">
 
+
                 <div>
+
 
                     <p class="small-label">
                         Patient Record
                     </p>
 
+
                     <h2 id="detail-patient-name">
                         Patient Name
                     </h2>
 
+
                     <div class="patient-meta">
+
 
                         <span id="detail-patient-id">
                             Patient ID
                         </span>
 
+
                         <span id="detail-patient-dob">
                             Date of Birth
                         </span>
+
 
                         <span id="detail-patient-location">
                             Location
@@ -210,20 +313,26 @@
 
                 <div class="patient-header-actions">
 
+
                     <span
                         id="detail-patient-status"
                         class="status-badge">
+
                         Status
+
                     </span>
 
 
                     <div class="edit-menu">
 
+
                         <button
                             id="edit-patient-button"
                             class="edit-patient-button"
                             type="button">
+
                             Edit Patient
+
                         </button>
 
 
@@ -231,34 +340,49 @@
                             id="edit-options"
                             class="edit-options hidden">
 
+
                             <button
                                 type="button"
                                 onclick="showEditSection('status')">
+
                                 Status
+
                             </button>
+
 
                             <button
                                 type="button"
                                 onclick="showEditSection('location')">
+
                                 Location
+
                             </button>
+
 
                             <button
                                 type="button"
                                 onclick="showEditSection('history')">
+
                                 Medical History
+
                             </button>
+
 
                             <button
                                 type="button"
                                 onclick="showEditSection('allergies')">
+
                                 Allergies
+
                             </button>
+
 
                             <button
                                 type="button"
                                 onclick="closeEditOptions()">
+
                                 Cancel
+
                             </button>
 
                         </div>
@@ -270,7 +394,9 @@
                         id="archive-patient-button"
                         class="archive-patient-button"
                         type="button">
+
                         Archive Patient
+
                     </button>
 
                 </div>
@@ -280,16 +406,24 @@
 
             <div class="record-tabs">
 
+
                 <button
                     class="tab-button active"
-                    data-tab="summary">
+                    data-tab="summary"
+                    type="button">
+
                     Summary
+
                 </button>
+
 
                 <button
                     class="tab-button"
-                    data-tab="referrals">
+                    data-tab="referrals"
+                    type="button">
+
                     Referrals
+
                 </button>
 
             </div>
@@ -299,7 +433,9 @@
                 class="tab-content active-tab"
                 id="summary">
 
+
                 <div class="record-grid">
+
 
                     <section class="record-section">
 
@@ -314,7 +450,8 @@
                     </section>
 
 
-                    <section class="record-section allergy-section">
+                    <section
+                        class="record-section allergy-section">
 
                         <h3>
                             Allergies
@@ -330,10 +467,15 @@
 
 
                 <section class="record-section">
-                    <h3>Completed Lab Results</h3>
+
+                    <h3>
+                        Completed Lab Results
+                    </h3>
+
                     <div id="patient-test-results">
                         Select a patient to view their lab results.
                     </div>
+
                 </section>
 
             </div>
@@ -342,6 +484,7 @@
             <div
                 class="tab-content"
                 id="referrals">
+
 
                 <section class="referral-summary">
 
@@ -356,7 +499,9 @@
                     <a
                         href="referrals.html"
                         class="view-button">
+
                         Open Referrals
+
                     </a>
 
                 </section>
@@ -368,25 +513,31 @@
                 id="edit-status-section"
                 class="edit-section hidden">
 
+
                 <h3>
                     Edit Status
                 </h3>
+
 
                 <label for="edit-status">
                     Patient status
                 </label>
 
+
                 <select
                     id="edit-status"
                     required>
+
 
                     <option value="Admitted">
                         Admitted
                     </option>
 
+
                     <option value="Active">
                         Active
                     </option>
+
 
                     <option value="Follow-up">
                         Follow-up
@@ -397,16 +548,22 @@
 
                 <div class="edit-actions">
 
+
                     <button
                         type="button"
                         onclick="savePatientField('status')">
+
                         Save
+
                     </button>
+
 
                     <button
                         type="button"
                         onclick="closeEditSection('status')">
+
                         Cancel
+
                     </button>
 
                 </div>
@@ -418,13 +575,16 @@
                 id="edit-location-section"
                 class="edit-section hidden">
 
+
                 <h3>
                     Edit Location
                 </h3>
 
+
                 <label for="edit-location">
                     Patient location
                 </label>
+
 
                 <input
                     id="edit-location"
@@ -432,18 +592,25 @@
                     maxlength="100"
                     placeholder="e.g. Ward 3B">
 
+
                 <div class="edit-actions">
+
 
                     <button
                         type="button"
                         onclick="savePatientField('location')">
+
                         Save
+
                     </button>
+
 
                     <button
                         type="button"
                         onclick="closeEditSection('location')">
+
                         Cancel
+
                     </button>
 
                 </div>
@@ -455,9 +622,11 @@
                 id="edit-history-section"
                 class="edit-section hidden">
 
+
                 <h3>
                     Edit Medical History
                 </h3>
+
 
                 <textarea
                     id="edit-medical-history"
@@ -465,18 +634,25 @@
                     aria-label="Medical history">
                 </textarea>
 
+
                 <div class="edit-actions">
+
 
                     <button
                         type="button"
                         onclick="savePatientField('history')">
+
                         Save
+
                     </button>
+
 
                     <button
                         type="button"
                         onclick="closeEditSection('history')">
+
                         Cancel
+
                     </button>
 
                 </div>
@@ -488,9 +664,11 @@
                 id="edit-allergies-section"
                 class="edit-section hidden">
 
+
                 <h3>
                     Edit Allergies
                 </h3>
+
 
                 <textarea
                     id="edit-allergies"
@@ -498,18 +676,25 @@
                     aria-label="Allergies">
                 </textarea>
 
+
                 <div class="edit-actions">
+
 
                     <button
                         type="button"
                         onclick="savePatientField('allergies')">
+
                         Save
+
                     </button>
+
 
                     <button
                         type="button"
                         onclick="closeEditSection('allergies')">
+
                         Cancel
+
                     </button>
 
                 </div>
@@ -530,9 +715,12 @@
     aria-modal="true"
     aria-labelledby="add-patient-title">
 
+
     <div class="patient-modal-card">
 
+
         <div class="patient-modal-header">
+
 
             <div>
 
@@ -546,12 +734,15 @@
 
             </div>
 
+
             <button
                 id="close-add-patient-button"
                 class="modal-close-button"
                 type="button"
                 aria-label="Close add patient form">
+
                 ×
+
             </button>
 
         </div>
@@ -567,15 +758,22 @@
             id="add-patient-form"
             novalidate>
 
+
             <div class="patient-form-grid">
 
 
                 <div class="form-field">
 
                     <label for="add-first-name">
+
                         First name
-                        <span class="required-mark">*</span>
+
+                        <span class="required-mark">
+                            *
+                        </span>
+
                     </label>
+
 
                     <input
                         id="add-first-name"
@@ -589,9 +787,15 @@
                 <div class="form-field">
 
                     <label for="add-last-name">
+
                         Last name
-                        <span class="required-mark">*</span>
+
+                        <span class="required-mark">
+                            *
+                        </span>
+
                     </label>
+
 
                     <input
                         id="add-last-name"
@@ -605,9 +809,15 @@
                 <div class="form-field">
 
                     <label for="add-date-of-birth">
+
                         Date of birth
-                        <span class="required-mark">*</span>
+
+                        <span class="required-mark">
+                            *
+                        </span>
+
                     </label>
+
 
                     <input
                         id="add-date-of-birth"
@@ -621,6 +831,7 @@
                     <label for="add-status">
                         Status
                     </label>
+
 
                     <select id="add-status">
 
@@ -647,6 +858,7 @@
                         Location
                     </label>
 
+
                     <input
                         id="add-location"
                         type="text"
@@ -662,11 +874,13 @@
                         Medical history
                     </label>
 
+
                     <textarea
                         id="add-medical-history"
                         maxlength="1000"
                         placeholder="Enter relevant medical history">
                     </textarea>
+
 
                     <div class="field-help">
                         Maximum 1000 characters
@@ -681,11 +895,13 @@
                         Allergies
                     </label>
 
+
                     <textarea
                         id="add-allergies"
                         maxlength="500"
                         placeholder="Enter known allergies or leave blank">
                     </textarea>
+
 
                     <div class="field-help">
                         Maximum 500 characters
@@ -698,18 +914,24 @@
 
             <div class="patient-modal-actions">
 
+
                 <button
                     id="cancel-add-patient-button"
                     class="secondary-button"
                     type="button">
+
                     Cancel
+
                 </button>
+
 
                 <button
                     id="save-new-patient-button"
                     class="primary-button"
                     type="submit">
+
                     Save Patient
+
                 </button>
 
             </div>
@@ -721,7 +943,9 @@
 </div>
 
 
-<script src="patient.js"></script>
+<script src="patient.js">
+</script>
+
 
 </body>
 

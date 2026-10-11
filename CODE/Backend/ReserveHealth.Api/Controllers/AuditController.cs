@@ -6,7 +6,7 @@ using ReserveHealth.Api.Models;
 
 namespace ReserveHealth.Api.Controllers
 {
-    [Authorize(Roles = "Doctor,Lab Technician")]
+    [Authorize(Roles = "Doctor")]
     [ApiController]
     [Route("api/audit")]
     public class AuditController : ControllerBase
