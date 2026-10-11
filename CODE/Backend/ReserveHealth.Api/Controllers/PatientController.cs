@@ -1,21 +1,16 @@
-// This controller is used to get patient information from the database.
-//handles the aptient requests betweent he fronted and the database
-// It uses the ReserveHealthContext to access the Patients table in the database.
-//it also handles th viewing, adding , editing, archniving and restoring of patients in the database. and resotring pateint records
+// Handles patient records, including viewing completed lab results.
 
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReserveHealth.Api.Data;
 using ReserveHealth.Api.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ReserveHealth.Api.Controllers;
 
 [Authorize(Roles = "Doctor")]
 [Route("api/[controller]")]
 [ApiController]
-
 public class PatientController : ControllerBase
 {
     private readonly ReserveHealthContext _context;
@@ -29,8 +24,8 @@ public class PatientController : ControllerBase
     public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
     {
         return await _context.Patients
-        .Where(patient => patient.IsActive)
-        .ToListAsync();
+            .Where(patient => patient.IsActive)
+            .ToListAsync();
     }
 
     [HttpGet("{id}")]
@@ -45,7 +40,37 @@ public class PatientController : ControllerBase
 
         return patient;
     }
-//copilot prompt added for new patients
+
+    [HttpGet("{id:int}/test-results")]
+    public async Task<IActionResult> GetPatientTestResults(int id)
+    {
+        var patientExists = await _context.Patients
+            .AnyAsync(patient => patient.PatientId == id);
+
+        if (!patientExists)
+        {
+            return NotFound("Patient not found.");
+        }
+
+        var results = await _context.TestResults
+            .AsNoTracking()
+            .Where(result =>
+                result.TestRequest.PatientId == id &&
+                result.TestRequest.Status == "Completed")
+            .OrderByDescending(result => result.RecordedAt)
+            .Select(result => new
+            {
+                result.TestResultId,
+                result.TestRequestId,
+                result.TestRequest.TestType,
+                result.ResultInformation,
+                result.RecordedAt
+            })
+            .ToListAsync();
+
+        return Ok(results);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Patient>> CreatePatient(Patient patient)
     {
@@ -58,7 +83,6 @@ public class PatientController : ControllerBase
             patient);
     }
 
-//copilot prompt added
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePatient(int id, Patient patient)
     {
@@ -81,45 +105,44 @@ public class PatientController : ControllerBase
     }
 
     [HttpPut("{id}/archive")]
-public async Task<IActionResult> ArchivePatient(int id)
-{
-    var patient = await _context.Patients.FindAsync(id);
-
-    if (patient == null)
+    public async Task<IActionResult> ArchivePatient(int id)
     {
-        return NotFound();
+        var patient = await _context.Patients.FindAsync(id);
+
+        if (patient == null)
+        {
+            return NotFound();
+        }
+
+        patient.IsActive = false;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 
-    patient.IsActive = false;
-
-    await _context.SaveChangesAsync();
-
-    return NoContent();
-}
-
-[HttpGet("archived")]
-public async Task<ActionResult<IEnumerable<Patient>>> GetArchivedPatients()
-{
-    return await _context.Patients
-        .Where(patient => !patient.IsActive)
-        .ToListAsync();
-}
-
-[HttpPut("{id}/restore")]
-public async Task<IActionResult> RestorePatient(int id)
-{
-    var patient = await _context.Patients.FindAsync(id);
-
-    if (patient == null)
+    [HttpGet("archived")]
+    public async Task<ActionResult<IEnumerable<Patient>>> GetArchivedPatients()
     {
-        return NotFound();
+        return await _context.Patients
+            .Where(patient => !patient.IsActive)
+            .ToListAsync();
     }
 
-    patient.IsActive = true;
+    [HttpPut("{id}/restore")]
+    public async Task<IActionResult> RestorePatient(int id)
+    {
+        var patient = await _context.Patients.FindAsync(id);
 
-    await _context.SaveChangesAsync();
+        if (patient == null)
+        {
+            return NotFound();
+        }
 
-    return NoContent();
-}
+        patient.IsActive = true;
 
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }

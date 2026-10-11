@@ -22,6 +22,42 @@ namespace ReserveHealth.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ReserveHealth.Api.Models.AuditLog", b =>
+                {
+                    b.Property<int>("AuditLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuditLogId"));
+
+                    b.Property<string>("ActionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditLogId");
+
+                    b.ToTable("AuditLogs");
+                });
+
             modelBuilder.Entity("ReserveHealth.Api.Models.Discharge", b =>
                 {
                     b.Property<int>("DischargeId")
@@ -71,7 +107,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasIndex("StaffInChargeId");
 
-                    b.ToTable("Discharges", (string)null);
+                    b.ToTable("Discharges");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.DischargeTask", b =>
@@ -115,7 +151,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasIndex("DischargeId");
 
-                    b.ToTable("DischargeTasks", (string)null);
+                    b.ToTable("DischargeTasks");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.MedicationCheck", b =>
@@ -152,7 +188,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasIndex("VerifiedByUserId");
 
-                    b.ToTable("MedicationChecks", (string)null);
+                    b.ToTable("MedicationChecks");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Patient", b =>
@@ -195,7 +231,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasKey("PatientId");
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Referral", b =>
@@ -233,7 +269,99 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasKey("ReferralId");
 
-                    b.ToTable("Referrals", (string)null);
+                    b.ToTable("Referrals");
+                });
+
+            modelBuilder.Entity("ReserveHealth.Api.Models.ReferralStatusHistory", b =>
+                {
+                    b.Property<int>("ReferralStatusHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReferralStatusHistoryId"));
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ChangedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NewStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreviousStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReferralId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReferralStatusHistoryId");
+
+                    b.ToTable("ReferralStatusHistories");
+                });
+
+            modelBuilder.Entity("ReserveHealth.Api.Models.TestRequest", b =>
+                {
+                    b.Property<int>("TestRequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestRequestId"));
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TestType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TestRequestId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("TestRequests");
+                });
+
+            modelBuilder.Entity("ReserveHealth.Api.Models.TestResult", b =>
+                {
+                    b.Property<int>("TestResultId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestResultId"));
+
+                    b.Property<int>("EnteredByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ResultInformation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TestRequestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TestResultId");
+
+                    b.HasIndex("EnteredByUserId");
+
+                    b.HasIndex("TestRequestId");
+
+                    b.ToTable("TestResults");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.User", b =>
@@ -262,7 +390,7 @@ namespace ReserveHealth.Api.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Discharge", b =>
@@ -316,6 +444,36 @@ namespace ReserveHealth.Api.Migrations
                     b.Navigation("Discharge");
 
                     b.Navigation("VerifiedByUser");
+                });
+
+            modelBuilder.Entity("ReserveHealth.Api.Models.TestRequest", b =>
+                {
+                    b.HasOne("ReserveHealth.Api.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ReserveHealth.Api.Models.TestResult", b =>
+                {
+                    b.HasOne("ReserveHealth.Api.Models.User", "EnteredByUser")
+                        .WithMany()
+                        .HasForeignKey("EnteredByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ReserveHealth.Api.Models.TestRequest", "TestRequest")
+                        .WithMany()
+                        .HasForeignKey("TestRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EnteredByUser");
+
+                    b.Navigation("TestRequest");
                 });
 
             modelBuilder.Entity("ReserveHealth.Api.Models.Patient", b =>

@@ -5,6 +5,10 @@
 
 .requests-page .small-label {
     color: var(--blue);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .requests-page h2 {
@@ -20,11 +24,13 @@
     width: 100%;
     border-collapse: collapse;
     background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 #requests-table th,
 #requests-table td {
-    padding: 14px;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--border);
     text-align: left;
 }
@@ -32,9 +38,106 @@
 #requests-table th {
     color: var(--navy);
     background: var(--light-blue);
+    font-weight: 700;
 }
 
 #requests-table tr.completed {
-    color: var(--muted);
     background: var(--background);
+}
+
+#requests-table button {
+    padding: 8px 14px;
+    border: 1px solid var(--blue);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--navy);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#requests-table button:hover {
+    background: var(--light-blue);
+}
+
+#result-section {
+    margin-top: 28px;
+    padding: 24px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+#result-section h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--navy);
+}
+
+#selected-request {
+    margin-bottom: 18px;
+    color: var(--muted);
+}
+
+#result-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#result-form label {
+    font-weight: 600;
+    color: var(--navy);
+}
+
+#result-information {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 120px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font: inherit;
+    resize: vertical;
+    background: var(--white);
+    color: var(--navy);
+}
+
+#result-information:focus {
+    outline: 2px solid var(--light-blue);
+    border-color: var(--blue);
+}
+
+#result-form > div {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+#save-result-button,
+#cancel-result-button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#save-result-button {
+    border: none;
+    background: var(--blue);
+    color: var(--white);
+}
+
+#cancel-result-button {
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--navy);
+}
+
+#save-result-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#result-message {
+    margin-top: 12px;
 }

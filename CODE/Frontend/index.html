@@ -1,17 +1,27 @@
-<!-- this is the main dashboard for the reserve health system -->
-<!-- it gives staff access to the patient and referral management sections -->
+<!-- main dashboard for the reserve health system -->
+<!-- dashboard content is shown according to the logged-in staff role -->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Reserve Health - Dashboard</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/shared.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <title>
+        Reserve Health - Dashboard
+    </title>
 
+    <link
+        rel="stylesheet"
+        href="css/shared.css">
+
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css">
 </head>
 
 <body>
@@ -25,8 +35,15 @@
         </div>
 
         <div class="brand-details">
-            <h1>Reserve Health</h1>
-            <p>Clinical Coordination System</p>
+
+            <h1>
+                Reserve Health
+            </h1>
+
+            <p>
+                Clinical Coordination System
+            </p>
+
         </div>
 
     </div>
@@ -34,23 +51,25 @@
     <div class="topbar-right">
 
         <div class="staff-details">
+
             <span
                 class="staff-name"
                 id="staff-name">
-                Clinical Staff
             </span>
 
             <span
                 class="role"
                 id="staff-role">
-                Doctor
             </span>
+
         </div>
 
         <button
             class="logout-button"
             onclick="logout()">
+
             Logout
+
         </button>
 
     </div>
@@ -58,11 +77,18 @@
 </header>
 
 
-<nav class="main-nav">
-    <a href="index.html" class="active">Dashboard</a>
-    <a href="patient.html">Patients</a>
-    <a href="referrals.html">Referrals</a>
-    <a href="test-requests.html" id="lab-nav-link" style="display: none;">Test Requests</a>
+<nav
+    class="main-nav"
+    id="main-navigation">
+
+    <a
+        href="index.html"
+        class="active">
+
+        Dashboard
+
+    </a>
+
 </nav>
 
 
@@ -78,15 +104,109 @@
             Dashboard
         </h2>
 
-        <p>
-            View patient and referral activity from one place.
+        <p id="dashboard-description">
         </p>
 
     </section>
 
 
-    <section class="dashboard-cards">
+    <section
+        class="dashboard-cards"
+        id="dashboard-cards">
+    </section>
 
+</main>
+
+
+<script>
+
+const storedUser =
+    sessionStorage.getItem(
+        "reserveHealthUser"
+    );
+
+if (!storedUser) {
+
+    window.location.href =
+        "login.html";
+
+    throw new Error(
+        "Authentication required."
+    );
+}
+
+const currentUser =
+    JSON.parse(storedUser);
+
+if (!currentUser.token) {
+
+    sessionStorage.removeItem(
+        "reserveHealthUser"
+    );
+
+    window.location.href =
+        "login.html";
+
+    throw new Error(
+        "Authentication required."
+    );
+}
+
+
+document
+    .getElementById(
+        "staff-name"
+    )
+    .textContent =
+    currentUser.name;
+
+document
+    .getElementById(
+        "staff-role"
+    )
+    .textContent =
+    currentUser.role;
+
+
+const navigation =
+    document.getElementById(
+        "main-navigation"
+    );
+
+const dashboardCards =
+    document.getElementById(
+        "dashboard-cards"
+    );
+
+const dashboardDescription =
+    document.getElementById(
+        "dashboard-description"
+    );
+
+
+if (
+    currentUser.role ===
+    "Doctor"
+) {
+
+    navigation.innerHTML += `
+        <a href="patient.html">
+            Patients
+        </a>
+
+        <a href="referrals.html">
+            Referrals
+        </a>
+
+        <a href="audit.html">
+            Audit Trail
+        </a>
+    `;
+
+    dashboardDescription.textContent =
+        "View patient, referral and system activity from one place.";
+
+    dashboardCards.innerHTML = `
         <a
             href="patient.html"
             class="dashboard-card">
@@ -124,61 +244,79 @@
 
         </a>
 
-    </section>
 
-</main>
+        <a
+            href="audit.html"
+            class="dashboard-card">
 
+            <span class="dashboard-card-label">
+                System History
+            </span>
 
-<script>
+            <h3>
+                Audit Trail
+            </h3>
 
-// Gets the current logged in user
-const storedUser =
-    sessionStorage.getItem("reserveHealthUser");
+            <p>
+                Review recorded system actions and changes.
+            </p>
 
-if (!storedUser) {
+        </a>
+    `;
+}
 
-    // Returns to login if there is no logged in user
-    window.location.href =
-        "login.html";
+else if (
+    currentUser.role ===
+    "Lab Technician"
+) {
 
+    navigation.innerHTML += `
+        <a href="test-requests.html">
+            Test Requests
+        </a>
+    `;
+
+    dashboardDescription.textContent =
+        "View and manage laboratory test requests.";
+
+    dashboardCards.innerHTML = `
+        <a
+            href="test-requests.html"
+            class="dashboard-card">
+
+            <span class="dashboard-card-label">
+                Laboratory
+            </span>
+
+            <h3>
+                Test Requests
+            </h3>
+
+            <p>
+                View outstanding requests and enter laboratory results.
+            </p>
+
+        </a>
+    `;
 }
 
 else {
 
-    // Gets the stored user information
-    const currentUser =
-        JSON.parse(storedUser);
-
-    // Shows the logged in staff details
-    document
-        .getElementById("staff-name")
-        .textContent =
-        currentUser.name || "Clinical Staff";
-
-    document
-        .getElementById("staff-role")
-        .textContent =
-        currentUser.role || "Doctor";
-
-    // Shows the test requests link to lab technicians
-    if (currentUser.role === "Lab Technician") {
-        document
-            .getElementById("lab-nav-link")
-            .style.display = "flex";
-    }
-
-}
-
-
-// Logs the current user out of the system
-function logout() {
-
-    // Removes the current user from the session
     sessionStorage.removeItem(
         "reserveHealthUser"
     );
 
-    // Returns to the login page
+    window.location.href =
+        "login.html";
+}
+
+
+function logout() {
+
+    sessionStorage.removeItem(
+        "reserveHealthUser"
+    );
+
     window.location.href =
         "login.html";
 }
