@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../CODE/Backend/ReserveHealth.Api/ReserveHealth.Api.csproj" />
+  <Project Path="ReserveHealth.Tests/ReserveHealth.Tests.csproj" />
+</Solution>
