@@ -65,14 +65,17 @@ jobs:
           exit 1
 
       - name: Check SQL Server authentication
+        shell: bash
         run: |
-          docker exec $(docker ps -q --filter ancestor=mcr.microsoft.com/mssql/server:2022-latest) \
-          /opt/mssql-tools18/bin/sqlcmd \
-          -S localhost \
-          -U sa \
-          -P "${{ secrets.CI_SQL_PASSWORD }}" \
-          -C \
-          -Q "SELECT 1"
+          CONTAINER_ID=$(docker ps -q --filter ancestor=mcr.microsoft.com/mssql/server:2022-latest)
+
+          docker exec "$CONTAINER_ID" \
+            /opt/mssql-tools18/bin/sqlcmd \
+            -S localhost \
+            -U sa \
+            -P "$CI_SQL_PASSWORD" \
+            -C \
+            -Q "SELECT 1"
 
       - name: Create CI database from migrations
         run: >
