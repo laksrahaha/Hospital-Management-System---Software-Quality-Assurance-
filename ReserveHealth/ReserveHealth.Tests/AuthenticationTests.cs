@@ -8,14 +8,14 @@ namespace ReserveHealth.Tests
     [TestClass]
     public class AuthenticationTests
     {
-        private WebApplicationFactory<Program> _factory = null!;
+        private ReserveHealthWebApplicationFactory _factory = null!;
 
 
         [TestInitialize]
         public void Setup()
         {
             _factory =
-                new WebApplicationFactory<Program>();
+                new ReserveHealthWebApplicationFactory();
         }
 
 
