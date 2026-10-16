@@ -2,201 +2,97 @@
 // Handles loading, searching, adding, editing,
 // archiving and restoring patient records.
 
-const apiUrl =
-    "http://localhost:5297/api/patient";
-
+const apiUrl = "http://localhost:5297/api/patient";
 
 // ----------------------------------------------------
 // AUTHENTICATION + ROLE ACCESS
 // ----------------------------------------------------
 
-const currentUser =
-    JSON.parse(
-        sessionStorage.getItem(
-            "reserveHealthUser"
-        )
-    );
+const currentUser = JSON.parse(
+    sessionStorage.getItem("reserveHealthUser")
+);
 
-
-if (
-    !currentUser ||
-    !currentUser.token
-) {
-
-    sessionStorage.removeItem(
-        "reserveHealthUser"
-    );
-
-    window.location.href =
-        "login.html";
-
-    throw new Error(
-        "Authentication required."
-    );
+if (!currentUser || !currentUser.token) {
+    sessionStorage.removeItem("reserveHealthUser");
+    window.location.href = "login.html";
+    throw new Error("Authentication required.");
 }
-
 
 // Patient management is Doctor-only.
-
-if (
-    currentUser.role !==
-    "Doctor"
-) {
-
-    window.location.href =
-        "index.html";
-
-    throw new Error(
-        "Doctor role required."
-    );
+if (currentUser.role !== "Doctor") {
+    window.location.href = "index.html";
+    throw new Error("Doctor role required.");
 }
-
 
 // Display the real logged-in user.
-
-const staffName =
-    document.getElementById(
-        "staff-name"
-    );
-
-const staffRole =
-    document.getElementById(
-        "staff-role"
-    );
-
+const staffName = document.getElementById("staff-name");
+const staffRole = document.getElementById("staff-role");
 
 if (staffName) {
-
-    staffName.textContent =
-        currentUser.name ||
-        "Staff User";
+    staffName.textContent = currentUser.name || "Staff User";
 }
-
 
 if (staffRole) {
-
-    staffRole.textContent =
-        currentUser.role;
+    staffRole.textContent = currentUser.role;
 }
-
 
 // ----------------------------------------------------
 // AUTHENTICATED API REQUEST
 // ----------------------------------------------------
 
-async function authenticatedFetch(
-    url,
-    options = {}
-) {
-
+async function authenticatedFetch(url, options = {}) {
     options.headers = {
-
         ...(options.headers || {}),
-
-        "Authorization":
-            `Bearer ${currentUser.token}`
+        "Authorization": `Bearer ${currentUser.token}`
     };
 
+    const response = await fetch(url, options);
 
-    const response =
-        await fetch(
-            url,
-            options
-        );
-
-
-    if (
-        response.status === 401
-    ) {
-
-        sessionStorage.removeItem(
-            "reserveHealthUser"
-        );
-
-        window.location.href =
-            "login.html";
-
+    if (response.status === 401) {
+        sessionStorage.removeItem("reserveHealthUser");
+        window.location.href = "login.html";
         return response;
     }
 
-
-    if (
-        response.status === 403
-    ) {
-
-        window.location.href =
-            "index.html";
+    if (response.status === 403) {
+        window.location.href = "index.html";
     }
-
 
     return response;
 }
-
 
 // ----------------------------------------------------
 // PAGE STATE
 // ----------------------------------------------------
 
-let selectedPatient =
-    null;
-
-let showingArchivedPatients =
-    false;
-
+let selectedPatient = null;
+let showingArchivedPatients = false;
 
 // ----------------------------------------------------
 // PATIENT LIST
 // ----------------------------------------------------
 
 async function loadPatients() {
-
-    const tableBody =
-        document.getElementById(
-            "patient-table-body"
-        );
-
+    const tableBody = document.getElementById("patient-table-body");
 
     try {
+        let requestUrl = apiUrl;
 
-        let requestUrl =
-            apiUrl;
-
-
-        if (
-            showingArchivedPatients
-        ) {
-
-            requestUrl =
-                `${apiUrl}/archived`;
+        if (showingArchivedPatients) {
+            requestUrl = `${apiUrl}/archived`;
         }
 
-
-        const response =
-            await authenticatedFetch(
-                requestUrl
-            );
-
+        const response = await authenticatedFetch(requestUrl);
 
         if (!response.ok) {
-
-            throw new Error(
-                "Could not load patient information."
-            );
+            throw new Error("Could not load patient information.");
         }
 
+        const patients = await response.json();
 
-        const patients =
-            await response.json();
+        tableBody.innerHTML = "";
 
-
-        tableBody.innerHTML =
-            "";
-
-
-        if (
-            patients.length === 0
-        ) {
-
+        if (patients.length === 0) {
             tableBody.innerHTML = `
                 <tr>
                     <td colspan="5">
@@ -208,74 +104,46 @@ async function loadPatients() {
                     </td>
                 </tr>
             `;
-
             return;
         }
 
+        patients.forEach(patient => {
+            const row = document.createElement("tr");
 
-        patients.forEach(
-            patient => {
+            const dateOfBirth = new Date(
+                patient.dateOfBirth
+            ).toLocaleDateString("en-NZ");
 
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
+            row.innerHTML = `
+                <td>${patient.patientId}</td>
 
+                <td>
+                    ${patient.firstName}
+                    ${patient.lastName}
+                </td>
 
-                const dateOfBirth =
-                    new Date(
-                        patient.dateOfBirth
-                    )
-                        .toLocaleDateString(
-                            "en-NZ"
-                        );
+                <td>${dateOfBirth}</td>
 
+                <td>
+                    <span class="status-pill">
+                        ${patient.status}
+                    </span>
+                </td>
 
-                row.innerHTML = `
-                    <td>
-                        ${patient.patientId}
-                    </td>
+                <td>
+                    <button
+                        class="view-button"
+                        type="button"
+                        onclick="loadPatient(${patient.patientId})">
+                        Open
+                    </button>
+                </td>
+            `;
 
-                    <td>
-                        ${patient.firstName}
-                        ${patient.lastName}
-                    </td>
-
-                    <td>
-                        ${dateOfBirth}
-                    </td>
-
-                    <td>
-                        <span class="status-pill">
-                            ${patient.status}
-                        </span>
-                    </td>
-
-                    <td>
-                        <button
-                            class="view-button"
-                            type="button"
-                            onclick="loadPatient(${patient.patientId})">
-
-                            Open
-
-                        </button>
-                    </td>
-                `;
-
-
-                tableBody.appendChild(
-                    row
-                );
-            }
-        );
-
+            tableBody.appendChild(row);
+        });
     } catch (error) {
-
-        console.error(
-            error
-        );
-
+        console.error(error);
 
         tableBody.innerHTML = `
             <tr>
@@ -287,1742 +155,820 @@ async function loadPatients() {
     }
 }
 
-
 // ----------------------------------------------------
 // OPEN ONE PATIENT
 // ----------------------------------------------------
 
-async function loadPatient(
-    patientId
-) {
-
+async function loadPatient(patientId) {
     try {
-
-        const response =
-            await authenticatedFetch(
-                `${apiUrl}/${patientId}`
-            );
-
+        const response = await authenticatedFetch(
+            `${apiUrl}/${patientId}`
+        );
 
         if (!response.ok) {
-
-            throw new Error(
-                "Patient could not be found."
-            );
+            throw new Error("Patient could not be found.");
         }
 
+        const patient = await response.json();
 
-        const patient =
-            await response.json();
+        document.getElementById("patient-empty")
+            .classList.add("hidden");
 
+        document.getElementById("patient-details")
+            .classList.remove("hidden");
 
-        document
-            .getElementById(
-                "patient-empty"
-            )
-            .classList
-            .add(
-                "hidden"
-            );
-
-
-        document
-            .getElementById(
-                "patient-details"
-            )
-            .classList
-            .remove(
-                "hidden"
-            );
-
-
-        document
-            .getElementById(
-                "detail-patient-id"
-            )
-            .textContent =
+        document.getElementById("detail-patient-id").textContent =
             `Patient ID: ${patient.patientId}`;
 
-
-        document
-            .getElementById(
-                "detail-patient-name"
-            )
-            .textContent =
+        document.getElementById("detail-patient-name").textContent =
             `${patient.firstName} ${patient.lastName}`;
 
-
-        document
-            .getElementById(
-                "detail-patient-dob"
-            )
-            .textContent =
+        document.getElementById("detail-patient-dob").textContent =
             `DOB: ${
-                new Date(
-                    patient.dateOfBirth
-                )
-                    .toLocaleDateString(
-                        "en-NZ"
-                    )
+                new Date(patient.dateOfBirth)
+                    .toLocaleDateString("en-NZ")
             }`;
 
+        document.getElementById("detail-patient-location").textContent =
+            `Location: ${patient.location || "Not specified"}`;
 
-        document
-            .getElementById(
-                "detail-patient-location"
-            )
-            .textContent =
-            `Location: ${
-                patient.location ||
-                "Not specified"
-            }`;
-
-
-        document
-            .getElementById(
-                "detail-patient-status"
-            )
-            .textContent =
+        document.getElementById("detail-patient-status").textContent =
             patient.status;
 
-
-        document
-            .getElementById(
-                "detail-medical-history"
-            )
-            .textContent =
+        document.getElementById("detail-medical-history").textContent =
             patient.medicalHistorySummary ||
             "No medical history available.";
 
-
-        document
-            .getElementById(
-                "detail-allergies"
-            )
-            .textContent =
+        document.getElementById("detail-allergies").textContent =
             patient.allergies ||
             "No allergy information available.";
 
+        selectedPatient = patient;
 
-        selectedPatient =
-            patient;
+        await Promise.all([
+            loadPatientTestResults(patient.patientId),
+            loadPatientReferrals(patient.patientId)
+        ]);
 
-
-        await loadPatientTestResults(
-            patient.patientId
-        );
-
-
-        if (
-            showingArchivedPatients
-        ) {
-
-            archivePatientButton
-                .textContent =
-                "Restore Patient";
-
+        if (showingArchivedPatients) {
+            archivePatientButton.textContent = "Restore Patient";
         } else {
-
-            archivePatientButton
-                .textContent =
-                "Archive Patient";
+            archivePatientButton.textContent = "Archive Patient";
         }
-
     } catch (error) {
-
-        console.error(
-            error
-        );
-
-        alert(
-            "Patient information could not be loaded."
-        );
+        console.error(error);
+        alert("Patient information could not be loaded.");
     }
 }
-
 
 // ----------------------------------------------------
 // COMPLETED LAB RESULTS
 // ----------------------------------------------------
 
-async function loadPatientTestResults(
-    patientId
-) {
+async function loadPatientTestResults(patientId) {
+    const container = document.getElementById("patient-test-results");
 
-    const container =
-        document.getElementById(
-            "patient-test-results"
-        );
-
-
-    container.textContent =
-        "Loading lab results...";
-
+    container.textContent = "Loading lab results...";
 
     try {
-
-        const response =
-            await authenticatedFetch(
-                `${apiUrl}/${patientId}/test-results`
-            );
-
+        const response = await authenticatedFetch(
+            `${apiUrl}/${patientId}/test-results`
+        );
 
         if (!response.ok) {
-
-            throw new Error(
-                "Could not load lab results."
-            );
+            throw new Error("Could not load lab results.");
         }
 
+        const results = await response.json();
 
-        const results =
-            await response.json();
-
-
-        if (
-            selectedPatient?.patientId !==
-            patientId
-        ) {
-
+        if (selectedPatient?.patientId !== patientId) {
             return;
         }
-
 
         container.replaceChildren();
 
-
-        if (
-            results.length === 0
-        ) {
-
-            container.textContent =
-                "No completed lab results.";
-
+        if (results.length === 0) {
+            container.textContent = "No completed lab results.";
             return;
         }
 
+        results.forEach(result => {
+            const item = document.createElement("div");
+            item.className = "lab-result-item";
 
-        results.forEach(
-            result => {
+            const title = document.createElement("strong");
+            title.textContent = result.testType;
 
-                const item =
-                    document.createElement(
-                        "div"
-                    );
+            const information = document.createElement("p");
+            information.textContent = result.resultInformation;
 
+            const date = document.createElement("small");
+            date.textContent = `Recorded: ${
+                new Date(result.recordedAt).toLocaleString("en-NZ")
+            }`;
 
-                item.className =
-                    "lab-result-item";
-
-
-                const title =
-                    document.createElement(
-                        "strong"
-                    );
-
-
-                title.textContent =
-                    result.testType;
-
-
-                const information =
-                    document.createElement(
-                        "p"
-                    );
-
-
-                information.textContent =
-                    result.resultInformation;
-
-
-                const date =
-                    document.createElement(
-                        "small"
-                    );
-
-
-                date.textContent =
-                    `Recorded: ${
-                        new Date(
-                            result.recordedAt
-                        )
-                            .toLocaleString(
-                                "en-NZ"
-                            )
-                    }`;
-
-
-                item.append(
-                    title,
-                    information,
-                    date
-                );
-
-
-                container.appendChild(
-                    item
-                );
-            }
-        );
-
+            item.append(title, information, date);
+            container.appendChild(item);
+        });
     } catch (error) {
+        console.error(error);
 
-        console.error(
-            error
-        );
-
-
-        if (
-            selectedPatient?.patientId ===
-            patientId
-        ) {
-
-            container.textContent =
-                "Lab results could not be loaded.";
+        if (selectedPatient?.patientId === patientId) {
+            container.textContent = "Lab results could not be loaded.";
         }
     }
 }
-
 
 // ----------------------------------------------------
 // ACTIVE / ARCHIVED PATIENT TABS
 // ----------------------------------------------------
 
 const activePatientsButton =
-    document.getElementById(
-        "active-patients-button"
-    );
-
+    document.getElementById("active-patients-button");
 
 const archivedPatientsButton =
-    document.getElementById(
-        "archived-patients-button"
-    );
-
+    document.getElementById("archived-patients-button");
 
 const patientListDescription =
-    document.getElementById(
-        "patient-list-description"
-    );
-
+    document.getElementById("patient-list-description");
 
 const addPatientButton =
-    document.getElementById(
-        "add-patient-button"
-    );
+    document.getElementById("add-patient-button");
 
+activePatientsButton.addEventListener("click", async function () {
+    showingArchivedPatients = false;
 
-activePatientsButton
-    .addEventListener(
-        "click",
-        async function () {
+    activePatientsButton.classList.add("active");
+    archivedPatientsButton.classList.remove("active");
 
-            showingArchivedPatients =
-                false;
+    patientListDescription.textContent = "Current patient records";
+    addPatientButton.classList.remove("hidden");
 
+    clearSelectedPatient();
+    await loadPatients();
+});
 
-            activePatientsButton
-                .classList
-                .add(
-                    "active"
-                );
+archivedPatientsButton.addEventListener("click", async function () {
+    showingArchivedPatients = true;
 
+    archivedPatientsButton.classList.add("active");
+    activePatientsButton.classList.remove("active");
 
-            archivedPatientsButton
-                .classList
-                .remove(
-                    "active"
-                );
+    patientListDescription.textContent = "Archived patient records";
+    addPatientButton.classList.add("hidden");
 
-
-            patientListDescription
-                .textContent =
-                "Current patient records";
-
-
-            addPatientButton
-                .classList
-                .remove(
-                    "hidden"
-                );
-
-
-            clearSelectedPatient();
-
-
-            await loadPatients();
-        }
-    );
-
-
-archivedPatientsButton
-    .addEventListener(
-        "click",
-        async function () {
-
-            showingArchivedPatients =
-                true;
-
-
-            archivedPatientsButton
-                .classList
-                .add(
-                    "active"
-                );
-
-
-            activePatientsButton
-                .classList
-                .remove(
-                    "active"
-                );
-
-
-            patientListDescription
-                .textContent =
-                "Archived patient records";
-
-
-            addPatientButton
-                .classList
-                .add(
-                    "hidden"
-                );
-
-
-            clearSelectedPatient();
-
-
-            await loadPatients();
-        }
-    );
-
+    clearSelectedPatient();
+    await loadPatients();
+});
 
 function clearSelectedPatient() {
+    selectedPatient = null;
 
-    selectedPatient =
-        null;
+    document.getElementById("patient-details")
+        .classList.add("hidden");
 
-
-    document
-        .getElementById(
-            "patient-details"
-        )
-        .classList
-        .add(
-            "hidden"
-        );
-
-
-    document
-        .getElementById(
-            "patient-empty"
-        )
-        .classList
-        .remove(
-            "hidden"
-        );
+    document.getElementById("patient-empty")
+        .classList.remove("hidden");
 }
-
 
 // ----------------------------------------------------
 // PATIENT SEARCH
 // ----------------------------------------------------
 
-const patientSearch =
-    document.getElementById(
-        "patient-search"
-    );
-
+const patientSearch = document.getElementById("patient-search");
 
 if (patientSearch) {
+    patientSearch.addEventListener("input", function () {
+        const searchValue = this.value.toLowerCase().trim();
 
-    patientSearch
-        .addEventListener(
-            "input",
-            function () {
-
-                const searchValue =
-                    this.value
-                        .toLowerCase()
-                        .trim();
-
-
-                const rows =
-                    document
-                        .querySelectorAll(
-                            "#patient-table-body tr"
-                        );
-
-
-                rows.forEach(
-                    row => {
-
-                        const cells =
-                            row.querySelectorAll(
-                                "td"
-                            );
-
-
-                        if (
-                            cells.length < 2
-                        ) {
-
-                            return;
-                        }
-
-
-                        const patientId =
-                            cells[0]
-                                .textContent
-                                .toLowerCase()
-                                .trim();
-
-
-                        const patientName =
-                            cells[1]
-                                .textContent
-                                .toLowerCase()
-                                .trim();
-
-
-                        const matches =
-                            patientId ===
-                            searchValue
-
-                            ||
-
-                            patientName
-                                .includes(
-                                    searchValue
-                                );
-
-
-                        row.style.display =
-                            matches ||
-                            searchValue === ""
-                                ? ""
-                                : "none";
-                    }
-                );
-            }
+        const rows = document.querySelectorAll(
+            "#patient-table-body tr"
         );
-}
 
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+
+            if (cells.length < 2) {
+                return;
+            }
+
+            const patientId =
+                cells[0].textContent.toLowerCase().trim();
+
+            const patientName =
+                cells[1].textContent.toLowerCase().trim();
+
+            const matches =
+                patientId === searchValue ||
+                patientName.includes(searchValue);
+
+            row.style.display =
+                matches || searchValue === "" ? "" : "none";
+        });
+    });
+}
 
 // ----------------------------------------------------
 // PATIENT RECORD TABS
 // ----------------------------------------------------
 
-const tabButtons =
-    document.querySelectorAll(
-        ".tab-button"
-    );
+const tabButtons = document.querySelectorAll(".tab-button");
+const tabContents = document.querySelectorAll(".tab-content");
 
+tabButtons.forEach(button => {
+    button.addEventListener("click", function () {
+        tabButtons.forEach(tab => {
+            tab.classList.remove("active");
+        });
 
-const tabContents =
-    document.querySelectorAll(
-        ".tab-content"
-    );
+        tabContents.forEach(content => {
+            content.classList.remove("active-tab");
+        });
 
+        this.classList.add("active");
 
-tabButtons.forEach(
-    button => {
+        const tabName = this.dataset.tab;
 
-        button.addEventListener(
-            "click",
-            function () {
-
-                tabButtons.forEach(
-                    tab => {
-
-                        tab.classList.remove(
-                            "active"
-                        );
-                    }
-                );
-
-
-                tabContents.forEach(
-                    content => {
-
-                        content
-                            .classList
-                            .remove(
-                                "active-tab"
-                            );
-                    }
-                );
-
-
-                this.classList.add(
-                    "active"
-                );
-
-
-                const tabName =
-                    this.dataset.tab;
-
-
-                document
-                    .getElementById(
-                        tabName
-                    )
-                    .classList
-                    .add(
-                        "active-tab"
-                    );
-            }
-        );
-    }
-);
-
+        document.getElementById(tabName)
+            .classList.add("active-tab");
+    });
+});
 
 // ----------------------------------------------------
 // LOGOUT
 // ----------------------------------------------------
 
 function logout() {
-
-    sessionStorage.removeItem(
-        "reserveHealthUser"
-    );
-
-    window.location.href =
-        "login.html";
+    sessionStorage.removeItem("reserveHealthUser");
+    window.location.href = "login.html";
 }
-
 
 // ----------------------------------------------------
 // EDIT PATIENT
 // ----------------------------------------------------
 
-document
-    .getElementById(
-        "edit-patient-button"
-    )
-    .addEventListener(
-        "click",
-        function () {
-
-            if (
-                !selectedPatient
-            ) {
-
-                alert(
-                    "Please select a patient first."
-                );
-
-                return;
-            }
-
-
-            document
-                .getElementById(
-                    "edit-options"
-                )
-                .classList
-                .remove(
-                    "hidden"
-                );
+document.getElementById("edit-patient-button")
+    .addEventListener("click", function () {
+        if (!selectedPatient) {
+            alert("Please select a patient first.");
+            return;
         }
-    );
 
+        document.getElementById("edit-options")
+            .classList.remove("hidden");
+    });
 
 function closeEditOptions() {
-
-    document
-        .getElementById(
-            "edit-options"
-        )
-        .classList
-        .add(
-            "hidden"
-        );
+    document.getElementById("edit-options")
+        .classList.add("hidden");
 }
 
-
-function showEditSection(
-    section
-) {
-
-    if (
-        !selectedPatient
-    ) {
-
+function showEditSection(section) {
+    if (!selectedPatient) {
         return;
     }
 
-
     closeEditOptions();
 
-
-    if (
-        section === "status"
-    ) {
-
-        document
-            .getElementById(
-                "edit-status"
-            )
-            .value =
+    if (section === "status") {
+        document.getElementById("edit-status").value =
             selectedPatient.status;
 
-
-        document
-            .getElementById(
-                "edit-status-section"
-            )
-            .classList
-            .remove(
-                "hidden"
-            );
+        document.getElementById("edit-status-section")
+            .classList.remove("hidden");
     }
 
+    if (section === "location") {
+        document.getElementById("edit-location").value =
+            selectedPatient.location || "";
 
-    if (
-        section === "location"
-    ) {
-
-        document
-            .getElementById(
-                "edit-location"
-            )
-            .value =
-            selectedPatient.location ||
-            "";
-
-
-        document
-            .getElementById(
-                "edit-location-section"
-            )
-            .classList
-            .remove(
-                "hidden"
-            );
+        document.getElementById("edit-location-section")
+            .classList.remove("hidden");
     }
 
+    if (section === "history") {
+        document.getElementById("edit-medical-history").value =
+            selectedPatient.medicalHistorySummary || "";
 
-    if (
-        section === "history"
-    ) {
-
-        document
-            .getElementById(
-                "edit-medical-history"
-            )
-            .value =
-            selectedPatient
-                .medicalHistorySummary ||
-            "";
-
-
-        document
-            .getElementById(
-                "edit-history-section"
-            )
-            .classList
-            .remove(
-                "hidden"
-            );
+        document.getElementById("edit-history-section")
+            .classList.remove("hidden");
     }
 
+    if (section === "allergies") {
+        document.getElementById("edit-allergies").value =
+            selectedPatient.allergies || "";
 
-    if (
-        section === "allergies"
-    ) {
-
-        document
-            .getElementById(
-                "edit-allergies"
-            )
-            .value =
-            selectedPatient.allergies ||
-            "";
-
-
-        document
-            .getElementById(
-                "edit-allergies-section"
-            )
-            .classList
-            .remove(
-                "hidden"
-            );
+        document.getElementById("edit-allergies-section")
+            .classList.remove("hidden");
     }
 }
 
-
-function closeEditSection(
-    section
-) {
-
-    document
-        .getElementById(
-            `edit-${section}-section`
-        )
-        .classList
-        .add(
-            "hidden"
-        );
+function closeEditSection(section) {
+    document.getElementById(`edit-${section}-section`)
+        .classList.add("hidden");
 }
-
 
 // ----------------------------------------------------
 // SAVE EDITED PATIENT FIELD
 // ----------------------------------------------------
 
-async function savePatientField(
-    field
-) {
-
-    if (
-        !selectedPatient
-    ) {
-
-        alert(
-            "Please select a patient first."
-        );
-
+async function savePatientField(field) {
+    if (!selectedPatient) {
+        alert("Please select a patient first.");
         return;
     }
 
-
     const updatedPatient = {
-
         ...selectedPatient
-
     };
 
-
-    if (
-        field === "status"
-    ) {
-
+    if (field === "status") {
         updatedPatient.status =
-            document
-                .getElementById(
-                    "edit-status"
-                )
-                .value;
+            document.getElementById("edit-status").value;
     }
 
-
-    if (
-        field === "location"
-    ) {
-
+    if (field === "location") {
         updatedPatient.location =
-            document
-                .getElementById(
-                    "edit-location"
-                )
-                .value
-                .trim();
+            document.getElementById("edit-location").value.trim();
     }
 
-
-    if (
-        field === "history"
-    ) {
-
-        updatedPatient
-            .medicalHistorySummary =
-            document
-                .getElementById(
-                    "edit-medical-history"
-                )
-                .value
-                .trim();
+    if (field === "history") {
+        updatedPatient.medicalHistorySummary =
+            document.getElementById("edit-medical-history")
+                .value.trim();
     }
 
-
-    if (
-        field === "allergies"
-    ) {
-
+    if (field === "allergies") {
         updatedPatient.allergies =
-            document
-                .getElementById(
-                    "edit-allergies"
-                )
-                .value
-                .trim();
+            document.getElementById("edit-allergies").value.trim();
     }
-
 
     try {
-
-        const response =
-            await authenticatedFetch(
-                `${apiUrl}/${selectedPatient.patientId}`,
-                {
-                    method:
-                        "PUT",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(
-                            updatedPatient
-                        )
-                }
-            );
-
+        const response = await authenticatedFetch(
+            `${apiUrl}/${selectedPatient.patientId}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updatedPatient)
+            }
+        );
 
         if (!response.ok) {
+            const errorMessage = await response.text();
 
-            const errorMessage =
-                await response.text();
-
-
-            throw new Error(
-                errorMessage ||
-                "Update failed."
-            );
+            throw new Error(errorMessage || "Update failed.");
         }
 
+        const patientId = selectedPatient.patientId;
 
-        const patientId =
-            selectedPatient.patientId;
-
-
-        await loadPatient(
-            patientId
-        );
-
-
+        await loadPatient(patientId);
         await loadPatients();
 
-
-        closeEditSection(
-            field
-        );
-
-
-        alert(
-            "Patient updated successfully."
-        );
-
+        closeEditSection(field);
+        alert("Patient updated successfully.");
     } catch (error) {
+        console.error(error);
 
-        console.error(
-            error
-        );
-
-
-        alert(
-            `Patient could not be updated: ${error.message}`
-        );
+        alert(`Patient could not be updated: ${error.message}`);
     }
 }
-
 
 // ----------------------------------------------------
 // ADD PATIENT MODAL
 // ----------------------------------------------------
 
 const addPatientModal =
-    document.getElementById(
-        "add-patient-modal"
-    );
-
+    document.getElementById("add-patient-modal");
 
 const addPatientForm =
-    document.getElementById(
-        "add-patient-form"
-    );
-
+    document.getElementById("add-patient-form");
 
 const addPatientMessage =
-    document.getElementById(
-        "add-patient-message"
-    );
-
+    document.getElementById("add-patient-message");
 
 const saveNewPatientButton =
-    document.getElementById(
-        "save-new-patient-button"
-    );
+    document.getElementById("save-new-patient-button");
 
-
-function showAddPatientMessage(
-    message,
-    type
-) {
-
-    addPatientMessage.textContent =
-        message;
-
-
-    addPatientMessage.className =
-        `form-message ${type}`;
+function showAddPatientMessage(message, type) {
+    addPatientMessage.textContent = message;
+    addPatientMessage.className = `form-message ${type}`;
 }
-
 
 function clearAddPatientMessage() {
-
-    addPatientMessage.textContent =
-        "";
-
-
-    addPatientMessage.className =
-        "form-message hidden";
+    addPatientMessage.textContent = "";
+    addPatientMessage.className = "form-message hidden";
 }
-
 
 function clearAddPatientForm() {
-
-    document
-        .getElementById(
-            "add-first-name"
-        )
-        .value =
-        "";
-
-
-    document
-        .getElementById(
-            "add-last-name"
-        )
-        .value =
-        "";
-
-
-    document
-        .getElementById(
-            "add-date-of-birth"
-        )
-        .value =
-        "";
-
-
-    document
-        .getElementById(
-            "add-status"
-        )
-        .value =
-        "Admitted";
-
-
-    document
-        .getElementById(
-            "add-location"
-        )
-        .value =
-        "";
-
-
-    document
-        .getElementById(
-            "add-medical-history"
-        )
-        .value =
-        "";
-
-
-    document
-        .getElementById(
-            "add-allergies"
-        )
-        .value =
-        "";
+    document.getElementById("add-first-name").value = "";
+    document.getElementById("add-last-name").value = "";
+    document.getElementById("add-date-of-birth").value = "";
+    document.getElementById("add-status").value = "Admitted";
+    document.getElementById("add-location").value = "";
+    document.getElementById("add-medical-history").value = "";
+    document.getElementById("add-allergies").value = "";
 }
-
 
 function openAddPatientModal() {
-
     clearAddPatientMessage();
 
-
-    addPatientModal
-        .classList
-        .remove(
-            "hidden"
-        );
-
-
-    document
-        .getElementById(
-            "add-first-name"
-        )
-        .focus();
+    addPatientModal.classList.remove("hidden");
+    document.getElementById("add-first-name").focus();
 }
-
 
 function closeAddPatientModal() {
-
-    addPatientModal
-        .classList
-        .add(
-            "hidden"
-        );
-
-
+    addPatientModal.classList.add("hidden");
     clearAddPatientMessage();
 }
-
 
 // ----------------------------------------------------
 // ADD PATIENT MODAL EVENTS
 // ----------------------------------------------------
 
-document
-    .getElementById(
-        "add-patient-button"
-    )
-    .addEventListener(
-        "click",
-        openAddPatientModal
-    );
+document.getElementById("add-patient-button")
+    .addEventListener("click", openAddPatientModal);
 
+document.getElementById("cancel-add-patient-button")
+    .addEventListener("click", closeAddPatientModal);
 
-document
-    .getElementById(
-        "cancel-add-patient-button"
-    )
-    .addEventListener(
-        "click",
-        closeAddPatientModal
-    );
+document.getElementById("close-add-patient-button")
+    .addEventListener("click", closeAddPatientModal);
 
-
-document
-    .getElementById(
-        "close-add-patient-button"
-    )
-    .addEventListener(
-        "click",
-        closeAddPatientModal
-    );
-
-
-document.addEventListener(
-    "keydown",
-    function (
-        event
+document.addEventListener("keydown", function (event) {
+    if (
+        event.key === "Escape" &&
+        !addPatientModal.classList.contains("hidden")
     ) {
-
-        if (
-            event.key ===
-            "Escape"
-
-            &&
-
-            !addPatientModal
-                .classList
-                .contains(
-                    "hidden"
-                )
-        ) {
-
-            closeAddPatientModal();
-        }
+        closeAddPatientModal();
     }
-);
+});
 
-
-addPatientModal.addEventListener(
-    "click",
-    function (
-        event
-    ) {
-
-        if (
-            event.target ===
-            addPatientModal
-        ) {
-
-            closeAddPatientModal();
-        }
+addPatientModal.addEventListener("click", function (event) {
+    if (event.target === addPatientModal) {
+        closeAddPatientModal();
     }
-);
-
+});
 
 // ----------------------------------------------------
 // CREATE PATIENT
 // ----------------------------------------------------
 
-addPatientForm.addEventListener(
-    "submit",
-    async function (
-        event
-    ) {
+addPatientForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    clearAddPatientMessage();
 
-        event.preventDefault();
+    const firstName =
+        document.getElementById("add-first-name").value.trim();
 
+    const lastName =
+        document.getElementById("add-last-name").value.trim();
 
-        clearAddPatientMessage();
+    const dateOfBirth =
+        document.getElementById("add-date-of-birth").value;
 
+    const status =
+        document.getElementById("add-status").value;
 
-        const firstName =
-            document
-                .getElementById(
-                    "add-first-name"
-                )
-                .value
-                .trim();
+    const location =
+        document.getElementById("add-location").value.trim();
 
+    const medicalHistorySummary =
+        document.getElementById("add-medical-history").value.trim();
 
-        const lastName =
-            document
-                .getElementById(
-                    "add-last-name"
-                )
-                .value
-                .trim();
+    const allergies =
+        document.getElementById("add-allergies").value.trim();
 
+    if (!firstName) {
+        showAddPatientMessage("First name is required.", "error");
+        document.getElementById("add-first-name").focus();
+        return;
+    }
 
-        const dateOfBirth =
-            document
-                .getElementById(
-                    "add-date-of-birth"
-                )
-                .value;
+    if (!lastName) {
+        showAddPatientMessage("Last name is required.", "error");
+        document.getElementById("add-last-name").focus();
+        return;
+    }
 
+    if (!dateOfBirth) {
+        showAddPatientMessage("Date of birth is required.", "error");
+        document.getElementById("add-date-of-birth").focus();
+        return;
+    }
 
-        const status =
-            document
-                .getElementById(
-                    "add-status"
-                )
-                .value;
+    const selectedDate = new Date(`${dateOfBirth}T00:00:00`);
+    const today = new Date();
 
+    if (selectedDate > today) {
+        showAddPatientMessage(
+            "Date of birth cannot be in the future.",
+            "error"
+        );
 
-        const location =
-            document
-                .getElementById(
-                    "add-location"
-                )
-                .value
-                .trim();
+        document.getElementById("add-date-of-birth").focus();
+        return;
+    }
 
+    const allowedStatuses = [
+        "Admitted",
+        "Active",
+        "Follow-up"
+    ];
 
-        const medicalHistorySummary =
-            document
-                .getElementById(
-                    "add-medical-history"
-                )
-                .value
-                .trim();
+    if (!allowedStatuses.includes(status)) {
+        showAddPatientMessage(
+            "Please select a valid patient status.",
+            "error"
+        );
+        return;
+    }
 
+    if (location.length > 100) {
+        showAddPatientMessage(
+            "Location cannot exceed 100 characters.",
+            "error"
+        );
+        return;
+    }
 
-        const allergies =
-            document
-                .getElementById(
-                    "add-allergies"
-                )
-                .value
-                .trim();
+    if (medicalHistorySummary.length > 1000) {
+        showAddPatientMessage(
+            "Medical history cannot exceed 1000 characters.",
+            "error"
+        );
+        return;
+    }
 
+    if (allergies.length > 500) {
+        showAddPatientMessage(
+            "Allergies cannot exceed 500 characters.",
+            "error"
+        );
+        return;
+    }
 
-        if (
-            !firstName
-        ) {
+    const newPatient = {
+        firstName: firstName,
+        lastName: lastName,
+        dateOfBirth: dateOfBirth,
+        status: status,
+        location: location,
+        medicalHistorySummary: medicalHistorySummary,
+        allergies: allergies
+    };
 
-            showAddPatientMessage(
-                "First name is required.",
-                "error"
+    saveNewPatientButton.disabled = true;
+    saveNewPatientButton.textContent = "Saving...";
+
+    try {
+        const response = await authenticatedFetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newPatient)
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+
+            throw new Error(
+                errorMessage || "Patient could not be added."
             );
+        }
 
+        const createdPatient = await response.json();
 
-            document
-                .getElementById(
-                    "add-first-name"
-                )
-                .focus();
+        showAddPatientMessage(
+            "Patient added successfully.",
+            "success"
+        );
 
+        showingArchivedPatients = false;
 
+        activePatientsButton.classList.add("active");
+        archivedPatientsButton.classList.remove("active");
+
+        patientListDescription.textContent =
+            "Current patient records";
+
+        addPatientButton.classList.remove("hidden");
+
+        await loadPatients();
+
+        setTimeout(async function () {
+            closeAddPatientModal();
+            clearAddPatientForm();
+            await loadPatient(createdPatient.patientId);
+        }, 500);
+    } catch (error) {
+        console.error(error);
+
+        showAddPatientMessage(
+            "Patient could not be added. Please check the information and try again.",
+            "error"
+        );
+    } finally {
+        saveNewPatientButton.disabled = false;
+        saveNewPatientButton.textContent = "Save Patient";
+    }
+});
+
+// ----------------------------------------------------
+// PATIENT REFERRAL HISTORY
+// ----------------------------------------------------
+
+async function loadPatientReferrals(patientId) {
+    const container =
+        document.getElementById("patient-referrals");
+
+    container.textContent = "Loading referrals...";
+
+    try {
+        const response = await authenticatedFetch(
+            "http://localhost:5297/api/referrals"
+        );
+
+        if (!response.ok) {
+            throw new Error("Could not load referrals.");
+        }
+
+        const referrals = await response.json();
+
+        // Ignore an older response after switching patients.
+        if (selectedPatient?.patientId !== patientId) {
             return;
         }
 
+        const patientReferrals = referrals.filter(
+            referral =>
+                referral.patientId === selectedPatient.patientId
+        );
 
-        if (
-            !lastName
-        ) {
+        container.replaceChildren();
 
-            showAddPatientMessage(
-                "Last name is required.",
-                "error"
-            );
-
-
-            document
-                .getElementById(
-                    "add-last-name"
-                )
-                .focus();
-
-
+        if (patientReferrals.length === 0) {
+            container.textContent =
+                "No referrals for this patient.";
             return;
         }
 
+        const table = document.createElement("table");
+        table.className = "patient-table";
 
-        if (
-            !dateOfBirth
-        ) {
+        const header = table.createTHead().insertRow();
 
-            showAddPatientMessage(
-                "Date of birth is required.",
-                "error"
-            );
+        ["Service", "Priority", "Status"].forEach(label => {
+            const heading = document.createElement("th");
 
+            heading.scope = "col";
+            heading.textContent = label;
 
-            document
-                .getElementById(
-                    "add-date-of-birth"
-                )
-                .focus();
+            header.appendChild(heading);
+        });
 
+        const body = table.createTBody();
 
-            return;
-        }
+        patientReferrals.forEach(referral => {
+            const row = body.insertRow();
 
+            [
+                referral.service,
+                referral.priority,
+                referral.status
+            ].forEach(value => {
+                row.insertCell().textContent =
+                    value || "Not specified";
+            });
+        });
 
-        const selectedDate =
-            new Date(
-                `${dateOfBirth}T00:00:00`
-            );
+        container.appendChild(table);
+    } catch (error) {
+        console.error("Error loading patient referrals:", error);
 
-
-        const today =
-            new Date();
-
-
-        if (
-            selectedDate >
-            today
-        ) {
-
-            showAddPatientMessage(
-                "Date of birth cannot be in the future.",
-                "error"
-            );
-
-
-            document
-                .getElementById(
-                    "add-date-of-birth"
-                )
-                .focus();
-
-
-            return;
-        }
-
-
-        const allowedStatuses = [
-
-            "Admitted",
-            "Active",
-            "Follow-up"
-
-        ];
-
-
-        if (
-            !allowedStatuses
-                .includes(
-                    status
-                )
-        ) {
-
-            showAddPatientMessage(
-                "Please select a valid patient status.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            location.length >
-            100
-        ) {
-
-            showAddPatientMessage(
-                "Location cannot exceed 100 characters.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            medicalHistorySummary.length >
-            1000
-        ) {
-
-            showAddPatientMessage(
-                "Medical history cannot exceed 1000 characters.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            allergies.length >
-            500
-        ) {
-
-            showAddPatientMessage(
-                "Allergies cannot exceed 500 characters.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const newPatient = {
-
-            firstName:
-                firstName,
-
-            lastName:
-                lastName,
-
-            dateOfBirth:
-                dateOfBirth,
-
-            status:
-                status,
-
-            location:
-                location,
-
-            medicalHistorySummary:
-                medicalHistorySummary,
-
-            allergies:
-                allergies
-        };
-
-
-        saveNewPatientButton.disabled =
-            true;
-
-
-        saveNewPatientButton.textContent =
-            "Saving...";
-
-
-        try {
-
-            const response =
-                await authenticatedFetch(
-                    apiUrl,
-                    {
-                        method:
-                            "POST",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify(
-                                newPatient
-                            )
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                const errorMessage =
-                    await response.text();
-
-
-                throw new Error(
-                    errorMessage ||
-                    "Patient could not be added."
-                );
-            }
-
-
-            const createdPatient =
-                await response.json();
-
-
-            showAddPatientMessage(
-                "Patient added successfully.",
-                "success"
-            );
-
-
-            showingArchivedPatients =
-                false;
-
-
-            activePatientsButton
-                .classList
-                .add(
-                    "active"
-                );
-
-
-            archivedPatientsButton
-                .classList
-                .remove(
-                    "active"
-                );
-
-
-            patientListDescription
-                .textContent =
-                "Current patient records";
-
-
-            addPatientButton
-                .classList
-                .remove(
-                    "hidden"
-                );
-
-
-            await loadPatients();
-
-
-            setTimeout(
-                async function () {
-
-                    closeAddPatientModal();
-
-                    clearAddPatientForm();
-
-
-                    await loadPatient(
-                        createdPatient.patientId
-                    );
-                },
-                500
-            );
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-
-            showAddPatientMessage(
-                "Patient could not be added. Please check the information and try again.",
-                "error"
-            );
-
-        } finally {
-
-            saveNewPatientButton.disabled =
-                false;
-
-
-            saveNewPatientButton.textContent =
-                "Save Patient";
+        if (selectedPatient?.patientId === patientId) {
+            container.textContent =
+                "Referrals could not be loaded. Please try again.";
         }
     }
-);
+}
 
+// Refresh history when returning through the browser's page cache.
+window.addEventListener("pageshow", event => {
+    if (event.persisted && selectedPatient) {
+        loadPatientReferrals(selectedPatient.patientId);
+    }
+});
 
 // ----------------------------------------------------
 // REFERRAL PAGE
 // ----------------------------------------------------
 
 function openReferralPage() {
+    if (!selectedPatient) {
+        return;
+    }
 
     window.location.href =
-        "referrals.html";
+        `referrals.html?patientId=${selectedPatient.patientId}`;
 }
-
 
 // ----------------------------------------------------
 // ARCHIVE / RESTORE PATIENT
 // ----------------------------------------------------
 
 const archivePatientButton =
-    document.getElementById(
-        "archive-patient-button"
-    );
+    document.getElementById("archive-patient-button");
 
-
-archivePatientButton.addEventListener(
-    "click",
-    async function () {
-
-        if (
-            !selectedPatient
-        ) {
-
-            return;
-        }
-
-
-        if (
-            showingArchivedPatients
-        ) {
-
-            await restorePatient();
-
-        } else {
-
-            await archivePatient();
-        }
+archivePatientButton.addEventListener("click", async function () {
+    if (!selectedPatient) {
+        return;
     }
-);
 
+    if (showingArchivedPatients) {
+        await restorePatient();
+    } else {
+        await archivePatient();
+    }
+});
 
 async function archivePatient() {
-
-    if (
-        !selectedPatient
-    ) {
-
+    if (!selectedPatient) {
         return;
     }
-
 
     const patientName =
         `${selectedPatient.firstName} ${selectedPatient.lastName}`;
 
+    const confirmed = confirm(
+        `Archive ${patientName}? This patient will be removed from the active patient list.`
+    );
 
-    const confirmed =
-        confirm(
-            `Archive ${patientName}? This patient will be removed from the active patient list.`
-        );
-
-
-    if (
-        !confirmed
-    ) {
-
+    if (!confirmed) {
         return;
     }
 
-
     try {
-
-        const response =
-            await authenticatedFetch(
-                `${apiUrl}/${selectedPatient.patientId}/archive`,
-                {
-                    method:
-                        "PUT"
-                }
-            );
-
+        const response = await authenticatedFetch(
+            `${apiUrl}/${selectedPatient.patientId}/archive`,
+            {
+                method: "PUT"
+            }
+        );
 
         if (!response.ok) {
-
-            throw new Error(
-                "Archive failed."
-            );
+            throw new Error("Archive failed.");
         }
 
-
-        selectedPatient =
-            null;
-
+        selectedPatient = null;
 
         clearSelectedPatient();
-
-
         await loadPatients();
-
     } catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        alert(
-            "Patient could not be archived."
-        );
+        console.error(error);
+        alert("Patient could not be archived.");
     }
 }
-
 
 async function restorePatient() {
-
-    if (
-        !selectedPatient
-    ) {
-
+    if (!selectedPatient) {
         return;
     }
-
 
     const patientName =
         `${selectedPatient.firstName} ${selectedPatient.lastName}`;
 
+    const confirmed = confirm(
+        `Restore ${patientName} to the active patient list?`
+    );
 
-    const confirmed =
-        confirm(
-            `Restore ${patientName} to the active patient list?`
-        );
-
-
-    if (
-        !confirmed
-    ) {
-
+    if (!confirmed) {
         return;
     }
 
-
     try {
-
-        const response =
-            await authenticatedFetch(
-                `${apiUrl}/${selectedPatient.patientId}/restore`,
-                {
-                    method:
-                        "PUT"
-                }
-            );
-
+        const response = await authenticatedFetch(
+            `${apiUrl}/${selectedPatient.patientId}/restore`,
+            {
+                method: "PUT"
+            }
+        );
 
         if (!response.ok) {
-
-            throw new Error(
-                "Restore failed."
-            );
+            throw new Error("Restore failed.");
         }
 
-
-        selectedPatient =
-            null;
-
+        selectedPatient = null;
 
         clearSelectedPatient();
-
-
         await loadPatients();
-
     } catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        alert(
-            "Patient could not be restored."
-        );
+        console.error(error);
+        alert("Patient could not be restored.");
     }
 }
-
 
 // ----------------------------------------------------
 // INITIAL PAGE LOAD
