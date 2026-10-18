@@ -6,6 +6,22 @@ const loginForm =
 
 if (loginForm) {
 
+    // Keep track of inputs so we can clear the "invalid credentials" lock
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+
+    function clearInvalidCredentials() {
+        if (loginForm.dataset.invalid === "true") {
+            delete loginForm.dataset.invalid;
+            delete loginForm.dataset.submitting;
+            const btn = loginForm.querySelector('button[type="submit"], input[type="submit"]');
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    if (emailInput) emailInput.addEventListener("input", clearInvalidCredentials);
+    if (passwordInput) passwordInput.addEventListener("input", clearInvalidCredentials);
+
     // Runs when the login form is submitted
     loginForm.addEventListener(
         "submit",
@@ -66,6 +82,19 @@ if (loginForm) {
             // Sends the login details to the backend
             if (valid) {
 
+                // Prevent multiple submissions
+                const submitButton = loginForm.querySelector(
+                    'button[type="submit"], input[type="submit"]'
+                );
+
+                // If a submission is already in progress, ignore further attempts
+                if (loginForm.dataset.submitting === "true") {
+                    return;
+                }
+
+                if (submitButton) submitButton.disabled = true;
+                loginForm.dataset.submitting = "true";
+
                 try {
 
                     const response =
@@ -92,6 +121,9 @@ if (loginForm) {
                         passwordError.textContent =
                             "Invalid email or password.";
 
+                        // Lock the form: keep button disabled until user edits input
+                        loginForm.dataset.invalid = "true";
+
                         return;
                     }
 
@@ -115,6 +147,21 @@ if (loginForm) {
 
                     passwordError.textContent =
                         "Could not connect to the server.";
+                }
+
+                finally {
+                    // If we locked the form due to invalid credentials, leave it
+                    // disabled until the user changes the email or password.
+                    if (loginForm.dataset.invalid === "true") {
+                        return;
+                    }
+
+                    // Keep the button disabled for at least 2 seconds to prevent
+                    // rapid repeated submissions even if the request finishes quickly.
+                    setTimeout(() => {
+                        if (submitButton) submitButton.disabled = false;
+                        delete loginForm.dataset.submitting;
+                    }, 2000);
                 }
             }
         }
