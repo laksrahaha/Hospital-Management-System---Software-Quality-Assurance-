@@ -71,7 +71,10 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider
         .GetRequiredService<ReserveHealthContext>();
-
+if (app.Environment.IsDevelopment())
+{
+    context.Database.Migrate();
+}
     SeedData.AddSamplePatients(context);
 }
 
