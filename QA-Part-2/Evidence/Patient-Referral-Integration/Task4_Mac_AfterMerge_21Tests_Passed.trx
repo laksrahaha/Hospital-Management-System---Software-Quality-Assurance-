@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="226db1db-1ba3-4568-9e7d-68c277a0d828" name="@Hita 2026-10-19 17:47:42" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-19T17:47:42.5131290+13:00" queuing="2026-10-19T17:47:42.5131290+13:00" start="2026-10-19T17:47:39.8753580+13:00" finish="2026-10-19T17:47:43.0545400+13:00" />
+  <TestSettings name="default" id="0dcc7b3c-6cb4-4623-bfcd-6bbf40127df7">
+    <Deployment runDeploymentRoot="_Hita_2026-10-19_17_47_42" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="3737b02d-f28c-4b1c-87f9-17a4edda356e" testId="112e4671-690c-85c2-bf72-abb45b68cf08" testName="AuditApi_LabTechnician_ReturnsForbidden" computerName="Hita" duration="00:00:00.2028088" startTime="2026-10-19T17:47:42.7271310+13:00" endTime="2026-10-19T17:47:42.9300240+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3737b02d-f28c-4b1c-87f9-17a4edda356e">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: ReserveHealth.Tests.TestAuthenticationHandler[13]
+      AuthenticationScheme: Test was forbidden.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="78964969-7964-44cf-a6ce-01f4d3295f0e" testId="13eb6816-5d70-894a-b4c1-d16d8aed0882" testName="TestRequestsApi_Doctor_ReturnsForbidden" computerName="Hita" duration="00:00:00.2360245" startTime="2026-10-19T17:47:42.6822960+13:00" endTime="2026-10-19T17:47:42.9183940+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="78964969-7964-44cf-a6ce-01f4d3295f0e">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: ReserveHealth.Tests.TestAuthenticationHandler[13]
+      AuthenticationScheme: Test was forbidden.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b88d53e1-2c27-44b2-9fa8-fd00408f86a5" testId="159336dd-0f6c-830f-a0e7-89e00d81d466" testName="ReferralsApi_Doctor_ReturnsSuccess" computerName="Hita" duration="00:00:00.2096415" startTime="2026-10-19T17:47:42.7228770+13:00" endTime="2026-10-19T17:47:42.9325880+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b88d53e1-2c27-44b2-9fa8-fd00408f86a5">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bf028fb2-e432-443a-bab2-7c1ac3432d95" testId="10553535-8329-8906-bd0e-ea61a1c365bc" testName="Login_WrongPassword_ReturnsUnauthorized" computerName="Hita" duration="00:00:02.0915814" startTime="2026-10-19T17:47:40.5746600+13:00" endTime="2026-10-19T17:47:42.6822220+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bf028fb2-e432-443a-bab2-7c1ac3432d95">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d1bebe83-1855-4639-8502-bb5abfed1839" testId="1ae64773-90d7-858b-abe5-74257576b093" testName="CreateReferral_ValidPatient_SavesCorrectPatientId" computerName="Hita" duration="00:00:01.9609321" startTime="2026-10-19T17:47:40.5746390+13:00" endTime="2026-10-19T17:47:42.5506850+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d1bebe83-1855-4639-8502-bb5abfed1839">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0227a869-b71a-48f7-8cef-f295faa44288" testId="1ad2633d-7bed-891e-b7aa-133baf1a88a5" testName="PatientApi_LabTechnician_ReturnsForbidden" computerName="Hita" duration="00:00:00.1709416" startTime="2026-10-19T17:47:42.5508240+13:00" endTime="2026-10-19T17:47:42.7218690+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0227a869-b71a-48f7-8cef-f295faa44288">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: ReserveHealth.Tests.TestAuthenticationHandler[13]
+      AuthenticationScheme: Test was forbidden.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="82f8d077-8d39-4a50-8f30-cdad0f96a63e" testId="1a25375e-fb77-8dd2-b4e8-f4c9b3abb348" testName="Signup_InvalidRole_ReturnsBadRequest" computerName="Hita" duration="00:00:01.8391487" startTime="2026-10-19T17:47:40.5746480+13:00" endTime="2026-10-19T17:47:42.4497180+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82f8d077-8d39-4a50-8f30-cdad0f96a63e">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="006f6ebe-cd21-4695-aa96-d8cfca47e985" testId="108d86e3-7ad0-8e9c-8d64-dd04ef7ac17f" testName="AuditApi_Doctor_ReturnsSuccess" computerName="Hita" duration="00:00:00.1442596" startTime="2026-10-19T17:47:42.8299680+13:00" endTime="2026-10-19T17:47:42.9743020+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="006f6ebe-cd21-4695-aa96-d8cfca47e985">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cb880d6f-f193-432d-a50e-263c31edc57c" testId="1079bcaa-3bd1-8b8f-8506-6e05ffb02d41" testName="CreateReferral_InvalidPriority_ReturnsBadRequest" computerName="Hita" duration="00:00:00.3636130" startTime="2026-10-19T17:47:42.4662040+13:00" endTime="2026-10-19T17:47:42.8299090+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cb880d6f-f193-432d-a50e-263c31edc57c">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="36346cc4-a074-4f9b-92f3-da595e212439" testId="1cdbdd4f-835c-8371-af7c-08fb88f2ad45" testName="CreateReferral_InvalidPatient_DoesNotCreateReferral (0)" computerName="Hita" duration="00:00:01.8755463" startTime="2026-10-19T17:47:40.5746300+13:00" endTime="2026-10-19T17:47:42.4658520+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="36346cc4-a074-4f9b-92f3-da595e212439">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d87e566f-50d7-4203-816f-76450d277557" testId="13a231b2-f41c-8287-b0aa-a44424cd890c" testName="PatientApi_NoAuthentication_ReturnsUnauthorized" computerName="Hita" duration="00:00:00.2381603" startTime="2026-10-19T17:47:42.4814180+13:00" endTime="2026-10-19T17:47:42.7197870+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d87e566f-50d7-4203-816f-76450d277557">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a07b62c6-b6cb-4e59-b28e-a566d38ae673" testId="1849d1f1-7049-8980-9881-3205347c6bc3" testName="CreateReferral_InvalidPatient_DoesNotCreateReferral (-1)" computerName="Hita" duration="00:00:01.8779670" startTime="2026-10-19T17:47:40.5746530+13:00" endTime="2026-10-19T17:47:42.4678640+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a07b62c6-b6cb-4e59-b28e-a566d38ae673">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="85d72e5e-32f7-4aff-be8e-fa5b82b19165" testId="19b32093-2409-898d-b273-6aae00d7e6b1" testName="ReferralsApi_LabTechnician_ReturnsForbidden" computerName="Hita" duration="00:00:00.2302487" startTime="2026-10-19T17:47:42.7225060+13:00" endTime="2026-10-19T17:47:42.9528600+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="85d72e5e-32f7-4aff-be8e-fa5b82b19165">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: ReserveHealth.Tests.TestAuthenticationHandler[13]
+      AuthenticationScheme: Test was forbidden.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f5aefe1a-106f-4909-8900-5ffbe2465204" testId="172b1eba-4a24-8097-b3f0-d92bcd3a9ffe" testName="CreateReferral_BlankReason_ReturnsBadRequest" computerName="Hita" duration="00:00:00.2513441" startTime="2026-10-19T17:47:42.4580880+13:00" endTime="2026-10-19T17:47:42.7096110+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5aefe1a-106f-4909-8900-5ffbe2465204">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ab5bd166-8850-4b5e-b9ce-0f10fa384605" testId="1a8c1c65-2ebb-8e92-a850-a46c38fd007e" testName="CreateReferral_MissingPatient_ReturnsBadRequest" computerName="Hita" duration="00:00:00.2213020" startTime="2026-10-19T17:47:42.4582860+13:00" endTime="2026-10-19T17:47:42.6796580+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab5bd166-8850-4b5e-b9ce-0f10fa384605">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="faff1f61-684f-470f-8a42-e4c72ada3bac" testId="10e7091a-bf25-8a48-b7f2-aa44d7fb7adf" testName="Login_InvalidEmail_ReturnsUnauthorized" computerName="Hita" duration="00:00:01.8391555" startTime="2026-10-19T17:47:40.5746680+13:00" endTime="2026-10-19T17:47:42.4506150+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="faff1f61-684f-470f-8a42-e4c72ada3bac">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5468e63b-3e04-49f7-9458-7d850728cde7" testId="1494b3fe-9935-8b40-b832-2c08c0c74d3c" testName="PatientApi_Doctor_ReturnsSuccess" computerName="Hita" duration="00:00:00.2528215" startTime="2026-10-19T17:47:42.6797360+13:00" endTime="2026-10-19T17:47:42.9326530+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5468e63b-3e04-49f7-9458-7d850728cde7">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3e43ab8a-2e23-4a5a-90ce-1e910a8e410e" testId="11cf1f32-57dc-89b9-a784-797e46f234fd" testName="UpdateReferral_InvalidStatusTransition_ReturnsBadRequest" computerName="Hita" duration="00:00:00.4536735" startTime="2026-10-19T17:47:42.4679480+13:00" endTime="2026-10-19T17:47:42.9217030+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3e43ab8a-2e23-4a5a-90ce-1e910a8e410e">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1fcd98c4-1390-4a34-8cae-7e7723f588df" testId="14249d09-b842-8261-a3f4-164dbd2e0083" testName="ArchivePatient_KeepsReferralHistoryAndPatientId" computerName="Hita" duration="00:00:02.0938252" startTime="2026-10-19T17:47:40.6331220+13:00" endTime="2026-10-19T17:47:42.7270390+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1fcd98c4-1390-4a34-8cae-7e7723f588df">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ebe9eed7-1f53-4564-9528-20c24b3daf4b" testId="1409058c-6913-84b1-9191-0882f0fb3e02" testName="TestRequestsApi_LabTechnician_ReturnsSuccess" computerName="Hita" duration="00:00:00.2949027" startTime="2026-10-19T17:47:42.7096910+13:00" endTime="2026-10-19T17:47:43.0054560+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ebe9eed7-1f53-4564-9528-20c24b3daf4b">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c24b2171-6035-4c78-b8cd-84fedbab9cea" testId="1d99504b-8a60-8dc6-bf9f-857122fc374d" testName="CreateReferral_InvalidPatient_DoesNotCreateReferral (2147483647)" computerName="Hita" duration="00:00:01.8802465" startTime="2026-10-19T17:47:40.5746650+13:00" endTime="2026-10-19T17:47:42.4699900+13:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c24b2171-6035-4c78-b8cd-84fedbab9cea">
+      <Output>
+        <StdOut>info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 6 entities to in-memory store.
+info: Microsoft.EntityFrameworkCore.Update[30100]
+      Saved 1 entities to in-memory store.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Testing
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/CODE/Backend/ReserveHealth.Api
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="CreateReferral_InvalidPriority_ReturnsBadRequest" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1079bcaa-3bd1-8b8f-8506-6e05ffb02d41">
+      <Execution id="cb880d6f-f193-432d-a50e-263c31edc57c" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.ReferralValidationTests" name="CreateReferral_InvalidPriority_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="ReferralsApi_LabTechnician_ReturnsForbidden" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="19b32093-2409-898d-b273-6aae00d7e6b1">
+      <Execution id="85d72e5e-32f7-4aff-be8e-fa5b82b19165" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="ReferralsApi_LabTechnician_ReturnsForbidden" />
+    </UnitTest>
+    <UnitTest name="Signup_InvalidRole_ReturnsBadRequest" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1a25375e-fb77-8dd2-b4e8-f4c9b3abb348">
+      <Execution id="82f8d077-8d39-4a50-8f30-cdad0f96a63e" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.AuthenticationTests" name="Signup_InvalidRole_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="CreateReferral_MissingPatient_ReturnsBadRequest" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1a8c1c65-2ebb-8e92-a850-a46c38fd007e">
+      <Execution id="ab5bd166-8850-4b5e-b9ce-0f10fa384605" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.ReferralValidationTests" name="CreateReferral_MissingPatient_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="CreateReferral_InvalidPatient_DoesNotCreateReferral (2147483647)" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1d99504b-8a60-8dc6-bf9f-857122fc374d">
+      <Execution id="c24b2171-6035-4c78-b8cd-84fedbab9cea" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.PatientReferralIntegrationTests" name="CreateReferral_InvalidPatient_DoesNotCreateReferral" />
+    </UnitTest>
+    <UnitTest name="Login_InvalidEmail_ReturnsUnauthorized" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="10e7091a-bf25-8a48-b7f2-aa44d7fb7adf">
+      <Execution id="faff1f61-684f-470f-8a42-e4c72ada3bac" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.AuthenticationTests" name="Login_InvalidEmail_ReturnsUnauthorized" />
+    </UnitTest>
+    <UnitTest name="PatientApi_Doctor_ReturnsSuccess" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1494b3fe-9935-8b40-b832-2c08c0c74d3c">
+      <Execution id="5468e63b-3e04-49f7-9458-7d850728cde7" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="PatientApi_Doctor_ReturnsSuccess" />
+    </UnitTest>
+    <UnitTest name="ArchivePatient_KeepsReferralHistoryAndPatientId" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="14249d09-b842-8261-a3f4-164dbd2e0083">
+      <Execution id="1fcd98c4-1390-4a34-8cae-7e7723f588df" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.PatientReferralIntegrationTests" name="ArchivePatient_KeepsReferralHistoryAndPatientId" />
+    </UnitTest>
+    <UnitTest name="PatientApi_NoAuthentication_ReturnsUnauthorized" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="13a231b2-f41c-8287-b0aa-a44424cd890c">
+      <Execution id="d87e566f-50d7-4203-816f-76450d277557" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="PatientApi_NoAuthentication_ReturnsUnauthorized" />
+    </UnitTest>
+    <UnitTest name="TestRequestsApi_Doctor_ReturnsForbidden" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="13eb6816-5d70-894a-b4c1-d16d8aed0882">
+      <Execution id="78964969-7964-44cf-a6ce-01f4d3295f0e" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="TestRequestsApi_Doctor_ReturnsForbidden" />
+    </UnitTest>
+    <UnitTest name="PatientApi_LabTechnician_ReturnsForbidden" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1ad2633d-7bed-891e-b7aa-133baf1a88a5">
+      <Execution id="0227a869-b71a-48f7-8cef-f295faa44288" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="PatientApi_LabTechnician_ReturnsForbidden" />
+    </UnitTest>
+    <UnitTest name="CreateReferral_InvalidPatient_DoesNotCreateReferral (-1)" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1849d1f1-7049-8980-9881-3205347c6bc3">
+      <Execution id="a07b62c6-b6cb-4e59-b28e-a566d38ae673" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.PatientReferralIntegrationTests" name="CreateReferral_InvalidPatient_DoesNotCreateReferral" />
+    </UnitTest>
+    <UnitTest name="CreateReferral_ValidPatient_SavesCorrectPatientId" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1ae64773-90d7-858b-abe5-74257576b093">
+      <Execution id="d1bebe83-1855-4639-8502-bb5abfed1839" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.PatientReferralIntegrationTests" name="CreateReferral_ValidPatient_SavesCorrectPatientId" />
+    </UnitTest>
+    <UnitTest name="ReferralsApi_Doctor_ReturnsSuccess" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="159336dd-0f6c-830f-a0e7-89e00d81d466">
+      <Execution id="b88d53e1-2c27-44b2-9fa8-fd00408f86a5" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="ReferralsApi_Doctor_ReturnsSuccess" />
+    </UnitTest>
+    <UnitTest name="CreateReferral_InvalidPatient_DoesNotCreateReferral (0)" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1cdbdd4f-835c-8371-af7c-08fb88f2ad45">
+      <Execution id="36346cc4-a074-4f9b-92f3-da595e212439" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.PatientReferralIntegrationTests" name="CreateReferral_InvalidPatient_DoesNotCreateReferral" />
+    </UnitTest>
+    <UnitTest name="CreateReferral_BlankReason_ReturnsBadRequest" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="172b1eba-4a24-8097-b3f0-d92bcd3a9ffe">
+      <Execution id="f5aefe1a-106f-4909-8900-5ffbe2465204" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.ReferralValidationTests" name="CreateReferral_BlankReason_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="AuditApi_LabTechnician_ReturnsForbidden" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="112e4671-690c-85c2-bf72-abb45b68cf08">
+      <Execution id="3737b02d-f28c-4b1c-87f9-17a4edda356e" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="AuditApi_LabTechnician_ReturnsForbidden" />
+    </UnitTest>
+    <UnitTest name="TestRequestsApi_LabTechnician_ReturnsSuccess" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="1409058c-6913-84b1-9191-0882f0fb3e02">
+      <Execution id="ebe9eed7-1f53-4564-9528-20c24b3daf4b" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="TestRequestsApi_LabTechnician_ReturnsSuccess" />
+    </UnitTest>
+    <UnitTest name="UpdateReferral_InvalidStatusTransition_ReturnsBadRequest" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="11cf1f32-57dc-89b9-a784-797e46f234fd">
+      <Execution id="3e43ab8a-2e23-4a5a-90ce-1e910a8e410e" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.ReferralValidationTests" name="UpdateReferral_InvalidStatusTransition_ReturnsBadRequest" />
+    </UnitTest>
+    <UnitTest name="AuditApi_Doctor_ReturnsSuccess" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="108d86e3-7ad0-8e9c-8d64-dd04ef7ac17f">
+      <Execution id="006f6ebe-cd21-4695-aa96-d8cfca47e985" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.RoleBasedAccessTests" name="AuditApi_Doctor_ReturnsSuccess" />
+    </UnitTest>
+    <UnitTest name="Login_WrongPassword_ReturnsUnauthorized" storage="/users/hita/documents/github/hospital-management-system---software-quality-assurance-/reservehealth/reservehealth.tests/bin/release/net10.0/reservehealth.tests.dll" id="10553535-8329-8906-bd0e-ea61a1c365bc">
+      <Execution id="bf028fb2-e432-443a-bab2-7c1ac3432d95" />
+      <TestMethod codeBase="/Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll" adapterTypeName="executor://mstestadapter/v4" className="ReserveHealth.Tests.AuthenticationTests" name="Login_WrongPassword_ReturnsUnauthorized" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="112e4671-690c-85c2-bf72-abb45b68cf08" executionId="3737b02d-f28c-4b1c-87f9-17a4edda356e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13eb6816-5d70-894a-b4c1-d16d8aed0882" executionId="78964969-7964-44cf-a6ce-01f4d3295f0e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="159336dd-0f6c-830f-a0e7-89e00d81d466" executionId="b88d53e1-2c27-44b2-9fa8-fd00408f86a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10553535-8329-8906-bd0e-ea61a1c365bc" executionId="bf028fb2-e432-443a-bab2-7c1ac3432d95" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ae64773-90d7-858b-abe5-74257576b093" executionId="d1bebe83-1855-4639-8502-bb5abfed1839" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ad2633d-7bed-891e-b7aa-133baf1a88a5" executionId="0227a869-b71a-48f7-8cef-f295faa44288" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a25375e-fb77-8dd2-b4e8-f4c9b3abb348" executionId="82f8d077-8d39-4a50-8f30-cdad0f96a63e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="108d86e3-7ad0-8e9c-8d64-dd04ef7ac17f" executionId="006f6ebe-cd21-4695-aa96-d8cfca47e985" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1079bcaa-3bd1-8b8f-8506-6e05ffb02d41" executionId="cb880d6f-f193-432d-a50e-263c31edc57c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1cdbdd4f-835c-8371-af7c-08fb88f2ad45" executionId="36346cc4-a074-4f9b-92f3-da595e212439" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13a231b2-f41c-8287-b0aa-a44424cd890c" executionId="d87e566f-50d7-4203-816f-76450d277557" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1849d1f1-7049-8980-9881-3205347c6bc3" executionId="a07b62c6-b6cb-4e59-b28e-a566d38ae673" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="19b32093-2409-898d-b273-6aae00d7e6b1" executionId="85d72e5e-32f7-4aff-be8e-fa5b82b19165" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="172b1eba-4a24-8097-b3f0-d92bcd3a9ffe" executionId="f5aefe1a-106f-4909-8900-5ffbe2465204" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a8c1c65-2ebb-8e92-a850-a46c38fd007e" executionId="ab5bd166-8850-4b5e-b9ce-0f10fa384605" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10e7091a-bf25-8a48-b7f2-aa44d7fb7adf" executionId="faff1f61-684f-470f-8a42-e4c72ada3bac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1494b3fe-9935-8b40-b832-2c08c0c74d3c" executionId="5468e63b-3e04-49f7-9458-7d850728cde7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="11cf1f32-57dc-89b9-a784-797e46f234fd" executionId="3e43ab8a-2e23-4a5a-90ce-1e910a8e410e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="14249d09-b842-8261-a3f4-164dbd2e0083" executionId="1fcd98c4-1390-4a34-8cae-7e7723f588df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1409058c-6913-84b1-9191-0882f0fb3e02" executionId="ebe9eed7-1f53-4564-9528-20c24b3daf4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d99504b-8a60-8dc6-bf9f-857122fc374d" executionId="c24b2171-6035-4c78-b8cd-84fedbab9cea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="21" executed="21" passed="21" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test Parallelization enabled for /Users/Hita/Documents/GitHub/Hospital-Management-System---Software-Quality-Assurance-/ReserveHealth/ReserveHealth.Tests/bin/Release/net10.0/ReserveHealth.Tests.dll (Workers: 8, Scope: MethodLevel)
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>
